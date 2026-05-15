@@ -976,7 +976,7 @@ document.getElementById('watch-overlay').addEventListener('click',function(e){if
 loadState();
 renderSummary();
 updateNavBadges();
-if(PRICES_JSON_URL !== 'YOUR_GITHUB_RAW_URL_HERE') {
+if(PRICES_JSON_URL !== 'https://raw.githubusercontent.com/vermaaman5/stock/main/prices.json') {
   fetchPrices();
 } else {
   document.getElementById('price-status-text').textContent='URL not set yet';
