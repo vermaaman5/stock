@@ -663,33 +663,7 @@ function saveState() {
   try { localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); } catch(e){}
 }
 
-// ─── Price fetch ───
-async function fetchPrices() {
-  const el = document.getElementById('price-status-text');
-  el.className = 'price-status-val';
-  el.textContent = 'Fetching…';
 
-  
-
-  try {
-    
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    livePrices = data.prices || {};
-    priceUpdatedAt = data.updated_at_readable || null;
-    el.className = 'price-status-val ok';
-    el.textContent = priceUpdatedAt || 'Updated';
-    // Update watchlist CMPs from live data
-    state.watchlist.forEach(w => {
-      if (livePrices[w.ticker]) w.liveCmp = livePrices[w.ticker].cmp;
-    });
-    rerenderAll();
-  } catch(e) {
-    el.className = 'price-status-val err';
-    el.textContent = 'Fetch failed';
-    console.error('Price fetch error:', e);
-  }
-}
 
 function getCmp(ticker) {
   if (livePrices[ticker]) return livePrices[ticker].cmp;
