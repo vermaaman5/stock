@@ -165,7 +165,7 @@
     "name": "BPCL",
     "sector": "Energy & Power",
     "view": "neutral",
-    "action": "hold",
+    "action": "sell",
     "conviction": 3,
     "target": null,
     "sl": null,
