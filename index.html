@@ -127,7 +127,31 @@
   ::-webkit-scrollbar{width:4px;height:4px;}
   ::-webkit-scrollbar-track{background:transparent;}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
-  .repo-notice{background:var(--surface2);border:1px solid var(--amber-border);border-radius:var(--radius);padding:12px 16px;margin:16px 28px;font-size:12px;color:var(--amber);display:none;}
+  .sidebar-bottom{border-top:1px solid var(--border);padding:12px 18px;}
+  .sb-row{display:flex;flex-direction:column;gap:2px;margin-bottom:10px;}
+  .sb-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+  .sb-val{font-family:var(--mono);font-size:10px;color:var(--text2);}
+  .sb-val.ok{color:var(--green);}
+  .sb-val.err{color:var(--red);}
+  .sb-val.warn{color:var(--amber);}
+  .icon-btn{width:100%;padding:6px 10px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--sans);font-size:11px;cursor:pointer;transition:all 0.12s;text-align:left;display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .icon-btn:hover{color:var(--text);border-color:var(--border3);}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rx);padding:22px;width:500px;max-width:100%;}
+  .modal-title{font-size:17px;color:var(--text);margin-bottom:18px;}
+  .fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .frow{display:flex;flex-direction:column;gap:4px;}
+  .frow.full{grid-column:1/-1;}
+  .frow label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+  .modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+  .sync-banner{margin:0 24px 14px;padding:10px 14px;border-radius:var(--r);font-size:11px;display:none;}
+  .sync-banner.show{display:flex;align-items:center;gap:8px;}
+  .sync-banner.info{background:var(--blue-dim);border:1px solid rgba(78,158,240,0.22);color:var(--blue);}
+  .sync-banner.ok{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);}
+  .sync-banner.err{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);}
+  .sync-banner.warn{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber);}
+  .repo-notice{background:var(--surface2);border:1px solid var(--amber-border);border-radius:var(--r);padding:12px 16px;margin:16px 28px;font-size:12px;color:var(--amber);display:none;}
   .repo-notice.show{display:block;}
 </style>
 </head>
@@ -162,20 +186,24 @@
         <span class="nav-badge alert" id="nav-alert-count" style="display:none">0</span>
       </div>
     </nav>
-    <div class="price-status">
-      <div class="price-status-label">Price data</div>
-      <div class="price-status-val" id="price-status-text">Loading…</div>
-      <button class="refresh-btn" onclick="fetchPrices()">↻ Refresh prices</button>
+    <div class="sidebar-bottom">
+      <div class="sb-row">
+        <div class="sb-label">Price data</div>
+        <div class="sb-val" id="sb-price">—</div>
+      </div>
+      <div class="sb-row">
+        <div class="sb-label">Research sync</div>
+        <div class="sb-val" id="sb-sync">—</div>
+      </div>
+      <button class="icon-btn" onclick="refreshAll()">↻ Refresh prices</button>
+      <button class="icon-btn" onclick="pushToGitHub()">↑ Sync to GitHub</button>
+      <button class="icon-btn" onclick="openSettings()">⚙ Settings</button>
     </div>
   </aside>
 
   <main class="main">
+  <div class="sync-banner" id="sync-banner"></div>
 
-    <!-- Repo config notice -->
-    <div class="repo-notice" id="repo-notice">
-      ⚠ Set your GitHub repo URL in the dashboard to enable live price updates.
-      Open stock-dashboard.html and update <strong>PRICES_JSON_URL</strong> at the top of the script.
-    </div>
 
     <!-- SUMMARY PAGE -->
     <div class="page active" id="page-summary">
@@ -344,13 +372,79 @@
 // ★ STEP 1: Replace this URL with your own after setup
 //   Format: https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/prices.json
 // ─────────────────────────────────────────────────────────
-const PRICES_JSON_URL = "https://raw.githubusercontent.com/vermaaman5/stock/refs/heads/main/prices.json"; // Replace with your prices.json raw URL
 
 const STORAGE_KEY = 'mkts_v5';
 const TODAY = new Date();
 const TODAY_STR = TODAY.toISOString().split('T')[0];
-let livePrices = {};   // ticker → { cmp, change_pct, ... }
+let livePrices = {};
 let priceUpdatedAt = null;
+let cfg = {user:'',repo:'stock',token:''};
+try{const c=localStorage.getItem(STORAGE_KEY+'_cfg');if(c)cfg=JSON.parse(c);}catch(e){}
+
+function ghHeaders(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
+function ghBase(){return`https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents`;}
+async function ghGet(path){const r=await fetch(ghBase()+path,{headers:ghHeaders()});if(!r.ok)throw new Error(r.status);return r.json();}
+async function ghPut(path,content,sha){const b={message:'chore: sync dashboard',content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2)))),sha};const r=await fetch(ghBase()+path,{method:'PUT',headers:ghHeaders(),body:JSON.stringify(b)});if(!r.ok)throw new Error(r.status);return r.json();}
+
+function setBanner(type,msg){const el=document.getElementById('sync-banner');if(!el)return;el.className=`sync-banner show ${type}`;el.textContent=msg;}
+function clearBanner(){const el=document.getElementById('sync-banner');if(el)el.className='sync-banner';}
+
+async function fetchPrices(){
+  if(!cfg.token||!cfg.user){setSbPrice('warn','Not configured');setBanner('warn','⚙ Open Settings to connect GitHub.');return;}
+  setSbPrice('','Fetching…');
+  try{
+    const f=await ghGet('/prices.json');
+    const content=JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g,'')))));
+    livePrices=content.prices||{};priceUpdatedAt=content.updated_at_readable||null;
+    setSbPrice('ok',priceUpdatedAt||'Updated');
+    rerenderAll();clearBanner();
+  }catch(e){setSbPrice('err','Fetch failed');setBanner('err','✗ Could not fetch prices. Check Settings.');}
+}
+
+async function pushToGitHub(){
+  if(!cfg.token||!cfg.user){openSettings();return;}
+  setBanner('info','↑ Syncing…');setSbSync('','Syncing…');
+  try{
+    let ss=null,ws=null;
+    try{const f=await ghGet('/stocks.json');ss=f.sha;}catch(e){}
+    await ghPut('/stocks.json',state.stocks,ss);
+    try{const f=await ghGet('/watchlist.json');ws=f.sha;}catch(e){}
+    await ghPut('/watchlist.json',state.watchlist,ws);
+    setSbSync('ok',new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
+    setBanner('ok','✓ Synced to GitHub.');setTimeout(clearBanner,3000);
+  }catch(e){setSbSync('err','Failed');setBanner('err','✗ Sync failed.');}
+}
+
+async function pullFromGitHub(){
+  if(!cfg.token||!cfg.user)return;
+  try{
+    const sf=await ghGet('/stocks.json');
+    const wf=await ghGet('/watchlist.json');
+    state.stocks=JSON.parse(decodeURIComponent(escape(atob(sf.content.replace(/\n/g,'')))));
+    state.watchlist=JSON.parse(decodeURIComponent(escape(atob(wf.content.replace(/\n/g,'')))));
+    saveState();rerenderAll();updateNavBadges();setSbSync('ok','Pulled');
+  }catch(e){}
+}
+
+async function refreshAll(){await fetchPrices();await pullFromGitHub();}
+
+function setSbPrice(cls,txt){const el=document.getElementById('sb-price');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
+function setSbSync(cls,txt){const el=document.getElementById('sb-sync');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
+
+function openSettings(){
+  document.getElementById('cfg-user').value=cfg.user||'';
+  document.getElementById('cfg-repo').value=cfg.repo||'stock';
+  document.getElementById('cfg-token').value=cfg.token||'';
+  document.getElementById('set-overlay').classList.add('open');
+}
+function closeSettings(){document.getElementById('set-overlay').classList.remove('open');}
+function saveSettings(){
+  cfg.user=document.getElementById('cfg-user').value.trim();
+  cfg.repo=document.getElementById('cfg-repo').value.trim()||'stock';
+  cfg.token=document.getElementById('cfg-token').value.trim();
+  localStorage.setItem(STORAGE_KEY+'_cfg',JSON.stringify(cfg));
+  closeSettings();setBanner('info','Connecting…');refreshAll();
+}
 
 const DEFAULT_STOCKS=[
   {id:1,ticker:'NTPC',name:'NTPC',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
@@ -575,15 +669,10 @@ async function fetchPrices() {
   el.className = 'price-status-val';
   el.textContent = 'Fetching…';
 
-  if (PRICES_JSON_URL === 'YOUR_GITHUB_RAW_URL_HERE') {
-    document.getElementById('repo-notice').classList.add('show');
-    el.className = 'price-status-val err';
-    el.textContent = 'URL not configured';
-    return;
-  }
+  
 
   try {
-    const res = await fetch(PRICES_JSON_URL + '?t=' + Date.now());
+    
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     livePrices = data.prices || {};
@@ -976,12 +1065,26 @@ document.getElementById('watch-overlay').addEventListener('click',function(e){if
 loadState();
 renderSummary();
 updateNavBadges();
-if(PRICES_JSON_URL !== 'https://raw.githubusercontent.com/vermaaman5/stock/main/prices.json') {
-  fetchPrices();
+if(cfg.token && cfg.user) {
+  refreshAll();
 } else {
-  document.getElementById('price-status-text').textContent='URL not set yet';
-  document.getElementById('repo-notice').classList.add('show');
+  document.getElementById('sb-price').textContent='Not configured';
+  document.getElementById('sb-sync').textContent='Not configured';
+  setTimeout(()=>setBanner('warn','⚙ Open Settings (bottom left) to connect GitHub for live prices & sync.'),500);
 }
 </script>
+<!-- SETTINGS MODAL -->
+<div class="overlay" id="set-overlay">
+  <div class="modal">
+    <div class="modal-title">Settings</div>
+    <div class="fg">
+      <div class="frow"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="your-username"></div>
+      <div class="frow"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="stock-dashboard"></div>
+      <div class="frow full"><label>Personal Access Token (repo scope)</label><input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="font-family:monospace;"></div>
+    </div>
+    <div style="font-size:11px;color:#6b7280;margin-top:8px;">Token stored only in your browser. Never sent anywhere except GitHub API.</div>
+    <div class="modal-foot"><button class="btn" onclick="closeSettings()">Cancel</button><button class="btn btn-accent" onclick="saveSettings()">Save & connect</button></div>
+  </div>
+</div>
 </body>
 </html>
