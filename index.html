@@ -419,11 +419,18 @@ async function pullFromGitHub(){
   if(!cfg.token||!cfg.user)return;
   try{
     const sf=await ghGet('/stocks.json');
-    const wf=await ghGet('/watchlist.json');
     state.stocks=JSON.parse(decodeURIComponent(escape(atob(sf.content.replace(/\n/g,'')))));
-    state.watchlist=JSON.parse(decodeURIComponent(escape(atob(wf.content.replace(/\n/g,'')))));
     saveState();rerenderAll();updateNavBadges();setSbSync('ok','Pulled');
-  }catch(e){}
+  }catch(e){
+    console.log('stocks.json pull failed:',e.message);
+  }
+  try{
+    const wf=await ghGet('/watchlist.json');
+    state.watchlist=JSON.parse(decodeURIComponent(escape(atob(wf.content.replace(/\n/g,'')))));
+    saveState();rerenderAll();updateNavBadges();
+  }catch(e){
+    console.log('watchlist.json pull failed:',e.message);
+  }
 }
 
 async function refreshAll(){await fetchPrices();await pullFromGitHub();}
