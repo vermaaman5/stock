@@ -76,6 +76,11 @@
   .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg);}
   table{width:100%;border-collapse:collapse;}
   thead th{padding:10px 14px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface);}
+  th.sortable{cursor:pointer;user-select:none;}
+  th.sortable:hover{color:var(--text);}
+  th.sortable.active{color:var(--accent);}
+  .sort-icon{font-size:10px;margin-left:2px;opacity:0.5;}
+  th.sortable.active .sort-icon{opacity:1;color:var(--accent);}
   tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text);font-size:13px;}
   tbody tr:last-child td{border-bottom:none;}
   tbody tr{transition:background 0.1s;}
@@ -252,9 +257,20 @@
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>Ticker</th><th>Name</th><th>Sector</th><th>View</th><th>Action</th><th>Conv.</th>
-              <th>CMP ₹</th><th>Chg%</th><th>Target ₹</th><th>SL ₹</th><th>Upside</th>
-              <th>Trend</th><th>Support</th><th>Resist.</th><th>Thesis date</th><th>Notes</th><th></th>
+              <th onclick="sortBy('ticker')" class="sortable">Ticker <span class="sort-icon" id="sort-ticker"></span></th>
+              <th>Name</th>
+              <th onclick="sortBy('sector')" class="sortable">Sector <span class="sort-icon" id="sort-sector"></span></th>
+              <th onclick="sortBy('view')" class="sortable">View <span class="sort-icon" id="sort-view"></span></th>
+              <th onclick="sortBy('action')" class="sortable">Action <span class="sort-icon" id="sort-action"></span></th>
+              <th onclick="sortBy('conviction')" class="sortable">Conv. <span class="sort-icon" id="sort-conviction"></span></th>
+              <th onclick="sortBy('cmp')" class="sortable">CMP ₹ <span class="sort-icon" id="sort-cmp"></span></th>
+              <th onclick="sortBy('chg')" class="sortable">Chg% <span class="sort-icon" id="sort-chg"></span></th>
+              <th>Target ₹</th><th>SL ₹</th>
+              <th onclick="sortBy('upside')" class="sortable">Upside <span class="sort-icon" id="sort-upside"></span></th>
+              <th onclick="sortBy('trend')" class="sortable">Trend <span class="sort-icon" id="sort-trend"></span></th>
+              <th>Support</th><th>Resist.</th>
+              <th onclick="sortBy('thesisDate')" class="sortable">Thesis date <span class="sort-icon" id="sort-thesisDate"></span></th>
+              <th>Notes</th><th></th>
             </tr></thead>
             <tbody id="coverage-tbody"></tbody>
           </table>
@@ -777,6 +793,36 @@ function renderSummary() {
 }
 
 // ─── Coverage ───
+// ─── Sort state ───
+let sortCol = null, sortDir = 1;
+
+function sortBy(col) {
+  if(sortCol===col) sortDir*=-1; else {sortCol=col;sortDir=1;}
+  document.querySelectorAll('th.sortable').forEach(th=>th.classList.remove('active'));
+  document.querySelectorAll('.sort-icon').forEach(el=>el.textContent='↕');
+  const activeId='sort-'+col;
+  const el=document.getElementById(activeId);
+  if(el){el.textContent=sortDir===1?'↑':'↓';el.closest('th').classList.add('active');}
+  renderCoverage();
+}
+
+function getSortVal(s, col) {
+  const cmp=getCmp(s.ticker);
+  switch(col){
+    case 'ticker': return s.ticker;
+    case 'sector': return s.sector;
+    case 'view': return ['bullish','neutral','bearish'].indexOf(s.view);
+    case 'action': return ['buy','accumulate','hold','watch','sell'].indexOf(s.action);
+    case 'conviction': return s.conviction||3;
+    case 'cmp': return cmp||0;
+    case 'chg': return getChange(s.ticker)||0;
+    case 'upside': return upside(cmp,s.target)||0;
+    case 'trend': return s.trend||'';
+    case 'thesisDate': return s.thesisDate||'';
+    default: return 0;
+  }
+}
+
 function renderCoverage() {
   const q=(document.getElementById('cov-search').value||'').toLowerCase();
   const sec=document.getElementById('cov-sector').value;
@@ -786,6 +832,13 @@ function renderCoverage() {
     (!q||s.ticker.toLowerCase().includes(q)||s.name.toLowerCase().includes(q))&&
     (!sec||s.sector===sec)&&(!vw||s.view===vw)&&(!ac||s.action===ac)
   );
+  if(sortCol){
+    filtered.sort((a,b)=>{
+      const av=getSortVal(a,sortCol),bv=getSortVal(b,sortCol);
+      if(av===bv)return 0;
+      return (av>bv?1:-1)*sortDir;
+    });
+  }
   const tbody=document.getElementById('coverage-tbody');
   if(!filtered.length){ tbody.innerHTML=`<tr><td colspan="17" class="empty">No stocks match.</td></tr>`; return; }
   tbody.innerHTML=filtered.map(s=>{
@@ -1047,7 +1100,8 @@ loadState();
 renderSummary();
 updateNavBadges();
 if(cfg.token && cfg.user) {
-  refreshAll();
+  // Always pull from GitHub on load to get latest views/signals
+  pullFromGitHub().then(()=>fetchPrices());
 } else {
   document.getElementById('sb-price').textContent='Not configured';
   document.getElementById('sb-sync').textContent='Not configured';
