@@ -1,0 +1,74 @@
+{
+  "updated_at": "2026-05-15T10:32:14.869537+05:30",
+  "updated_at_readable": "15 May 2026 10:32 IST",
+  "prices": {
+    "COALINDIA": {
+      "cmp": 467.4,
+      "prev_close": 456.85,
+      "day_high": 468.5,
+      "day_low": 455.25,
+      "week_52_high": 491.25,
+      "week_52_low": 368.65,
+      "change_pct": 2.31
+    },
+    "NTPC": {
+      "cmp": 395.8,
+      "prev_close": 396.55,
+      "day_high": 398.0,
+      "day_low": 393.85,
+      "week_52_high": 414.4,
+      "week_52_low": 315.55,
+      "change_pct": -0.19
+    },
+    "HDFCBANK": {
+      "cmp": 779.15,
+      "prev_close": 770.1,
+      "day_high": 781.9,
+      "day_low": 767.75,
+      "week_52_high": 1020.5,
+      "week_52_low": 726.65,
+      "change_pct": 1.18
+    },
+    "KOTAKBANK": {
+      "cmp": 392.3,
+      "prev_close": 383.25,
+      "day_high": 392.3,
+      "day_low": 380.5,
+      "week_52_high": 453.2,
+      "week_52_low": 345.5,
+      "change_pct": 2.36
+    },
+    "INFY": {
+      "cmp": 1120.3,
+      "prev_close": 1094.5,
+      "day_high": 1133.2,
+      "day_low": 1101.6,
+      "week_52_high": 1728.0,
+      "week_52_low": 1089.0,
+      "change_pct": 2.36
+    },
+    "RELIANCE": {
+      "cmp": 1339.8,
+      "prev_close": 1368.6,
+      "day_high": 1364.8,
+      "day_low": 1338.4,
+      "week_52_high": 1611.8,
+      "week_52_low": 1290.0,
+      "change_pct": -2.1
+    },
+    "POWERGRID": {
+      "cmp": 306.7,
+      "prev_close": 303.0,
+      "day_high": 307.8,
+      "day_low": 302.9,
+      "week_52_high": 324.95,
+      "week_52_low": 250.0,
+      "change_pct": 1.22
+    }
+  },
+  "failed": [
+    "KECINTER",
+    "LTIM"
+  ],
+  "total": 7
+}
