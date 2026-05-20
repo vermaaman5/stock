@@ -3198,5 +3198,21 @@
     "resist": null,
     "notes": "",
     "thesisDate": "2026-05-15"
+  },
+  {
+    "id": 204,
+    "ticker": "PTC",
+    "name": "PTC India Ltd",
+    "sector": "Energy & Power",
+    "view": "bullish",
+    "action": "buy",
+    "conviction": 5,
+    "trend": "sideways",
+    "target": 300,
+    "sl": 125,
+    "support": 180,
+    "resist": 230,
+    "notes": "",
+    "thesisDate": "2026-05-20"
   }
 ]
