@@ -3262,5 +3262,53 @@
     "resist": 2900,
     "notes": "Add only on dips",
     "thesisDate": "2026-05-21"
+  },
+  {
+    "id": 208,
+    "ticker": "APARINDS",
+    "name": "Apar Industries",
+    "sector": "Energy & Power",
+    "view": "bullish",
+    "action": "accumulate",
+    "conviction": 2,
+    "trend": "uptrend",
+    "target": 20000,
+    "sl": 9800,
+    "support": 9800,
+    "resist": 13000,
+    "notes": "Global #1 conductor, US exports, grid anchor",
+    "thesisDate": "2026-05-21"
+  },
+  {
+    "id": 209,
+    "ticker": "TARIL",
+    "name": "Transformers and Rectifiers",
+    "sector": "Energy & Power",
+    "view": "bullish",
+    "action": "accumulate",
+    "conviction": 4,
+    "trend": "uptrend",
+    "target": 800,
+    "sl": 250,
+    "support": 290,
+    "resist": 350,
+    "notes": "First Indian HDFC qualifier, USD 1 Bn revenue target",
+    "thesisDate": "2026-05-21"
+  },
+  {
+    "id": 210,
+    "ticker": "TECHNOE",
+    "name": "Techno electric",
+    "sector": "Energy & Power",
+    "view": "neutral",
+    "action": "accumulate",
+    "conviction": 4,
+    "trend": "uptrend",
+    "target": 2500,
+    "sl": 1150,
+    "support": 1150,
+    "resist": 1400,
+    "notes": "Asset Light EPC, Zero Debt, substation boom",
+    "thesisDate": "2026-05-21"
   }
 ]
