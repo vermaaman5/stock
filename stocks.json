@@ -3214,5 +3214,53 @@
     "resist": 230,
     "notes": "",
     "thesisDate": "2026-05-20"
+  },
+  {
+    "id": 205,
+    "ticker": "SYRMA",
+    "name": "SYRMA",
+    "sector": "Capital Goods & Infra",
+    "view": "bullish",
+    "action": "hold",
+    "conviction": 3,
+    "trend": "uptrend",
+    "target": 2000,
+    "sl": 600,
+    "support": 900,
+    "resist": 1150,
+    "notes": "",
+    "thesisDate": "2026-05-21"
+  },
+  {
+    "id": 206,
+    "ticker": "AVALON",
+    "name": "Avalon Technologies Limited",
+    "sector": "Capital Goods & Infra",
+    "view": "bullish",
+    "action": "hold",
+    "conviction": 5,
+    "trend": "uptrend",
+    "target": 2400,
+    "sl": 1000,
+    "support": 1250,
+    "resist": 1500,
+    "notes": "Kavach + semiconductor equipment",
+    "thesisDate": "2026-05-21"
+  },
+  {
+    "id": 207,
+    "ticker": "SANSERA",
+    "name": "Sansera Engineering",
+    "sector": "Capital Goods & Infra",
+    "view": "bullish",
+    "action": "buy",
+    "conviction": 5,
+    "trend": "uptrend",
+    "target": 4000,
+    "sl": 2300,
+    "support": 2600,
+    "resist": 2900,
+    "notes": "Add only on dips",
+    "thesisDate": "2026-05-21"
   }
 ]
