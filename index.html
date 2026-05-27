@@ -519,7 +519,7 @@ function closeChart() {
 }
 document.getElementById('chart-overlay').addEventListener('click', function(e) { if(e.target===this) closeChart(); });
 
-
+function openSettings(){
   document.getElementById('cfg-user').value=cfg.user||'';
   document.getElementById('cfg-repo').value=cfg.repo||'stock';
   document.getElementById('cfg-token').value=cfg.token||'';
