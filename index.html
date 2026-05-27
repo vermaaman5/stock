@@ -471,7 +471,55 @@ async function refreshAll(){await fetchPrices();await pullFromGitHub();}
 function setSbPrice(cls,txt){const el=document.getElementById('sb-price');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
 function setSbSync(cls,txt){const el=document.getElementById('sb-sync');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
 
-function openSettings(){
+// ── Chart modal ──────────────────────────────────────
+function openChart(ticker, name) {
+  document.getElementById('chart-ticker').textContent = ticker;
+  document.getElementById('chart-name').textContent = name;
+  document.getElementById('chart-tv-link').href = `https://www.tradingview.com/chart/?symbol=NSE:${ticker}`;
+  document.getElementById('chart-overlay').classList.add('open');
+
+  // Clear previous widget
+  const container = document.getElementById('tv-widget-container');
+  container.innerHTML = '';
+
+  // Load TradingView widget script
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/tv.js';
+  script.onload = () => {
+    new TradingView.widget({
+      container_id: 'tv-widget-container',
+      symbol: `NSE:${ticker}`,
+      interval: 'D',
+      timezone: 'Asia/Kolkata',
+      theme: 'dark',
+      style: '1',
+      locale: 'en',
+      toolbar_bg: '#0f1318',
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      height: 500,
+      width: '100%',
+      studies: ['RSI@tv-basicstudies', 'MACD@tv-basicstudies'],
+      show_popup_button: false,
+    });
+  };
+  // If script already loaded
+  if (window.TradingView) {
+    script.onload();
+  } else {
+    document.head.appendChild(script);
+  }
+}
+
+function closeChart() {
+  document.getElementById('chart-overlay').classList.remove('open');
+  document.getElementById('tv-widget-container').innerHTML = '';
+}
+document.getElementById('chart-overlay').addEventListener('click', function(e) { if(e.target===this) closeChart(); });
+
+
   document.getElementById('cfg-user').value=cfg.user||'';
   document.getElementById('cfg-repo').value=cfg.repo||'stock';
   document.getElementById('cfg-token').value=cfg.token||'';
@@ -910,7 +958,7 @@ function renderCoverage() {
     const bigDown=chg&&chg<=-3;
     const rowClass=atTarget?'row-alert-target':atSL?'row-alert-sl':bigUp?'row-up':bigDown?'row-down':'';
     return `<tr class="${rowClass}">
-      <td><span class="ticker">${s.ticker}</span></td>
+      <td><span class="ticker" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;" onclick="openChart('${s.ticker}','${s.name}')" title="View chart">${s.ticker} ↗</span></td>
       <td>${s.name}</td>
       <td style="color:var(--muted2);font-size:12px;">${s.sector}</td>
       <td><span class="badge badge-${s.view}">${s.view}</span></td>
@@ -1174,6 +1222,23 @@ if(cfg.token && cfg.user) {
   setTimeout(()=>setBanner('warn','⚙ Open Settings (bottom left) to connect GitHub for live prices & sync.'),500);
 }
 </script>
+<!-- CHART MODAL -->
+<div class="overlay" id="chart-overlay" style="align-items:center;">
+  <div class="modal" style="width:820px;max-width:98vw;padding:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div>
+        <span class="tk" id="chart-ticker" style="font-size:15px;"></span>
+        <span style="color:var(--muted);font-size:12px;margin-left:8px;" id="chart-name"></span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <a id="chart-tv-link" href="#" target="_blank" class="btn" style="font-size:11px;">Open in TradingView ↗</a>
+        <button class="btn" onclick="closeChart()">✕</button>
+      </div>
+    </div>
+    <div id="tv-widget-container" style="height:500px;border-radius:var(--r);overflow:hidden;"></div>
+  </div>
+</div>
+
 <!-- SETTINGS MODAL -->
 <div class="overlay" id="set-overlay">
   <div class="modal">
