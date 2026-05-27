@@ -3,1254 +3,1211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stock Dashboard</title>
+<title>MKTS // Research Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#0d0f12;--surface:#14181f;--surface2:#1c2230;
-    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-    --text:#e8eaf0;--muted:#6b7280;--muted2:#9ca3af;
-    --green:#22c55e;--green-bg:rgba(34,197,94,0.1);--green-border:rgba(34,197,94,0.25);
-    --red:#ef4444;--red-bg:rgba(239,68,68,0.1);--red-border:rgba(239,68,68,0.25);
-    --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);--amber-border:rgba(245,158,11,0.25);
-    --blue:#3b82f6;--blue-bg:rgba(59,130,246,0.1);--blue-border:rgba(59,130,246,0.25);
-    --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);
-    --accent:#22c55e;--mono:'IBM Plex Mono',monospace;--sans:'DM Sans',sans-serif;
-    --radius:8px;--radius-lg:12px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;}
-  body{min-height:100vh;}
-  .shell{display:flex;min-height:100vh;}
-  .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
-  .main{flex:1;overflow-x:hidden;}
-  .logo{padding:22px 20px 16px;border-bottom:1px solid var(--border);}
-  .logo-text{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);letter-spacing:0.08em;}
-  .logo-sub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:0.04em;text-transform:uppercase;}
-  .nav{padding:12px 0;flex:1;}
-  .nav-section{padding:12px 20px 6px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;color:var(--muted2);font-size:13px;transition:all 0.15s;border-left:2px solid transparent;}
-  .nav-item:hover{color:var(--text);background:rgba(255,255,255,0.03);}
-  .nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(34,197,94,0.05);}
-  .nav-item svg{width:15px;height:15px;flex-shrink:0;}
-  .nav-badge{margin-left:auto;background:var(--surface2);color:var(--muted2);font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:99px;}
-  .nav-badge.alert{background:var(--red-bg);color:var(--red);}
-  .price-status{padding:14px 20px;border-top:1px solid var(--border);}
-  .price-status-label{font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;}
-  .price-status-val{font-family:var(--mono);font-size:11px;color:var(--muted2);}
-  .price-status-val.ok{color:var(--green);}
-  .price-status-val.err{color:var(--red);}
-  .refresh-btn{margin-top:8px;width:100%;padding:6px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:var(--sans);font-size:11px;cursor:pointer;transition:all 0.15s;}
-  .refresh-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
-  .page{display:none;}
-  .page.active{display:block;}
-  .page-header{padding:24px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .page-title{font-size:20px;font-weight:500;color:var(--text);}
-  .page-sub{font-size:12px;color:var(--muted);margin-top:3px;}
-  .header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:var(--sans);font-size:12px;cursor:pointer;transition:all 0.15s;}
-  .btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04);}
-  .btn-primary{background:var(--accent);border-color:var(--accent);color:#0d0f12;font-weight:500;}
-  .btn-primary:hover{background:#16a34a;border-color:#16a34a;color:#0d0f12;}
-  .btn svg{width:14px;height:14px;}
-  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:20px 28px;}
-  .metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;}
-  .metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
-  .metric-value{font-family:var(--mono);font-size:24px;font-weight:500;color:var(--text);}
-  .metric-value.green{color:var(--green);}
-  .metric-value.red{color:var(--red);}
-  .metric-value.amber{color:var(--amber);}
-  .metric-sub{font-size:10px;color:var(--muted);margin-top:3px;}
-  .section{padding:0 28px 28px;}
-  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-  .section-title{font-size:13px;font-weight:500;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-  .search-wrap{position:relative;}
-  .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--muted);pointer-events:none;}
-  input[type=text],input[type=number],input[type=date],select,textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);font-family:var(--sans);font-size:13px;padding:7px 10px;outline:none;transition:border 0.15s;}
-  input[type=text]:focus,input[type=number]:focus,input[type=date]:focus,select:focus,textarea:focus{border-color:var(--accent);}
-  .search-input{padding-left:30px;width:200px;}
-  select{cursor:pointer;color:var(--muted2);}
-  select option{background:var(--surface2);}
-  textarea{resize:vertical;min-height:72px;width:100%;font-size:13px;}
-  .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg);}
-  table{width:100%;border-collapse:collapse;}
-  thead th{padding:10px 14px;font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface);}
-  th.sortable{cursor:pointer;user-select:none;}
-  th.sortable:hover{color:var(--text);}
-  th.sortable.active{color:var(--accent);}
-  .sort-icon{font-size:10px;margin-left:2px;opacity:0.5;}
-  th.sortable.active .sort-icon{opacity:1;color:var(--accent);}
-  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text);font-size:13px;}
-  tbody tr:last-child td{border-bottom:none;}
-  tbody tr.row-up td{background:rgba(32,212,114,0.06)!important;border-bottom-color:rgba(32,212,114,0.1);}
-  tbody tr.row-up td:first-child{border-left:2px solid var(--green);}
-  tbody tr.row-down td{background:rgba(240,78,78,0.06)!important;border-bottom-color:rgba(240,78,78,0.1);}
-  tbody tr.row-down td:first-child{border-left:2px solid var(--red);}
-  tbody tr.row-alert-target td{background:rgba(32,212,114,0.1)!important;}
-  tbody tr.row-alert-target td:first-child{border-left:3px solid var(--green);}
-  tbody tr.row-alert-sl td{background:rgba(240,78,78,0.1)!important;}
-  tbody tr.row-alert-sl td:first-child{border-left:3px solid var(--red);}
-  .alert-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:16px;}
-  .alert-panel-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-  .alert-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r);margin-bottom:4px;font-size:12px;}
-  .alert-item:last-child{margin-bottom:0;}
-  .alert-item.target{background:rgba(32,212,114,0.08);border:1px solid var(--green-border);}
-  .alert-item.sl{background:rgba(240,78,78,0.08);border:1px solid var(--red-border);}
-  .alert-item .tk{font-size:11px;}
-  .alert-count{background:var(--red-dim);color:var(--red);font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:99px;border:1px solid var(--red-border);}
-  tbody tr{transition:background 0.1s;}
-  tbody tr:hover td{background:rgba(255,255,255,0.02);}
-  .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap;border:1px solid transparent;}
-  .badge-bullish{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
-  .badge-bearish{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
-  .badge-neutral{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
-  .badge-buy{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
-  .badge-accumulate{background:rgba(34,197,94,0.06);color:#86efac;border-color:rgba(134,239,172,0.2);}
-  .badge-hold{background:var(--purple-bg);color:var(--purple);border-color:rgba(167,139,250,0.25);}
-  .badge-watch{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border);}
-  .badge-sell{background:var(--red-bg);color:var(--red);border-color:var(--red-border);}
-  .badge-none{background:rgba(107,114,128,0.1);color:var(--muted);border-color:rgba(107,114,128,0.2);}
-  .mono{font-family:var(--mono);font-size:12px;}
-  .ticker{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text);}
-  .upside-pos{color:var(--green);font-family:var(--mono);font-size:12px;font-weight:500;}
-  .upside-neg{color:var(--red);font-family:var(--mono);font-size:12px;font-weight:500;}
-  .muted{color:var(--muted);}
-  .stars{font-size:12px;letter-spacing:1px;color:var(--amber);}
-  .stars .dim{opacity:0.2;}
-  .alert-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 1.5s infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-  .sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
-  .sector-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
-  .sector-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-  .sector-card-name{font-size:14px;font-weight:500;color:var(--text);}
-  .sector-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-  .sector-bar{flex:1;height:5px;border-radius:99px;background:var(--surface2);overflow:hidden;display:flex;}
-  .bar-bull{background:var(--green);height:100%;}
-  .bar-neut{background:var(--amber);height:100%;}
-  .bar-bear{background:var(--red);height:100%;}
-  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
-  .overlay.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;width:520px;max-width:100%;}
-  .modal-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:20px;}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .form-group{display:flex;flex-direction:column;gap:5px;}
-  .form-group.full{grid-column:1/-1;}
-  .form-group label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
-  .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;}
-  .divider{height:1px;background:var(--border);margin:0 28px 20px;}
-  .stale{color:var(--red);}
-  .empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;}
-  .change-pos{color:var(--green);font-family:var(--mono);font-size:11px;}
-  .change-neg{color:var(--red);font-family:var(--mono);font-size:11px;}
-  .live-pill{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-size:10px;padding:2px 8px;border-radius:99px;font-family:var(--mono);}
-  .live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
-  ::-webkit-scrollbar{width:4px;height:4px;}
-  ::-webkit-scrollbar-track{background:transparent;}
-  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
-  .sidebar-bottom{border-top:1px solid var(--border);padding:12px 18px;}
-  .sb-row{display:flex;flex-direction:column;gap:2px;margin-bottom:10px;}
-  .sb-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-  .sb-val{font-family:var(--mono);font-size:10px;color:var(--text2);}
-  .sb-val.ok{color:var(--green);}
-  .sb-val.err{color:var(--red);}
-  .sb-val.warn{color:var(--amber);}
-  .icon-btn{width:100%;padding:6px 10px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:var(--sans);font-size:11px;cursor:pointer;transition:all 0.12s;text-align:left;display:flex;align-items:center;gap:6px;margin-top:4px;}
-  .icon-btn:hover{color:var(--text);border-color:var(--border3);}
-  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:300;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;}
-  .overlay.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rx);padding:22px;width:500px;max-width:100%;}
-  .modal-title{font-size:17px;color:var(--text);margin-bottom:18px;}
-  .fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .frow{display:flex;flex-direction:column;gap:4px;}
-  .frow.full{grid-column:1/-1;}
-  .frow label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
-  .modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
-  .sync-banner{margin:0 24px 14px;padding:10px 14px;border-radius:var(--r);font-size:11px;display:none;}
-  .sync-banner.show{display:flex;align-items:center;gap:8px;}
-  .sync-banner.info{background:var(--blue-dim);border:1px solid rgba(78,158,240,0.22);color:var(--blue);}
-  .sync-banner.ok{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);}
-  .sync-banner.err{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);}
-  .sync-banner.warn{background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber);}
-  .repo-notice{background:var(--surface2);border:1px solid var(--amber-border);border-radius:var(--r);padding:12px 16px;margin:16px 28px;font-size:12px;color:var(--amber);display:none;}
-  .repo-notice.show{display:block;}
+:root {
+  --bg:#080a0e; --surface:#0f1318; --surface2:#161c24; --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.11); --border3:rgba(255,255,255,0.18);
+  --text:#dfe3ec; --text2:#a8b0bf; --muted:#5c6470;
+  --green:#20d472; --green-dim:rgba(32,212,114,0.1); --green-border:rgba(32,212,114,0.2);
+  --red:#f04e4e; --red-dim:rgba(240,78,78,0.1); --red-border:rgba(240,78,78,0.2);
+  --amber:#f0a040; --amber-dim:rgba(240,160,64,0.1); --amber-border:rgba(240,160,64,0.2);
+  --blue:#4e9ef0; --blue-dim:rgba(78,158,240,0.1);
+  --purple:#9b7ef0; --purple-dim:rgba(155,126,240,0.1); --purple-border:rgba(155,126,240,0.2);
+  --accent:#20d472; --mono:'IBM Plex Mono',monospace; --sans:'DM Sans',sans-serif;
+  --r:6px; --rl:10px; --rx:14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:13px; }
+body { min-height:100vh; }
+::-webkit-scrollbar { width:3px; height:3px; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:99px; }
+
+/* Layout */
+.shell { display:flex; min-height:100vh; }
+.sidebar { width:210px; min-width:210px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto; }
+.main { flex:1; min-width:0; overflow-x:hidden; }
+
+/* Sidebar */
+.logo { padding:20px 18px 14px; border-bottom:1px solid var(--border); }
+.logo-mark { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--accent); letter-spacing:0.14em; display:flex; align-items:center; gap:8px; }
+.logo-mark::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.logo-sub { font-size:9px; color:var(--muted); margin-top:3px; letter-spacing:0.08em; text-transform:uppercase; padding-left:14px; }
+.nav { padding:10px 0; flex:1; }
+.nav-group { padding:10px 18px 4px; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+.nav-item { display:flex; align-items:center; gap:9px; padding:8px 18px; cursor:pointer; color:var(--text2); font-size:12px; transition:all 0.12s; border-left:2px solid transparent; user-select:none; }
+.nav-item:hover { color:var(--text); background:rgba(255,255,255,0.025); }
+.nav-item.active { color:var(--accent); border-left-color:var(--accent); background:rgba(32,212,114,0.04); }
+.nav-item svg { width:14px; height:14px; flex-shrink:0; opacity:0.7; }
+.nav-item.active svg { opacity:1; }
+.nav-pill { margin-left:auto; font-family:var(--mono); font-size:9px; padding:1px 5px; border-radius:99px; background:var(--surface2); color:var(--muted); }
+.nav-pill.hot { background:var(--red-dim); color:var(--red); }
+.sidebar-bottom { border-top:1px solid var(--border); padding:12px 18px; }
+.sb-row { display:flex; flex-direction:column; gap:2px; margin-bottom:10px; }
+.sb-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; }
+.sb-val { font-family:var(--mono); font-size:10px; color:var(--text2); }
+.sb-val.ok { color:var(--green); }
+.sb-val.err { color:var(--red); }
+.sb-val.warn { color:var(--amber); }
+.icon-btn { width:100%; padding:6px 10px; border-radius:var(--r); border:1px solid var(--border2); background:transparent; color:var(--text2); font-family:var(--sans); font-size:11px; cursor:pointer; transition:all 0.12s; text-align:left; display:flex; align-items:center; gap:6px; margin-top:4px; }
+.icon-btn:hover { color:var(--text); border-color:var(--border3); }
+
+/* Pages */
+.page { display:none; }
+.page.active { display:block; }
+.ph { padding:22px 24px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+.ph-left h1 { font-size:20px; font-weight:500; color:var(--text); }
+.ph-left p { font-size:11px; color:var(--muted); margin-top:2px; }
+.ph-right { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:var(--r); border:1px solid var(--border2); background:transparent; color:var(--text2); font-family:var(--sans); font-size:11px; cursor:pointer; transition:all 0.12s; white-space:nowrap; }
+.btn:hover { color:var(--text); border-color:var(--border3); background:rgba(255,255,255,0.03); }
+.btn-accent { background:var(--accent); border-color:var(--accent); color:#050a06; font-weight:500; }
+.btn-accent:hover { background:#18b860; border-color:#18b860; color:#050a06; }
+.btn svg { width:12px; height:12px; }
+.btn-sm { padding:4px 8px; font-size:10px; }
+
+/* Metrics */
+.metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; padding:0 24px 18px; }
+.mc { background:var(--surface); border:1px solid var(--border); border-radius:var(--rl); padding:12px 14px; }
+.mc-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.mc-val { font-family:var(--mono); font-size:22px; font-weight:400; color:var(--text); }
+.mc-val.g { color:var(--green); }
+.mc-val.r { color:var(--red); }
+.mc-val.a { color:var(--amber); }
+.mc-sub { font-size:9px; color:var(--muted); margin-top:3px; }
+
+/* Section */
+.sec { padding:0 24px 24px; }
+.sec-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.sec-title { font-size:10px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+.divider { height:1px; background:var(--border); margin:0 24px 18px; }
+
+/* Toolbar */
+.toolbar { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.sw { position:relative; }
+.sw svg { position:absolute; left:8px; top:50%; transform:translateY(-50%); width:11px; height:11px; color:var(--muted); pointer-events:none; }
+input, select, textarea { background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:var(--r); font-family:var(--sans); font-size:12px; padding:6px 9px; outline:none; transition:border 0.12s; }
+input:focus, select:focus, textarea:focus { border-color:var(--accent); }
+.si { padding-left:26px; width:180px; }
+select { cursor:pointer; color:var(--text2); }
+select option { background:var(--surface2); }
+textarea { resize:vertical; min-height:68px; width:100%; line-height:1.5; }
+
+/* Table */
+.tw { overflow-x:auto; border:1px solid var(--border); border-radius:var(--rl); }
+table { width:100%; border-collapse:collapse; }
+thead th { padding:9px 12px; font-size:9px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; background:var(--surface); }
+th.sortable { cursor:pointer; user-select:none; }
+th.sortable:hover { color:var(--text); }
+th.sortable.sorted { color:var(--accent); }
+.sort-ic { font-size:9px; margin-left:2px; }
+tbody td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:middle; font-size:12px; }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:rgba(255,255,255,0.018); }
+tbody tr.row-up td { background:rgba(32,212,114,0.05)!important; }
+tbody tr.row-up td:first-child { border-left:2px solid var(--green); }
+tbody tr.row-dn td { background:rgba(240,78,78,0.05)!important; }
+tbody tr.row-dn td:first-child { border-left:2px solid var(--red); }
+tbody tr.row-tgt td { background:rgba(32,212,114,0.09)!important; }
+tbody tr.row-tgt td:first-child { border-left:3px solid var(--green); }
+tbody tr.row-sl td { background:rgba(240,78,78,0.09)!important; }
+tbody tr.row-sl td:first-child { border-left:3px solid var(--red); }
+
+/* Badges */
+.b { display:inline-flex; align-items:center; padding:2px 7px; border-radius:99px; font-size:10px; font-weight:500; white-space:nowrap; border:1px solid transparent; }
+.b-bullish { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.b-bearish { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.b-neutral { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.b-buy { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.b-accumulate { background:rgba(32,212,114,0.06); color:#6ee8a8; border-color:rgba(110,232,168,0.2); }
+.b-hold { background:var(--purple-dim); color:var(--purple); border-color:var(--purple-border); }
+.b-watch { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.b-sell { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.b-uptrend { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.b-downtrend { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.b-sideways { background:var(--blue-dim); color:var(--blue); border-color:rgba(78,158,240,0.22); }
+.b-reversal { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.b-high { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.b-medium { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.b-low { background:rgba(92,100,112,0.15); color:var(--muted); border-color:rgba(92,100,112,0.25); }
+
+/* Misc */
+.mono { font-family:var(--mono); font-size:11px; }
+.tk { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--text); cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+.tk:hover { color:var(--accent); }
+.pos { color:var(--green); font-family:var(--mono); font-size:11px; font-weight:500; }
+.neg { color:var(--red); font-family:var(--mono); font-size:11px; font-weight:500; }
+.dim { color:var(--muted); }
+.stale { color:var(--red); }
+.stars { font-size:11px; letter-spacing:1.5px; color:var(--amber); }
+.stars .off { opacity:0.15; }
+.adot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--red); margin-right:5px; animation:pulse 1.4s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* Sector cards */
+.sc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:10px; }
+.sc { background:var(--surface); border:1px solid var(--border); border-radius:var(--rl); padding:14px; }
+.sc-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.sc-name { font-size:13px; font-weight:500; color:var(--text); }
+.sc-bar-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+.sc-bar { flex:1; height:4px; border-radius:99px; background:var(--surface2); overflow:hidden; display:flex; }
+.bb { background:var(--green); height:100%; }
+.bn { background:var(--amber); height:100%; }
+.br { background:var(--red); height:100%; }
+
+/* Alert panel */
+.alert-panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--rl); padding:14px; margin-bottom:16px; }
+.alert-panel-title { font-size:10px; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.alert-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--r); margin-bottom:4px; font-size:12px; }
+.alert-item:last-child { margin-bottom:0; }
+.alert-item.tgt { background:rgba(32,212,114,0.08); border:1px solid var(--green-border); }
+.alert-item.sl { background:rgba(240,78,78,0.08); border:1px solid var(--red-border); }
+.alert-item.mover { background:var(--surface2); border:1px solid var(--border2); }
+
+/* Banners */
+.banner { margin:0 24px 14px; padding:10px 14px; border-radius:var(--r); font-size:11px; display:none; }
+.banner.show { display:flex; align-items:center; gap:8px; }
+.banner.info { background:var(--blue-dim); border:1px solid rgba(78,158,240,0.22); color:var(--blue); }
+.banner.ok { background:var(--green-dim); border:1px solid var(--green-border); color:var(--green); }
+.banner.err { background:var(--red-dim); border:1px solid var(--red-border); color:var(--red); }
+.banner.warn { background:var(--amber-dim); border:1px solid var(--amber-border); color:var(--amber); }
+
+/* Overlays / Modals */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:300; align-items:flex-start; justify-content:center; padding:32px 16px; overflow-y:auto; }
+.overlay.open { display:flex; }
+.modal { background:var(--surface); border:1px solid var(--border2); border-radius:var(--rx); padding:22px; width:500px; max-width:100%; }
+.modal-title { font-size:16px; font-weight:500; color:var(--text); margin-bottom:18px; }
+.fg { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.frow { display:flex; flex-direction:column; gap:4px; }
+.frow.full { grid-column:1/-1; }
+.frow label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; }
+.modal-foot { display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
+.live-badge { display:inline-flex; align-items:center; gap:5px; background:var(--green-dim); border:1px solid var(--green-border); color:var(--green); font-size:9px; padding:2px 8px; border-radius:99px; font-family:var(--mono); }
+.live-dot { width:4px; height:4px; border-radius:50%; background:var(--green); animation:pulse 1.5s infinite; }
+.empty { text-align:center; padding:36px; color:var(--muted); font-size:12px; }
 </style>
 </head>
 <body>
 <div class="shell">
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="logo">
-      <div class="logo-text">MKTS //</div>
-      <div class="logo-sub">Research & Watchlist</div>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">MKTS</div>
+    <div class="logo-sub">Research & Watchlist</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-group">Research</div>
+    <div class="nav-item active" id="nav-summary" onclick="showPage('summary',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Summary
     </div>
-    <nav class="nav">
-      <div class="nav-section">Research</div>
-      <div class="nav-item active" id="nav-summary" onclick="showPage('summary',this)">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Summary
-      </div>
-      <div class="nav-item" id="nav-coverage" onclick="showPage('coverage',this)">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Coverage
-        <span class="nav-badge" id="nav-cov-count">0</span>
-      </div>
-      <div class="nav-item" id="nav-sectors" onclick="showPage('sectors',this)">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
-        Sectors
-      </div>
-      <div class="nav-section">Trading</div>
-      <div class="nav-item" id="nav-watchlist" onclick="showPage('watchlist',this)">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-        Watchlist
-        <span class="nav-badge alert" id="nav-alert-count" style="display:none">0</span>
-      </div>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="sb-row">
-        <div class="sb-label">Price data</div>
-        <div class="sb-val" id="sb-price">—</div>
-      </div>
-      <div class="sb-row">
-        <div class="sb-label">Research sync</div>
-        <div class="sb-val" id="sb-sync">—</div>
-      </div>
-      <button class="icon-btn" onclick="refreshAll()">↻ Refresh prices</button>
-      <button class="icon-btn" onclick="pushToGitHub()">↑ Sync to GitHub</button>
-      <button class="icon-btn" onclick="openSettings()">⚙ Settings</button>
+    <div class="nav-item" id="nav-coverage" onclick="showPage('coverage',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Coverage
+      <span class="nav-pill" id="np-cov">0</span>
     </div>
-  </aside>
+    <div class="nav-item" id="nav-sectors" onclick="showPage('sectors',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+      Sectors
+    </div>
+    <div class="nav-group">Trading</div>
+    <div class="nav-item" id="nav-watchlist" onclick="showPage('watchlist',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      Watchlist
+      <span class="nav-pill hot" id="np-alert" style="display:none">0</span>
+    </div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sb-row">
+      <div class="sb-label">Price data</div>
+      <div class="sb-val" id="sb-price">—</div>
+    </div>
+    <div class="sb-row">
+      <div class="sb-label">Research sync</div>
+      <div class="sb-val" id="sb-sync">—</div>
+    </div>
+    <button class="icon-btn" onclick="refreshAll()">↻ Refresh prices</button>
+    <button class="icon-btn" onclick="syncToGitHub()">↑ Sync to GitHub</button>
+    <button class="icon-btn" onclick="openSettings()">⚙ Settings</button>
+  </div>
+</aside>
 
-  <main class="main">
-  <div class="sync-banner" id="sync-banner"></div>
+<!-- MAIN -->
+<main class="main">
+  <div class="banner" id="banner"></div>
 
+  <!-- SUMMARY -->
+  <div class="page active" id="page-summary">
+    <div class="ph">
+      <div class="ph-left"><h1>Summary</h1><p id="sum-date"></p></div>
+      <div class="ph-right" id="sum-live"></div>
+    </div>
+    <div class="metrics" id="sum-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div id="alerts-panel"></div>
+      <div class="sec-hdr"><span class="sec-title">Sector overview</span></div>
+      <div class="sc-grid" id="sum-sectors"></div>
+    </div>
+  </div>
 
-    <!-- SUMMARY PAGE -->
-    <div class="page active" id="page-summary">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Summary</div>
-          <div class="page-sub" id="summary-date"></div>
-        </div>
-        <div id="live-badge"></div>
-      </div>
-      <div class="metrics" id="summary-metrics"></div>
-      <div class="divider"></div>
-      <div class="section">
-        <div id="alerts-panel"></div>
-        <div class="section-header"><span class="section-title">Sector overview</span></div>
-        <div class="sector-grid" id="summary-sectors"></div>
+  <!-- COVERAGE -->
+  <div class="page" id="page-coverage">
+    <div class="ph">
+      <div class="ph-left"><h1>Coverage</h1><p>Click any ticker to view chart</p></div>
+      <div class="ph-right">
+        <button class="btn btn-accent" onclick="openAddModal()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Add stock
+        </button>
       </div>
     </div>
-
-    <!-- COVERAGE PAGE -->
-    <div class="page" id="page-coverage">
-      <div class="page-header">
-        <div><div class="page-title">Stock coverage</div><div class="page-sub">Views, actions, conviction & live prices</div></div>
-        <div class="header-actions">
-          <button class="btn btn-primary" onclick="openStockModal()">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Add stock
-          </button>
-        </div>
-      </div>
-      <div class="section" style="padding-top:20px;">
-        <div class="section-header">
-          <div class="toolbar">
-            <div class="search-wrap">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input class="search-input" type="text" id="cov-search" placeholder="Search…" oninput="renderCoverage()">
-            </div>
-            <select id="cov-sector" onchange="renderCoverage()"><option value="">All sectors</option></select>
-            <select id="cov-view" onchange="renderCoverage()">
-              <option value="">All views</option><option value="bullish">Bullish</option><option value="neutral">Neutral</option><option value="bearish">Bearish</option>
-            </select>
-            <select id="cov-action" onchange="renderCoverage()">
-              <option value="">All actions</option><option value="buy">Buy</option><option value="accumulate">Accumulate</option><option value="hold">Hold</option><option value="watch">Watch</option><option value="sell">Sell</option>
-            </select>
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="toolbar">
+          <div class="sw">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input class="si" type="text" id="cov-q" placeholder="Search…" oninput="renderCoverage()">
           </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th onclick="sortBy('ticker')" class="sortable">Ticker <span class="sort-icon" id="sort-ticker"></span></th>
-              <th>Name</th>
-              <th onclick="sortBy('sector')" class="sortable">Sector <span class="sort-icon" id="sort-sector"></span></th>
-              <th onclick="sortBy('view')" class="sortable">View <span class="sort-icon" id="sort-view"></span></th>
-              <th onclick="sortBy('action')" class="sortable">Action <span class="sort-icon" id="sort-action"></span></th>
-              <th onclick="sortBy('conviction')" class="sortable">Conv. <span class="sort-icon" id="sort-conviction"></span></th>
-              <th onclick="sortBy('cmp')" class="sortable">CMP ₹ <span class="sort-icon" id="sort-cmp"></span></th>
-              <th onclick="sortBy('chg')" class="sortable">Chg% <span class="sort-icon" id="sort-chg"></span></th>
-              <th>Target ₹</th><th>SL ₹</th>
-              <th onclick="sortBy('upside')" class="sortable">Upside <span class="sort-icon" id="sort-upside"></span></th>
-              <th onclick="sortBy('trend')" class="sortable">Trend <span class="sort-icon" id="sort-trend"></span></th>
-              <th>Support</th><th>Resist.</th>
-              <th onclick="sortBy('thesisDate')" class="sortable">Thesis date <span class="sort-icon" id="sort-thesisDate"></span></th>
-              <th>Notes</th><th></th>
-            </tr></thead>
-            <tbody id="coverage-tbody"></tbody>
-          </table>
+          <select id="cov-sec" onchange="renderCoverage()"><option value="">All sectors</option></select>
+          <select id="cov-view" onchange="renderCoverage()">
+            <option value="">All views</option><option value="bullish">Bullish</option>
+            <option value="neutral">Neutral</option><option value="bearish">Bearish</option>
+          </select>
+          <select id="cov-act" onchange="renderCoverage()">
+            <option value="">All actions</option><option value="buy">Buy</option>
+            <option value="accumulate">Accumulate</option><option value="hold">Hold</option>
+            <option value="watch">Watch</option><option value="sell">Sell</option>
+          </select>
         </div>
       </div>
-    </div>
-
-    <!-- SECTORS PAGE -->
-    <div class="page" id="page-sectors">
-      <div class="page-header"><div><div class="page-title">Sector view</div><div class="page-sub">Aggregated breakdown by sector</div></div></div>
-      <div class="section" style="padding-top:20px;" id="sectors-content"></div>
-    </div>
-
-    <!-- WATCHLIST PAGE -->
-    <div class="page" id="page-watchlist">
-      <div class="page-header">
-        <div><div class="page-title">Watchlist</div><div class="page-sub">Price alerts & levels</div></div>
-        <div class="header-actions">
-          <button class="btn btn-primary" onclick="openWatchModal()">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Add to watchlist
-          </button>
-        </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th class="sortable" onclick="sortBy('ticker')">Ticker <span class="sort-ic" id="si-ticker">↕</span></th>
+            <th>Name</th>
+            <th class="sortable" onclick="sortBy('sector')">Sector <span class="sort-ic" id="si-sector">↕</span></th>
+            <th class="sortable" onclick="sortBy('view')">View <span class="sort-ic" id="si-view">↕</span></th>
+            <th class="sortable" onclick="sortBy('action')">Action <span class="sort-ic" id="si-action">↕</span></th>
+            <th class="sortable" onclick="sortBy('conviction')">Conv. <span class="sort-ic" id="si-conviction">↕</span></th>
+            <th class="sortable" onclick="sortBy('cmp')">CMP ₹ <span class="sort-ic" id="si-cmp">↕</span></th>
+            <th class="sortable" onclick="sortBy('chg')">Chg% <span class="sort-ic" id="si-chg">↕</span></th>
+            <th>Target ₹</th><th>SL ₹</th>
+            <th class="sortable" onclick="sortBy('upside')">Upside <span class="sort-ic" id="si-upside">↕</span></th>
+            <th class="sortable" onclick="sortBy('trend')">Trend <span class="sort-ic" id="si-trend">↕</span></th>
+            <th>Support</th><th>Resist.</th>
+            <th class="sortable" onclick="sortBy('thesisDate')">Thesis <span class="sort-ic" id="si-thesisDate">↕</span></th>
+            <th>Notes</th><th></th>
+          </tr></thead>
+          <tbody id="cov-body"></tbody>
+        </table>
       </div>
-      <div class="metrics" id="watch-metrics"></div>
-      <div class="divider"></div>
-      <div class="section">
-        <div class="section-header">
-          <span class="section-title">Alerts & levels</span>
-          <div class="toolbar">
-            <div class="search-wrap">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input class="search-input" type="text" id="watch-search" placeholder="Search…" oninput="renderWatchlist()">
-            </div>
-            <select id="watch-filter" onchange="renderWatchlist()">
-              <option value="">All</option><option value="alerted">Alerted</option><option value="normal">Normal</option>
-            </select>
+    </div>
+  </div>
+
+  <!-- SECTORS -->
+  <div class="page" id="page-sectors">
+    <div class="ph"><div class="ph-left"><h1>Sectors</h1><p>Aggregated breakdown</p></div></div>
+    <div class="sec" id="sec-content"></div>
+  </div>
+
+  <!-- WATCHLIST -->
+  <div class="page" id="page-watchlist">
+    <div class="ph">
+      <div class="ph-left"><h1>Watchlist</h1><p>Price alerts & levels</p></div>
+      <div class="ph-right">
+        <button class="btn btn-accent" onclick="openWatchAddModal()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Add
+        </button>
+      </div>
+    </div>
+    <div class="metrics" id="watch-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-title">Alerts & levels</span>
+        <div class="toolbar">
+          <div class="sw">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input class="si" type="text" id="w-q" placeholder="Search…" oninput="renderWatchlist()">
           </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr>
-              <th>Ticker</th><th>Name</th><th>CMP ₹</th><th>Chg%</th>
-              <th>Alert above ₹</th><th>Alert below ₹</th><th>Target ₹</th><th>SL ₹</th>
-              <th>Upside</th><th>Risk/Reward</th><th>Priority</th><th>Notes</th><th>Added</th><th></th>
-            </tr></thead>
-            <tbody id="watch-tbody"></tbody>
-          </table>
+          <select id="w-filter" onchange="renderWatchlist()">
+            <option value="">All</option><option value="alerted">Alerted</option><option value="normal">Normal</option>
+          </select>
         </div>
       </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th>Name</th><th>CMP ₹</th><th>Chg%</th>
+            <th>Alert ↑</th><th>Alert ↓</th><th>Target ₹</th><th>SL ₹</th>
+            <th>Upside</th><th>R/R</th><th>Priority</th><th>Notes</th><th>Added</th><th></th>
+          </tr></thead>
+          <tbody id="w-body"></tbody>
+        </table>
+      </div>
     </div>
-
-  </main>
+  </div>
+</main>
 </div>
 
-<!-- STOCK MODAL -->
-<div class="overlay" id="stock-overlay">
+<!-- EDIT STOCK MODAL -->
+<div class="overlay" id="edit-overlay">
   <div class="modal">
-    <div class="modal-title" id="stock-modal-title">Add stock</div>
-    <div class="form-grid">
-      <div class="form-group"><label>Ticker *</label><input type="text" id="s-ticker" placeholder="e.g. RELIANCE"></div>
-      <div class="form-group"><label>Company name *</label><input type="text" id="s-name" placeholder="e.g. Reliance Industries"></div>
-      <div class="form-group full"><label>Sector *</label><input type="text" id="s-sector" list="sector-dl" placeholder="e.g. Energy, BFSI"><datalist id="sector-dl"></datalist></div>
-      <div class="form-group"><label>View</label>
-        <select id="s-view"><option value="bullish">Bullish</option><option value="neutral" selected>Neutral</option><option value="bearish">Bearish</option></select>
+    <div class="modal-title" id="edit-title">Edit stock</div>
+    <div class="fg">
+      <div class="frow"><label>Ticker</label><input type="text" id="e-ticker" readonly style="opacity:0.5"></div>
+      <div class="frow"><label>Sector</label><input type="text" id="e-sector" readonly style="opacity:0.5"></div>
+      <div class="frow"><label>View</label>
+        <select id="e-view"><option value="bullish">Bullish</option><option value="neutral" selected>Neutral</option><option value="bearish">Bearish</option></select>
       </div>
-      <div class="form-group"><label>Action</label>
-        <select id="s-action"><option value="buy">Buy</option><option value="accumulate">Accumulate</option><option value="hold" selected>Hold</option><option value="watch">Watch</option><option value="sell">Sell</option></select>
+      <div class="frow"><label>Action</label>
+        <select id="e-action"><option value="buy">Buy</option><option value="accumulate">Accumulate</option><option value="hold" selected>Hold</option><option value="watch">Watch</option><option value="sell">Sell</option></select>
       </div>
-      <div class="form-group"><label>Conviction (1–5)</label>
-        <select id="s-conviction"><option value="1">1 — Low</option><option value="2">2</option><option value="3" selected>3 — Medium</option><option value="4">4</option><option value="5">5 — High</option></select>
+      <div class="frow"><label>Conviction (1-5)</label>
+        <select id="e-conv"><option value="1">1 Low</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 High</option></select>
       </div>
-      <div class="form-group"><label>Thesis date</label><input type="date" id="s-thesis-date"></div>
-      <div class="form-group"><label>Target ₹</label><input type="number" id="s-target" placeholder="Price target"></div>
-      <div class="form-group"><label>Stop loss ₹</label><input type="number" id="s-sl" placeholder="Stop loss level"></div>
-      <div class="form-group"><label>Trend</label>
-        <select id="s-trend"><option value="">—</option><option value="uptrend">Uptrend</option><option value="downtrend">Downtrend</option><option value="sideways">Sideways</option><option value="reversal">Reversal</option></select>
+      <div class="frow"><label>Thesis date</label><input type="date" id="e-tdate"></div>
+      <div class="frow"><label>Target ₹</label><input type="number" id="e-target"></div>
+      <div class="frow"><label>Stop loss ₹</label><input type="number" id="e-sl"></div>
+      <div class="frow"><label>Trend</label>
+        <select id="e-trend"><option value="">—</option><option value="uptrend">Uptrend</option><option value="downtrend">Downtrend</option><option value="sideways">Sideways</option><option value="reversal">Reversal</option></select>
       </div>
-      <div class="form-group"><label>Support ₹</label><input type="number" id="s-support" placeholder="Key support"></div>
-      <div class="form-group"><label>Resistance ₹</label><input type="number" id="s-resist" placeholder="Key resistance"></div>
-      <div class="form-group full"><label>Notes / Thesis</label><textarea id="s-notes" placeholder="Key thesis, triggers, risks…"></textarea></div>
+      <div class="frow"><label>Support ₹</label><input type="number" id="e-sup"></div>
+      <div class="frow"><label>Resistance ₹</label><input type="number" id="e-res"></div>
+      <div class="frow full"><label>Notes / Thesis</label><textarea id="e-notes" placeholder="Thesis, triggers, risks…"></textarea></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeStockModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveStock()">Save</button>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD STOCK MODAL -->
+<div class="overlay" id="add-overlay">
+  <div class="modal">
+    <div class="modal-title">Add stock</div>
+    <div class="fg">
+      <div class="frow"><label>Ticker *</label><input type="text" id="a-ticker" placeholder="RELIANCE"></div>
+      <div class="frow"><label>Name *</label><input type="text" id="a-name" placeholder="Reliance Industries"></div>
+      <div class="frow full"><label>Sector *</label><input type="text" id="a-sector" list="sec-dl" placeholder="Energy, BFSI…"><datalist id="sec-dl"></datalist></div>
+      <div class="frow"><label>View</label>
+        <select id="a-view"><option value="bullish">Bullish</option><option value="neutral" selected>Neutral</option><option value="bearish">Bearish</option></select>
+      </div>
+      <div class="frow"><label>Action</label>
+        <select id="a-action"><option value="buy">Buy</option><option value="accumulate">Accumulate</option><option value="hold" selected>Hold</option><option value="watch">Watch</option><option value="sell">Sell</option></select>
+      </div>
+      <div class="frow"><label>Conviction</label>
+        <select id="a-conv"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
+      </div>
+      <div class="frow"><label>Target ₹</label><input type="number" id="a-target"></div>
+      <div class="frow"><label>Stop loss ₹</label><input type="number" id="a-sl"></div>
+      <div class="frow full"><label>Notes</label><textarea id="a-notes"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeAddModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveAdd()">Add</button>
     </div>
   </div>
 </div>
 
 <!-- WATCHLIST MODAL -->
-<div class="overlay" id="watch-overlay">
+<div class="overlay" id="wadd-overlay">
   <div class="modal">
-    <div class="modal-title" id="watch-modal-title">Add to watchlist</div>
-    <div class="form-grid">
-      <div class="form-group"><label>Ticker *</label><input type="text" id="w-ticker" placeholder="e.g. RELIANCE"></div>
-      <div class="form-group"><label>Name *</label><input type="text" id="w-name" placeholder="e.g. Reliance Industries"></div>
-      <div class="form-group"><label>Priority</label>
-        <select id="w-priority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select>
+    <div class="modal-title" id="wm-title">Add to watchlist</div>
+    <div class="fg">
+      <div class="frow"><label>Ticker *</label><input type="text" id="wa-ticker" placeholder="RELIANCE"></div>
+      <div class="frow"><label>Name *</label><input type="text" id="wa-name" placeholder="Reliance Industries"></div>
+      <div class="frow"><label>Priority</label>
+        <select id="wa-pri"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select>
       </div>
-      <div class="form-group"><label>Alert above ₹</label><input type="number" id="w-above" placeholder="Upper alert level"></div>
-      <div class="form-group"><label>Alert below ₹</label><input type="number" id="w-below" placeholder="Lower alert level"></div>
-      <div class="form-group"><label>Target ₹</label><input type="number" id="w-target" placeholder="Price target"></div>
-      <div class="form-group"><label>Stop loss ₹</label><input type="number" id="w-sl" placeholder="Stop loss"></div>
-      <div class="form-group full"><label>Notes</label><textarea id="w-notes" placeholder="Setup, catalyst, why watching…"></textarea></div>
+      <div class="frow"><label>Alert above ₹</label><input type="number" id="wa-above"></div>
+      <div class="frow"><label>Alert below ₹</label><input type="number" id="wa-below"></div>
+      <div class="frow"><label>Target ₹</label><input type="number" id="wa-target"></div>
+      <div class="frow"><label>Stop loss ₹</label><input type="number" id="wa-sl"></div>
+      <div class="frow full"><label>Notes</label><textarea id="wa-notes"></textarea></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeWatchModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveWatch()">Save</button>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeWatchAddModal()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveWatchAdd()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="overlay" id="settings-overlay">
+  <div class="modal">
+    <div class="modal-title">Settings</div>
+    <div class="fg">
+      <div class="frow"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="your-username"></div>
+      <div class="frow"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="stock"></div>
+      <div class="frow full"><label>Personal Access Token (repo scope)</label>
+        <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx" style="font-family:monospace">
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px;">Token stored only in your browser. Never shared anywhere.</div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeSettings()">Cancel</button>
+      <button class="btn btn-accent" onclick="saveSettings()">Save & connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHART MODAL -->
+<div class="overlay" id="chart-overlay" style="align-items:center;">
+  <div class="modal" style="width:860px;max-width:98vw;padding:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div>
+        <span class="mono" id="chart-tk" style="font-size:15px;font-weight:500;color:var(--text)"></span>
+        <span style="color:var(--muted);font-size:12px;margin-left:8px;" id="chart-nm"></span>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a id="chart-link" href="#" target="_blank" class="btn" style="font-size:11px;">Open in TradingView ↗</a>
+        <button class="btn" onclick="closeChart()">✕ Close</button>
+      </div>
+    </div>
+    <div id="tv-container" style="height:500px;border-radius:var(--r);overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;">
+      <span style="color:var(--muted);font-size:12px;">Loading chart…</span>
     </div>
   </div>
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────────
-// ★ STEP 1: Replace this URL with your own after setup
-//   Format: https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/prices.json
-// ─────────────────────────────────────────────────────────
-
-const STORAGE_KEY = 'mkts_v5';
+// ═══════════════════════════════════════════════
+// CONFIG & STATE
+// ═══════════════════════════════════════════════
+const SK = 'mkts_v6';
+const CFG_KEY = 'mkts_cfg';
 const TODAY = new Date();
 const TODAY_STR = TODAY.toISOString().split('T')[0];
+
+let cfg = { user:'', repo:'stock', token:'' };
+let stocks = [];
+let watchlist = [];
 let livePrices = {};
 let priceUpdatedAt = null;
-let cfg = {user:'',repo:'stock',token:''};
-try{const c=localStorage.getItem(STORAGE_KEY+'_cfg');if(c)cfg=JSON.parse(c);}catch(e){}
+let nextSid = 201;
+let nextWid = 1;
+let sortCol = null;
+let sortDir = 1;
+let editingId = null;
+let editingWid = null;
 
-function ghHeaders(){return{'Authorization':'token '+cfg.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
-function ghBase(){return`https://api.github.com/repos/${cfg.user}/${cfg.repo}/contents`;}
-async function ghGet(path){const r=await fetch(ghBase()+path,{headers:ghHeaders()});if(!r.ok)throw new Error(r.status);return r.json();}
-async function ghPut(path,content,sha){const b={message:'chore: sync dashboard',content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2)))),sha};const r=await fetch(ghBase()+path,{method:'PUT',headers:ghHeaders(),body:JSON.stringify(b)});if(!r.ok)throw new Error(r.status);return r.json();}
-
-function setBanner(type,msg){const el=document.getElementById('sync-banner');if(!el)return;el.className=`sync-banner show ${type}`;el.textContent=msg;}
-function clearBanner(){const el=document.getElementById('sync-banner');if(el)el.className='sync-banner';}
-
-async function fetchPrices(){
-  if(!cfg.token||!cfg.user){setSbPrice('warn','Not configured');setBanner('warn','⚙ Open Settings to connect GitHub.');return;}
-  setSbPrice('','Fetching…');
-  try{
-    const f=await ghGet('/prices.json');
-    const content=JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g,'')))));
-    livePrices=content.prices||{};priceUpdatedAt=content.updated_at_readable||null;
-    setSbPrice('ok',priceUpdatedAt||'Updated');
-    rerenderAll();clearBanner();
-  }catch(e){setSbPrice('err','Fetch failed');setBanner('err','✗ Could not fetch prices. Check Settings.');}
+// ═══════════════════════════════════════════════
+// LOAD / SAVE
+// ═══════════════════════════════════════════════
+function loadLocal() {
+  try {
+    const c = localStorage.getItem(CFG_KEY);
+    if (c) cfg = JSON.parse(c);
+    const s = localStorage.getItem(SK);
+    if (s) {
+      const d = JSON.parse(s);
+      stocks = d.stocks || [];
+      watchlist = d.watchlist || [];
+      nextSid = d.nextSid || 201;
+      nextWid = d.nextWid || 1;
+    }
+  } catch(e) {}
 }
 
-async function pushToGitHub(){
-  if(!cfg.token||!cfg.user){openSettings();return;}
-  setBanner('info','↑ Syncing…');setSbSync('','Syncing…');
-  try{
-    let ss=null,ws=null;
-    try{const f=await ghGet('/stocks.json');ss=f.sha;}catch(e){}
-    await ghPut('/stocks.json',state.stocks,ss);
-    try{const f=await ghGet('/watchlist.json');ws=f.sha;}catch(e){}
-    await ghPut('/watchlist.json',state.watchlist,ws);
-    setSbSync('ok',new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
-    setBanner('ok','✓ Synced to GitHub.');setTimeout(clearBanner,3000);
-  }catch(e){setSbSync('err','Failed');setBanner('err','✗ Sync failed.');}
+function saveLocal() {
+  try {
+    localStorage.setItem(SK, JSON.stringify({ stocks, watchlist, nextSid, nextWid }));
+  } catch(e) {}
 }
 
-async function pullFromGitHub(){
-  if(!cfg.token||!cfg.user)return;
-  try{
-    const sf=await ghGet('/stocks.json');
-    state.stocks=JSON.parse(decodeURIComponent(escape(atob(sf.content.replace(/\n/g,'')))));
-    saveState();rerenderAll();updateNavBadges();setSbSync('ok','Pulled');
-  }catch(e){
-    console.log('stocks.json pull failed:',e.message);
+// ═══════════════════════════════════════════════
+// GITHUB API
+// ═══════════════════════════════════════════════
+function ghHeaders() {
+  return {
+    'Authorization': 'token ' + cfg.token,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
+}
+function ghBase() { return 'https://api.github.com/repos/' + cfg.user + '/' + cfg.repo + '/contents'; }
+
+async function ghGet(path) {
+  const r = await fetch(ghBase() + path, { headers: ghHeaders() });
+  if (!r.ok) throw new Error('GitHub ' + r.status);
+  return r.json();
+}
+
+async function ghPut(path, content, sha) {
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
+  const body = { message: 'chore: sync dashboard data', content: encoded };
+  if (sha) body.sha = sha;
+  const r = await fetch(ghBase() + path, { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!r.ok) throw new Error('GitHub PUT ' + r.status);
+  return r.json();
+}
+
+function decodeGH(b64) {
+  return JSON.parse(decodeURIComponent(escape(atob(b64.replace(/
+/g,'')))));
+}
+
+// ═══════════════════════════════════════════════
+// PRICES
+// ═══════════════════════════════════════════════
+async function fetchPrices() {
+  if (!cfg.token || !cfg.user) {
+    setSb('price','warn','Not configured');
+    showBanner('warn','⚙ Open Settings to connect GitHub for live prices.');
+    return;
   }
-  try{
-    const wf=await ghGet('/watchlist.json');
-    state.watchlist=JSON.parse(decodeURIComponent(escape(atob(wf.content.replace(/\n/g,'')))));
-    saveState();rerenderAll();updateNavBadges();
-  }catch(e){
-    console.log('watchlist.json pull failed:',e.message);
+  setSb('price','','Fetching…');
+  try {
+    const f = await ghGet('/prices.json');
+    const data = decodeGH(f.content);
+    livePrices = data.prices || {};
+    priceUpdatedAt = data.updated_at_readable || null;
+    setSb('price','ok', priceUpdatedAt || 'Updated');
+    rerenderActive();
+    hideBanner();
+  } catch(e) {
+    setSb('price','err','Fetch failed');
+    showBanner('err','✗ Could not fetch prices. Check Settings.');
   }
 }
 
-async function refreshAll(){await fetchPrices();await pullFromGitHub();}
+// ═══════════════════════════════════════════════
+// SYNC
+// ═══════════════════════════════════════════════
+async function pullFromGitHub() {
+  if (!cfg.token || !cfg.user) return;
+  try {
+    const sf = await ghGet('/stocks.json');
+    const pulled = decodeGH(sf.content);
+    if (Array.isArray(pulled) && pulled.length > 0) {
+      stocks = pulled;
+      // Update nextSid
+      const maxId = Math.max(...stocks.map(s => s.id || 0));
+      nextSid = maxId + 1;
+      saveLocal();
+      rerenderActive();
+      updatePills();
+    }
+    setSb('sync','ok','Pulled');
+  } catch(e) {
+    // stocks.json may not exist yet — that's fine
+    setSb('sync','warn','No remote data');
+  }
+  try {
+    const wf = await ghGet('/watchlist.json');
+    const wpulled = decodeGH(wf.content);
+    if (Array.isArray(wpulled)) {
+      watchlist = wpulled;
+      const maxWid = Math.max(0, ...watchlist.map(w => w.id || 0));
+      nextWid = maxWid + 1;
+      saveLocal();
+    }
+  } catch(e) {}
+}
 
-function setSbPrice(cls,txt){const el=document.getElementById('sb-price');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
-function setSbSync(cls,txt){const el=document.getElementById('sb-sync');if(!el)return;el.className='sb-val'+(cls?' '+cls:'');el.textContent=txt;}
+async function syncToGitHub() {
+  if (!cfg.token || !cfg.user) { openSettings(); return; }
+  showBanner('info','↑ Syncing to GitHub…');
+  setSb('sync','','Syncing…');
+  try {
+    let sSha = null, wSha = null;
+    try { const f = await ghGet('/stocks.json'); sSha = f.sha; } catch(e) {}
+    await ghPut('/stocks.json', stocks, sSha);
+    try { const f = await ghGet('/watchlist.json'); wSha = f.sha; } catch(e) {}
+    await ghPut('/watchlist.json', watchlist, wSha);
+    setSb('sync','ok', new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
+    showBanner('ok','✓ Synced to GitHub. Data available on all devices.');
+    setTimeout(hideBanner, 3000);
+  } catch(e) {
+    setSb('sync','err','Failed');
+    showBanner('err','✗ Sync failed. Check your token and repo name in Settings.');
+  }
+}
 
-// ── Chart modal ──────────────────────────────────────
+async function refreshAll() {
+  await pullFromGitHub();
+  await fetchPrices();
+}
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+function setSb(which, cls, txt) {
+  const el = document.getElementById('sb-' + which);
+  if (!el) return;
+  el.className = 'sb-val' + (cls ? ' ' + cls : '');
+  el.textContent = txt;
+}
+function showBanner(type, msg) {
+  const el = document.getElementById('banner');
+  el.className = 'banner show ' + type;
+  el.textContent = msg;
+}
+function hideBanner() {
+  document.getElementById('banner').className = 'banner';
+}
+function getCmp(t) { return livePrices[t] ? livePrices[t].cmp : null; }
+function getChg(t) { return livePrices[t] ? livePrices[t].change_pct : null; }
+function upside(cmp, tgt) { if (!cmp || !tgt) return null; return ((tgt-cmp)/cmp*100); }
+function rr(cmp, tgt, sl) {
+  if (!cmp || !tgt || !sl) return null;
+  const rw = tgt-cmp, rk = cmp-sl;
+  if (rk <= 0) return null;
+  return (rw/rk).toFixed(1) + 'x';
+}
+function fN(n) { return n ? '₹' + Number(n).toLocaleString('en-IN') : '—'; }
+function fPct(v) {
+  if (v === null || v === undefined) return '<span class="dim">—</span>';
+  const s = v.toFixed(1);
+  return v >= 0 ? '<span class="pos">+' + s + '%</span>' : '<span class="neg">' + s + '%</span>';
+}
+function fChg(v) {
+  if (v === null || v === undefined) return '<span class="dim">—</span>';
+  const s = v.toFixed(2);
+  return v >= 0 ? '<span class="pos">+' + s + '%</span>' : '<span class="neg">' + s + '%</span>';
+}
+function stars(n) {
+  n = n || 3;
+  return '<span class="stars">' + '★'.repeat(n) + '<span class="off">' + '★'.repeat(5-n) + '</span></span>';
+}
+function tBadge(t) {
+  if (!t) return '<span class="dim">—</span>';
+  return '<span class="b b-' + t + '">' + t + '</span>';
+}
+function thesisAge(d) {
+  if (!d) return '<span class="dim">—</span>';
+  const days = Math.round((TODAY - new Date(d)) / 86400000);
+  const l = days === 0 ? 'Today' : days < 30 ? days + 'd' : days < 365 ? Math.round(days/30) + 'mo' : Math.round(days/365) + 'y';
+  return '<span class="' + (days > 90 ? 'stale' : '') + '" title="' + d + '">' + (days > 90 ? '⚑ ' : '') + l + ' ago</span>';
+}
+function getSectors() { return [...new Set(stocks.map(s => s.sector))].sort(); }
+function isAlerted(w) {
+  const c = getCmp(w.ticker);
+  if (!c) return false;
+  return (w.above && c >= w.above) || (w.below && c <= w.below);
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  if (id === 'summary') renderSummary();
+  if (id === 'coverage') { renderCoverage(); populateSecFilter(); }
+  if (id === 'sectors') renderSectors();
+  if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
+}
+
+function rerenderActive() {
+  const active = document.querySelector('.page.active');
+  if (!active) return;
+  const id = active.id.replace('page-', '');
+  if (id === 'summary') renderSummary();
+  else if (id === 'coverage') renderCoverage();
+  else if (id === 'sectors') renderSectors();
+  else if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
+}
+
+function updatePills() {
+  document.getElementById('np-cov').textContent = stocks.length;
+  const tgtHits = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.target&&c>=s.target; }).length;
+  const slHits = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.sl&&c<=s.sl; }).length;
+  const wAlerts = watchlist.filter(isAlerted).length;
+  const total = tgtHits + slHits + wAlerts;
+  const el = document.getElementById('np-alert');
+  el.textContent = total;
+  el.style.display = total > 0 ? 'inline-block' : 'none';
+}
+
+// ═══════════════════════════════════════════════
+// SUMMARY
+// ═══════════════════════════════════════════════
+function renderSummary() {
+  document.getElementById('sum-date').textContent = TODAY.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const lv = document.getElementById('sum-live');
+  lv.innerHTML = priceUpdatedAt ? '<span class="live-badge"><span class="live-dot"></span>Live · ' + priceUpdatedAt + '</span>' : '';
+
+  const bull = stocks.filter(s => s.view==='bullish').length;
+  const bear = stocks.filter(s => s.view==='bearish').length;
+  const neut = stocks.filter(s => s.view==='neutral').length;
+  const buy  = stocks.filter(s => ['buy','accumulate'].includes(s.action)).length;
+  const sell = stocks.filter(s => s.action==='sell').length;
+  const stale= stocks.filter(s => s.thesisDate && Math.round((TODAY-new Date(s.thesisDate))/86400000)>90).length;
+  const tgtH = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.target&&c>=s.target; }).length;
+  const slH  = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.sl&&c<=s.sl; }).length;
+
+  document.getElementById('sum-metrics').innerHTML =
+    mc('Coverage', stocks.length, '', getSectors().length + ' sectors') +
+    mc('Bullish', bull, 'g', pct(bull,stocks.length)) +
+    mc('Neutral', neut, 'a', '') +
+    mc('Bearish', bear, 'r', '') +
+    mc('Buy/Accum.', buy, 'g', '') +
+    mc('Sell', sell, sell>0?'r':'', '') +
+    mc('Stale theses', stale, stale>0?'r':'', '>90 days') +
+    mc('Price alerts', tgtH+slH, tgtH+slH>0?'r':'', tgtH+slH>0?'⚑ Active':'Clear');
+
+  // Alerts panel
+  const tgtStocks = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.target&&c>=s.target; });
+  const slStocks  = stocks.filter(s => { const c=getCmp(s.ticker); return c&&s.sl&&c<=s.sl; });
+  const movers    = stocks.filter(s => { const ch=getChg(s.ticker); return ch && Math.abs(ch)>=3; });
+  let apHtml = '';
+  if (tgtStocks.length || slStocks.length || movers.length) {
+    apHtml = '<div class="alert-panel"><div class="alert-panel-title">⚡ Price alerts</div>';
+    tgtStocks.forEach(s => {
+      const c = getCmp(s.ticker);
+      apHtml += '<div class="alert-item tgt"><span class="adot" style="background:var(--green)"></span><span class="mono">' + s.ticker + '</span><span style="color:var(--text2)">' + s.name + '</span><span style="margin-left:auto;color:var(--green);font-family:var(--mono);font-size:11px;">₹' + Number(c).toLocaleString('en-IN') + ' ≥ Target ₹' + Number(s.target).toLocaleString('en-IN') + ' 🎯</span></div>';
+    });
+    slStocks.forEach(s => {
+      const c = getCmp(s.ticker);
+      apHtml += '<div class="alert-item sl"><span class="adot"></span><span class="mono">' + s.ticker + '</span><span style="color:var(--text2)">' + s.name + '</span><span style="margin-left:auto;color:var(--red);font-family:var(--mono);font-size:11px;">₹' + Number(c).toLocaleString('en-IN') + ' ≤ SL ₹' + Number(s.sl).toLocaleString('en-IN') + ' ⚠</span></div>';
+    });
+    if (movers.length) {
+      apHtml += '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Big movers (&gt;3%)</div>';
+      movers.forEach(s => {
+        const ch = getChg(s.ticker);
+        apHtml += '<div class="alert-item mover"><span class="mono">' + s.ticker + '</span><span style="color:var(--text2)">' + s.name + '</span><span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:' + (ch>0?'var(--green)':'var(--red)') + '">' + (ch>0?'+':'') + ch.toFixed(2) + '%</span></div>';
+      });
+    }
+    apHtml += '</div>';
+  }
+  document.getElementById('alerts-panel').innerHTML = apHtml;
+
+  // Sector cards
+  let html = '';
+  getSectors().forEach(sec => {
+    const ss = stocks.filter(s => s.sector===sec);
+    const b = ss.filter(s=>s.view==='bullish').length;
+    const n = ss.filter(s=>s.view==='neutral').length;
+    const br= ss.filter(s=>s.view==='bearish').length;
+    const p = v => ss.length ? Math.round(v/ss.length*100) : 0;
+    const ov = b>br&&b>=n?'bullish':br>b&&br>=n?'bearish':'neutral';
+    const avgC = (ss.reduce((a,s)=>a+(s.conviction||3),0)/ss.length).toFixed(1);
+    html += '<div class="sc"><div class="sc-hdr"><span class="sc-name">' + sec + '</span><span class="b b-' + ov + '">' + ov + '</span></div>' +
+      '<div class="sc-bar-row"><span style="font-size:9px;color:var(--green);min-width:24px;">' + p(b) + '%</span>' +
+      '<div class="sc-bar"><div class="bb" style="width:' + p(b) + '%"></div><div class="bn" style="width:' + p(n) + '%"></div><div class="br" style="width:' + p(br) + '%"></div></div>' +
+      '<span style="font-size:9px;color:var(--red);min-width:24px;text-align:right;">' + p(br) + '%</span></div>' +
+      '<div style="font-size:9px;color:var(--muted);margin-bottom:6px;">' + ss.length + ' stocks · avg conv ' + avgC + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);font-family:var(--mono);">' + ss.map(s=>s.ticker).join(' · ') + '</div></div>';
+  });
+  document.getElementById('sum-sectors').innerHTML = html || '<div class="empty">No stocks yet.</div>';
+  updatePills();
+}
+
+function mc(label, val, cls, sub) {
+  return '<div class="mc"><div class="mc-label">' + label + '</div><div class="mc-val' + (cls?' '+cls:'') + '">' + val + '</div>' + (sub?'<div class="mc-sub">'+sub+'</div>':'') + '</div>';
+}
+function pct(v, total) { return total ? Math.round(v/total*100) + '%' : '0%'; }
+
+// ═══════════════════════════════════════════════
+// COVERAGE
+// ═══════════════════════════════════════════════
+function sortBy(col) {
+  if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+  document.querySelectorAll('.sort-ic').forEach(el => el.textContent = '↕');
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  const ic = document.getElementById('si-' + col);
+  if (ic) { ic.textContent = sortDir===1?'↑':'↓'; ic.closest('th').classList.add('sorted'); }
+  renderCoverage();
+}
+
+function getSortVal(s, col) {
+  const cmp = getCmp(s.ticker);
+  if (col==='ticker') return s.ticker;
+  if (col==='sector') return s.sector;
+  if (col==='view') return ['bullish','neutral','bearish'].indexOf(s.view);
+  if (col==='action') return ['buy','accumulate','hold','watch','sell'].indexOf(s.action);
+  if (col==='conviction') return s.conviction || 3;
+  if (col==='cmp') return cmp || 0;
+  if (col==='chg') return getChg(s.ticker) || 0;
+  if (col==='upside') return upside(cmp, s.target) || 0;
+  if (col==='trend') return s.trend || '';
+  if (col==='thesisDate') return s.thesisDate || '';
+  return 0;
+}
+
+function renderCoverage() {
+  const q   = (document.getElementById('cov-q').value||'').toLowerCase();
+  const sec = document.getElementById('cov-sec').value;
+  const vw  = document.getElementById('cov-view').value;
+  const ac  = document.getElementById('cov-act').value;
+  let filtered = stocks.filter(s =>
+    (!q  || s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)) &&
+    (!sec|| s.sector===sec) && (!vw||s.view===vw) && (!ac||s.action===ac)
+  );
+  if (sortCol) {
+    filtered.sort((a,b) => {
+      const av=getSortVal(a,sortCol), bv=getSortVal(b,sortCol);
+      return av===bv ? 0 : (av>bv?1:-1)*sortDir;
+    });
+  }
+  const tbody = document.getElementById('cov-body');
+  if (!filtered.length) { tbody.innerHTML='<tr><td colspan="17" class="empty">No stocks match.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(s => {
+    const cmp = getCmp(s.ticker);
+    const chg = getChg(s.ticker);
+    const up  = upside(cmp, s.target);
+    const atTgt = cmp && s.target && cmp >= s.target;
+    const atSL  = cmp && s.sl && cmp <= s.sl;
+    const bigUp = chg && chg >= 3;
+    const bigDn = chg && chg <= -3;
+    const rc = atTgt ? 'row-tgt' : atSL ? 'row-sl' : bigUp ? 'row-up' : bigDn ? 'row-dn' : '';
+    return '<tr class="' + rc + '">' +
+      '<td><span class="tk" onclick="openChart(' + JSON.stringify(s.ticker) + ',' + JSON.stringify(s.name) + ')" title="View chart">' + s.ticker + ' ↗</span></td>' +
+      '<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + s.name + '</td>' +
+      '<td style="color:var(--text2);font-size:11px;">' + s.sector + '</td>' +
+      '<td><span class="b b-' + s.view + '">' + s.view + '</span></td>' +
+      '<td><span class="b b-' + s.action + '">' + s.action + '</span></td>' +
+      '<td>' + stars(s.conviction) + '</td>' +
+      '<td class="mono">' + (cmp ? '₹'+Number(cmp).toLocaleString('en-IN') : '<span class="dim">—</span>') + '</td>' +
+      '<td>' + fChg(chg) + '</td>' +
+      '<td class="mono">' + fN(s.target) + '</td>' +
+      '<td class="mono">' + fN(s.sl) + '</td>' +
+      '<td>' + fPct(up) + '</td>' +
+      '<td>' + tBadge(s.trend) + '</td>' +
+      '<td class="mono dim">' + fN(s.support) + '</td>' +
+      '<td class="mono dim">' + fN(s.resist) + '</td>' +
+      '<td>' + thesisAge(s.thesisDate) + '</td>' +
+      '<td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);" title="' + (s.notes||'').replace(/"/g,'&quot;') + '">' + (s.notes||'—') + '</td>' +
+      '<td style="white-space:nowrap;display:flex;gap:4px;">' +
+        '<button class="btn btn-sm" onclick="openEditModal(' + s.id + ')">Edit</button>' +
+        '<button class="btn btn-sm" style="color:var(--red)" onclick="delStock(' + s.id + ')">Del</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function populateSecFilter() {
+  const sel = document.getElementById('cov-sec'), cur = sel.value;
+  sel.innerHTML = '<option value="">All sectors</option>' + getSectors().map(s => '<option value="' + s + '"' + (s===cur?' selected':'') + '>' + s + '</option>').join('');
+  const dl = document.getElementById('sec-dl');
+  if (dl) dl.innerHTML = getSectors().map(s => '<option value="' + s + '">').join('');
+}
+
+// ═══════════════════════════════════════════════
+// SECTORS
+// ═══════════════════════════════════════════════
+function renderSectors() {
+  let html = '';
+  getSectors().forEach(sec => {
+    const ss = stocks.filter(s => s.sector===sec);
+    const b=ss.filter(s=>s.view==='bullish').length, n=ss.filter(s=>s.view==='neutral').length, br=ss.filter(s=>s.view==='bearish').length;
+    const ov = b>br&&b>=n?'bullish':br>b&&br>=n?'bearish':'neutral';
+    html += '<div style="margin-bottom:22px;">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><span style="font-size:14px;font-weight:500;">' + sec + '</span>' +
+      '<span class="b b-' + ov + '">' + ov + '</span><span style="font-size:10px;color:var(--muted);">' + ss.length + ' stocks</span></div>' +
+      '<div class="tw"><table><thead><tr><th>Ticker</th><th>Name</th><th>View</th><th>Action</th><th>Conv.</th><th>CMP ₹</th><th>Chg%</th><th>Target ₹</th><th>SL ₹</th><th>Upside</th><th>Trend</th><th>Thesis</th></tr></thead><tbody>' +
+      ss.map(s => {
+        const cmp=getCmp(s.ticker), chg=getChg(s.ticker);
+        return '<tr><td><span class="tk" onclick="openChart(' + JSON.stringify(s.ticker) + ',' + JSON.stringify(s.name) + ')">' + s.ticker + ' ↗</span></td>' +
+          '<td style="font-size:11px;">' + s.name + '</td>' +
+          '<td><span class="b b-'+s.view+'">'+s.view+'</span></td>' +
+          '<td><span class="b b-'+s.action+'">'+s.action+'</span></td>' +
+          '<td>'+stars(s.conviction)+'</td>' +
+          '<td class="mono">'+(cmp?'₹'+Number(cmp).toLocaleString('en-IN'):'<span class="dim">—</span>')+'</td>' +
+          '<td>'+fChg(chg)+'</td><td class="mono">'+fN(s.target)+'</td><td class="mono">'+fN(s.sl)+'</td>' +
+          '<td>'+fPct(upside(cmp,s.target))+'</td><td>'+tBadge(s.trend)+'</td><td>'+thesisAge(s.thesisDate)+'</td></tr>';
+      }).join('') +
+      '</tbody></table></div></div>';
+  });
+  document.getElementById('sec-content').innerHTML = html || '<div class="empty">No stocks yet.</div>';
+}
+
+// ═══════════════════════════════════════════════
+// WATCHLIST
+// ═══════════════════════════════════════════════
+function renderWatchMetrics() {
+  const al = watchlist.filter(isAlerted).length;
+  const hi = watchlist.filter(w => w.priority==='high').length;
+  document.getElementById('watch-metrics').innerHTML =
+    mc('Watching', watchlist.length, '', '') +
+    mc('Alerts triggered', al, al>0?'r':'', 'vs live CMP') +
+    mc('High priority', hi, 'a', '');
+}
+
+function renderWatchlist() {
+  const q  = (document.getElementById('w-q').value||'').toLowerCase();
+  const f2 = document.getElementById('w-filter').value;
+  const filtered = watchlist.filter(w =>
+    (!q || w.ticker.toLowerCase().includes(q) || w.name.toLowerCase().includes(q)) &&
+    (!f2 || (f2==='alerted'&&isAlerted(w)) || (f2==='normal'&&!isAlerted(w)))
+  );
+  const tbody = document.getElementById('w-body');
+  if (!filtered.length) { tbody.innerHTML='<tr><td colspan="14" class="empty">Nothing to show.</td></tr>'; return; }
+  tbody.innerHTML = filtered.map(w => {
+    const cmp=getCmp(w.ticker), chg=getChg(w.ticker), al=isAlerted(w);
+    const aA=w.above&&cmp&&cmp>=w.above, aB=w.below&&cmp&&cmp<=w.below;
+    return '<tr style="' + (al?'background:rgba(240,78,78,0.03);':'') + '">' +
+      '<td><span class="tk" onclick="openChart(' + JSON.stringify(w.ticker) + ',' + JSON.stringify(w.name) + ')">' + (al?'<span class="adot"></span>':'') + w.ticker + '</span></td>' +
+      '<td>' + w.name + '</td>' +
+      '<td class="mono">' + (cmp?'₹'+Number(cmp).toLocaleString('en-IN'):'<span class="dim">—</span>') + '</td>' +
+      '<td>' + fChg(chg) + '</td>' +
+      '<td class="mono' + (aA?' stale':'') + '">' + (w.above ? fN(w.above)+(aA?' ⚑':'') : '—') + '</td>' +
+      '<td class="mono' + (aB?' stale':'') + '">' + (w.below ? fN(w.below)+(aB?' ⚑':'') : '—') + '</td>' +
+      '<td class="mono">' + fN(w.target) + '</td>' +
+      '<td class="mono">' + fN(w.sl) + '</td>' +
+      '<td>' + fPct(upside(cmp,w.target)) + '</td>' +
+      '<td class="mono dim">' + (rr(cmp,w.target,w.sl)||'—') + '</td>' +
+      '<td><span class="b b-' + w.priority + '">' + w.priority + '</span></td>' +
+      '<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);" title="' + (w.notes||'').replace(/"/g,'&quot;') + '">' + (w.notes||'—') + '</td>' +
+      '<td style="color:var(--muted);font-size:10px;">' + (w.added?new Date(w.added).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—') + '</td>' +
+      '<td style="white-space:nowrap;display:flex;gap:4px;">' +
+        '<button class="btn btn-sm" onclick="openWatchEdit(' + w.id + ')">Edit</button>' +
+        '<button class="btn btn-sm" style="color:var(--red)" onclick="delWatch(' + w.id + ')">Del</button>' +
+      '</td></tr>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// EDIT STOCK
+// ═══════════════════════════════════════════════
+function openEditModal(id) {
+  const s = stocks.find(x => x.id===id);
+  if (!s) return;
+  editingId = id;
+  document.getElementById('edit-title').textContent = 'Edit — ' + s.ticker + ' · ' + s.name;
+  document.getElementById('e-ticker').value = s.ticker;
+  document.getElementById('e-sector').value = s.sector;
+  document.getElementById('e-view').value = s.view || 'neutral';
+  document.getElementById('e-action').value = s.action || 'hold';
+  document.getElementById('e-conv').value = s.conviction || 3;
+  document.getElementById('e-tdate').value = s.thesisDate || TODAY_STR;
+  document.getElementById('e-target').value = s.target || '';
+  document.getElementById('e-sl').value = s.sl || '';
+  document.getElementById('e-trend').value = s.trend || '';
+  document.getElementById('e-sup').value = s.support || '';
+  document.getElementById('e-res').value = s.resist || '';
+  document.getElementById('e-notes').value = s.notes || '';
+  document.getElementById('edit-overlay').classList.add('open');
+}
+function closeEditModal() { document.getElementById('edit-overlay').classList.remove('open'); }
+function saveEdit() {
+  if (!editingId) return;
+  const i = stocks.findIndex(x => x.id===editingId);
+  stocks[i] = Object.assign({}, stocks[i], {
+    view: document.getElementById('e-view').value,
+    action: document.getElementById('e-action').value,
+    conviction: parseInt(document.getElementById('e-conv').value) || 3,
+    thesisDate: document.getElementById('e-tdate').value || null,
+    target: parseFloat(document.getElementById('e-target').value) || null,
+    sl: parseFloat(document.getElementById('e-sl').value) || null,
+    trend: document.getElementById('e-trend').value || null,
+    support: parseFloat(document.getElementById('e-sup').value) || null,
+    resist: parseFloat(document.getElementById('e-res').value) || null,
+    notes: document.getElementById('e-notes').value.trim(),
+  });
+  saveLocal();
+  closeEditModal();
+  rerenderActive();
+  updatePills();
+}
+function delStock(id) {
+  if (!confirm('Remove from coverage?')) return;
+  stocks = stocks.filter(s => s.id!==id);
+  saveLocal();
+  rerenderActive();
+  populateSecFilter();
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════
+// ADD STOCK
+// ═══════════════════════════════════════════════
+function openAddModal() {
+  ['a-ticker','a-name','a-sector','a-notes'].forEach(id => document.getElementById(id).value='');
+  ['a-target','a-sl'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('a-view').value='neutral';
+  document.getElementById('a-action').value='hold';
+  document.getElementById('a-conv').value='3';
+  populateSecFilter();
+  document.getElementById('add-overlay').classList.add('open');
+}
+function closeAddModal() { document.getElementById('add-overlay').classList.remove('open'); }
+function saveAdd() {
+  const ticker = document.getElementById('a-ticker').value.trim().toUpperCase();
+  const name   = document.getElementById('a-name').value.trim();
+  const sector = document.getElementById('a-sector').value.trim();
+  if (!ticker||!name||!sector) { alert('Ticker, name and sector required.'); return; }
+  stocks.push({
+    id: nextSid++, ticker, name, sector,
+    view: document.getElementById('a-view').value,
+    action: document.getElementById('a-action').value,
+    conviction: parseInt(document.getElementById('a-conv').value)||3,
+    target: parseFloat(document.getElementById('a-target').value)||null,
+    sl: parseFloat(document.getElementById('a-sl').value)||null,
+    trend:null, support:null, resist:null,
+    notes: document.getElementById('a-notes').value.trim(),
+    thesisDate: TODAY_STR,
+  });
+  saveLocal();
+  closeAddModal();
+  rerenderActive();
+  populateSecFilter();
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════
+// WATCHLIST CRUD
+// ═══════════════════════════════════════════════
+function openWatchAddModal() {
+  editingWid = null;
+  document.getElementById('wm-title').textContent = 'Add to watchlist';
+  ['wa-ticker','wa-name','wa-notes'].forEach(id => document.getElementById(id).value='');
+  ['wa-above','wa-below','wa-target','wa-sl'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('wa-pri').value='medium';
+  document.getElementById('wadd-overlay').classList.add('open');
+}
+function closeWatchAddModal() { document.getElementById('wadd-overlay').classList.remove('open'); }
+function openWatchEdit(id) {
+  const w = watchlist.find(x => x.id===id);
+  if (!w) return;
+  editingWid = id;
+  document.getElementById('wm-title').textContent = 'Edit — ' + w.ticker;
+  document.getElementById('wa-ticker').value = w.ticker;
+  document.getElementById('wa-name').value = w.name;
+  document.getElementById('wa-above').value = w.above||'';
+  document.getElementById('wa-below').value = w.below||'';
+  document.getElementById('wa-target').value = w.target||'';
+  document.getElementById('wa-sl').value = w.sl||'';
+  document.getElementById('wa-pri').value = w.priority||'medium';
+  document.getElementById('wa-notes').value = w.notes||'';
+  document.getElementById('wadd-overlay').classList.add('open');
+}
+function saveWatchAdd() {
+  const ticker = document.getElementById('wa-ticker').value.trim().toUpperCase();
+  const name   = document.getElementById('wa-name').value.trim();
+  if (!ticker||!name) { alert('Ticker and name required.'); return; }
+  const obj = {
+    ticker, name,
+    above: parseFloat(document.getElementById('wa-above').value)||null,
+    below: parseFloat(document.getElementById('wa-below').value)||null,
+    target: parseFloat(document.getElementById('wa-target').value)||null,
+    sl: parseFloat(document.getElementById('wa-sl').value)||null,
+    priority: document.getElementById('wa-pri').value,
+    notes: document.getElementById('wa-notes').value.trim(),
+    added: editingWid ? watchlist.find(x=>x.id===editingWid)?.added : TODAY_STR,
+  };
+  if (editingWid) {
+    const i = watchlist.findIndex(x => x.id===editingWid);
+    watchlist[i] = Object.assign({}, watchlist[i], obj);
+  } else {
+    watchlist.push(Object.assign({ id: nextWid++ }, obj));
+  }
+  saveLocal();
+  closeWatchAddModal();
+  renderWatchlist();
+  renderWatchMetrics();
+  updatePills();
+}
+function delWatch(id) {
+  if (!confirm('Remove from watchlist?')) return;
+  watchlist = watchlist.filter(w => w.id!==id);
+  saveLocal();
+  renderWatchlist();
+  renderWatchMetrics();
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════
+function openSettings() {
+  document.getElementById('cfg-user').value = cfg.user || '';
+  document.getElementById('cfg-repo').value = cfg.repo || 'stock';
+  document.getElementById('cfg-token').value = cfg.token || '';
+  document.getElementById('settings-overlay').classList.add('open');
+}
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
+function saveSettings() {
+  cfg.user  = document.getElementById('cfg-user').value.trim();
+  cfg.repo  = document.getElementById('cfg-repo').value.trim() || 'stock';
+  cfg.token = document.getElementById('cfg-token').value.trim();
+  localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  closeSettings();
+  showBanner('info','Connecting…');
+  refreshAll();
+}
+
+// ═══════════════════════════════════════════════
+// CHART
+// ═══════════════════════════════════════════════
 function openChart(ticker, name) {
-  document.getElementById('chart-ticker').textContent = ticker;
-  document.getElementById('chart-name').textContent = name;
-  document.getElementById('chart-tv-link').href = `https://www.tradingview.com/chart/?symbol=NSE:${ticker}`;
+  document.getElementById('chart-tk').textContent = ticker;
+  document.getElementById('chart-nm').textContent = name;
+  document.getElementById('chart-link').href = 'https://www.tradingview.com/chart/?symbol=NSE:' + ticker;
   document.getElementById('chart-overlay').classList.add('open');
-
-  // Clear previous widget
-  const container = document.getElementById('tv-widget-container');
-  container.innerHTML = '';
-
-  // Load TradingView widget script
-  const script = document.createElement('script');
-  script.src = 'https://s3.tradingview.com/tv.js';
-  script.onload = () => {
+  const container = document.getElementById('tv-container');
+  container.innerHTML = '<span style="color:var(--muted);font-size:12px;">Loading chart…</span>';
+  function initWidget() {
+    container.innerHTML = '';
     new TradingView.widget({
-      container_id: 'tv-widget-container',
-      symbol: `NSE:${ticker}`,
+      container_id: 'tv-container',
+      symbol: 'NSE:' + ticker,
       interval: 'D',
       timezone: 'Asia/Kolkata',
       theme: 'dark',
       style: '1',
       locale: 'en',
-      toolbar_bg: '#0f1318',
       enable_publishing: false,
       hide_top_toolbar: false,
-      hide_legend: false,
       save_image: false,
       height: 500,
       width: '100%',
-      studies: ['RSI@tv-basicstudies', 'MACD@tv-basicstudies'],
-      show_popup_button: false,
+      studies: ['RSI@tv-basicstudies','MACD@tv-basicstudies'],
     });
-  };
-  // If script already loaded
+  }
   if (window.TradingView) {
-    script.onload();
+    initWidget();
   } else {
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
+    script.onload = initWidget;
     document.head.appendChild(script);
   }
 }
-
 function closeChart() {
   document.getElementById('chart-overlay').classList.remove('open');
-  document.getElementById('tv-widget-container').innerHTML = '';
-}
-document.getElementById('chart-overlay').addEventListener('click', function(e) { if(e.target===this) closeChart(); });
-
-function openSettings(){
-  document.getElementById('cfg-user').value=cfg.user||'';
-  document.getElementById('cfg-repo').value=cfg.repo||'stock';
-  document.getElementById('cfg-token').value=cfg.token||'';
-  document.getElementById('set-overlay').classList.add('open');
-}
-function closeSettings(){document.getElementById('set-overlay').classList.remove('open');}
-function saveSettings(){
-  cfg.user=document.getElementById('cfg-user').value.trim();
-  cfg.repo=document.getElementById('cfg-repo').value.trim()||'stock';
-  cfg.token=document.getElementById('cfg-token').value.trim();
-  localStorage.setItem(STORAGE_KEY+'_cfg',JSON.stringify(cfg));
-  closeSettings();setBanner('info','Connecting…');refreshAll();
+  document.getElementById('tv-container').innerHTML = '';
 }
 
-const DEFAULT_STOCKS=[
-  {id:1,ticker:'NTPC',name:'NTPC',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:2,ticker:'POWERGRID',name:'Power Grid Corp',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:3,ticker:'COALINDIA',name:'Coal India',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:4,ticker:'TATAPOWER',name:'Tata Power',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:5,ticker:'ADANIGREEN',name:'Adani Green Energy',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:6,ticker:'ADANIPOWER',name:'Adani Power',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:7,ticker:'CESC',name:'CESC',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:8,ticker:'TORNTPOWER',name:'Torrent Power',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:9,ticker:'NHPC',name:'NHPC',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:10,ticker:'SJVN',name:'SJVN',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:11,ticker:'BPCL',name:'BPCL',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:12,ticker:'IOC',name:'Indian Oil Corp',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:13,ticker:'HINDPETRO',name:'HPCL',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:14,ticker:'GAIL',name:'GAIL India',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:15,ticker:'PETRONET',name:'Petronet LNG',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:16,ticker:'OIL',name:'Oil India',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:17,ticker:'ONGC',name:'ONGC',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:18,ticker:'RELIANCE',name:'Reliance Industries',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:19,ticker:'IGL',name:'Indraprastha Gas',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:20,ticker:'MGL',name:'Mahanagar Gas',sector:'Energy & Power',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:21,ticker:'HDFCBANK',name:'HDFC Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:22,ticker:'ICICIBANK',name:'ICICI Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:23,ticker:'KOTAKBANK',name:'Kotak Mahindra Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:24,ticker:'SBIN',name:'State Bank of India',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:25,ticker:'AXISBANK',name:'Axis Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:26,ticker:'INDUSINDBK',name:'IndusInd Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:27,ticker:'BANDHANBNK',name:'Bandhan Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:28,ticker:'FEDERALBNK',name:'Federal Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:29,ticker:'IDFCFIRSTB',name:'IDFC First Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:30,ticker:'AUBANK',name:'AU Small Finance Bank',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:31,ticker:'BAJFINANCE',name:'Bajaj Finance',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:32,ticker:'BAJAJFINSV',name:'Bajaj Finserv',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:33,ticker:'CHOLAFIN',name:'Cholamandalam Finance',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:34,ticker:'MUTHOOTFIN',name:'Muthoot Finance',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:35,ticker:'HDFCLIFE',name:'HDFC Life Insurance',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:36,ticker:'SBILIFE',name:'SBI Life Insurance',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:37,ticker:'ICICIGI',name:'ICICI Lombard',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:38,ticker:'LICI',name:'LIC India',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:39,ticker:'PFC',name:'Power Finance Corp',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:40,ticker:'RECLTD',name:'REC Limited',sector:'BFSI',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:41,ticker:'INFY',name:'Infosys',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:42,ticker:'TCS',name:'TCS',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:43,ticker:'WIPRO',name:'Wipro',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:44,ticker:'HCLTECH',name:'HCL Technologies',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:45,ticker:'TECHM',name:'Tech Mahindra',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:46,ticker:'LTIM',name:'LTIMindtree',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:47,ticker:'MPHASIS',name:'Mphasis',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:48,ticker:'COFORGE',name:'Coforge',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:49,ticker:'PERSISTENT',name:'Persistent Systems',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:50,ticker:'KPIT',name:'KPIT Technologies',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:51,ticker:'CYIENT',name:'Cyient',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:52,ticker:'ZENSARTECH',name:'Zensar Technologies',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:53,ticker:'BSOFT',name:'Birlasoft',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:54,ticker:'TATAELXSI',name:'Tata Elxsi',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:55,ticker:'INTELLECT',name:'Intellect Design',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:56,ticker:'RATEGAIN',name:'RateGain Travel',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:57,ticker:'NAUKRI',name:'Info Edge (Naukri)',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:58,ticker:'POLICYBZR',name:'PB Fintech',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:59,ticker:'MAPMYINDIA',name:'MapMyIndia',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:60,ticker:'HAPPSTMNDS',name:'Happiest Minds',sector:'Technology',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:61,ticker:'KECINTER',name:'KEC International',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:62,ticker:'ABB',name:'ABB India',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:63,ticker:'SIEMENS',name:'Siemens India',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:64,ticker:'BHEL',name:'BHEL',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:65,ticker:'LTTS',name:'L&T Technology Services',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:66,ticker:'LT',name:'Larsen & Toubro',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:67,ticker:'CUMMINSIND',name:'Cummins India',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:68,ticker:'THERMAX',name:'Thermax',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:69,ticker:'AIAENG',name:'AIA Engineering',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:70,ticker:'GRINDWELL',name:'Grindwell Norton',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:71,ticker:'ELGIEQUIP',name:'Elgi Equipments',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:72,ticker:'KALPATPOWR',name:'Kalpataru Projects',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:73,ticker:'GMRAIRPORT',name:'GMR Airports',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:74,ticker:'IRB',name:'IRB Infrastructure',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:75,ticker:'KNRCON',name:'KNR Constructions',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:76,ticker:'NCC',name:'NCC Limited',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:77,ticker:'ENGINERSIN',name:'Engineers India',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:78,ticker:'RVNL',name:'Rail Vikas Nigam',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:79,ticker:'IRFC',name:'Indian Railway Finance',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:80,ticker:'TITAGARH',name:'Titagarh Rail Systems',sector:'Capital Goods & Infra',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:81,ticker:'HINDUNILVR',name:'Hindustan Unilever',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:82,ticker:'ITC',name:'ITC Limited',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:83,ticker:'NESTLEIND',name:'Nestle India',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:84,ticker:'BRITANNIA',name:'Britannia Industries',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:85,ticker:'DABUR',name:'Dabur India',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:86,ticker:'MARICO',name:'Marico',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:87,ticker:'GODREJCP',name:'Godrej Consumer',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:88,ticker:'EMAMILTD',name:'Emami',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:89,ticker:'COLPAL',name:'Colgate-Palmolive India',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:90,ticker:'TATACONSUM',name:'Tata Consumer',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:91,ticker:'VBL',name:'Varun Beverages',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:92,ticker:'DMART',name:'Avenue Supermarts',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:93,ticker:'TRENT',name:'Trent',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:94,ticker:'ABFRL',name:'ABFRL',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:95,ticker:'TITAN',name:'Titan Company',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:96,ticker:'KALYANKJIL',name:'Kalyan Jewellers',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:97,ticker:'BATAINDIA',name:'Bata India',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:98,ticker:'PAGEIND',name:'Page Industries',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:99,ticker:'PIDILITIND',name:'Pidilite Industries',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:100,ticker:'ASIANPAINT',name:'Asian Paints',sector:'Consumer & Retail',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:101,ticker:'SUNPHARMA',name:'Sun Pharma',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:102,ticker:'DRREDDY',name:"Dr Reddy's Labs",sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:103,ticker:'CIPLA',name:'Cipla',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:104,ticker:'DIVISLAB',name:"Divi's Laboratories",sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:105,ticker:'AUROPHARMA',name:'Aurobindo Pharma',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:106,ticker:'LUPIN',name:'Lupin',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:107,ticker:'TORNTPHARM',name:'Torrent Pharma',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:108,ticker:'ALKEM',name:'Alkem Laboratories',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:109,ticker:'IPCALAB',name:'IPCA Laboratories',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:110,ticker:'ABBOTINDIA',name:'Abbott India',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:111,ticker:'PFIZER',name:'Pfizer India',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:112,ticker:'GLAXO',name:'GSK Pharma',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:113,ticker:'APOLLOHOSP',name:'Apollo Hospitals',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:114,ticker:'MAXHEALTH',name:'Max Healthcare',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:115,ticker:'FORTIS',name:'Fortis Healthcare',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:116,ticker:'METROPOLIS',name:'Metropolis Healthcare',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:117,ticker:'LALPATHLAB',name:'Dr Lal PathLabs',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:118,ticker:'POLYMED',name:'Poly Medicure',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:119,ticker:'MEDANTA',name:'Global Health (Medanta)',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:120,ticker:'MANKIND',name:'Mankind Pharma',sector:'Pharma & Healthcare',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:121,ticker:'MARUTI',name:'Maruti Suzuki',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:122,ticker:'TATAMOTORS',name:'Tata Motors',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:123,ticker:'M&M',name:'Mahindra & Mahindra',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:124,ticker:'BAJAJ-AUTO',name:'Bajaj Auto',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:125,ticker:'HEROMOTOCO',name:'Hero MotoCorp',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:126,ticker:'EICHERMOT',name:'Eicher Motors',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:127,ticker:'TVSMOTORS',name:'TVS Motor',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:128,ticker:'ASHOKLEY',name:'Ashok Leyland',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:129,ticker:'TIINDIA',name:'Tube Investments',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:130,ticker:'MOTHERSON',name:'Samvardhana Motherson',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:131,ticker:'BHARATFORG',name:'Bharat Forge',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:132,ticker:'BOSCHLTD',name:'Bosch India',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:133,ticker:'EXIDEIND',name:'Exide Industries',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:134,ticker:'AMARAJABAT',name:'Amara Raja Energy',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:135,ticker:'MRF',name:'MRF',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:136,ticker:'APOLLOTYRE',name:'Apollo Tyres',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:137,ticker:'CEATLTD',name:'CEAT',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:138,ticker:'BALKRISIND',name:'Balkrishna Industries',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:139,ticker:'SUNDRMFAST',name:'Sundram Fasteners',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:140,ticker:'SUPRAJIT',name:'Suprajit Engineering',sector:'Auto & Ancillaries',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:141,ticker:'TATASTEEL',name:'Tata Steel',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:142,ticker:'JSWSTEEL',name:'JSW Steel',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:143,ticker:'HINDALCO',name:'Hindalco Industries',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:144,ticker:'VEDL',name:'Vedanta',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:145,ticker:'SAIL',name:'SAIL',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:146,ticker:'NMDC',name:'NMDC',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:147,ticker:'HINDCOPPER',name:'Hindustan Copper',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:148,ticker:'NALCO',name:'NALCO',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:149,ticker:'MOIL',name:'MOIL',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:150,ticker:'APLAPOLLO',name:'APL Apollo Tubes',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:151,ticker:'RATNAMANI',name:'Ratnamani Metals',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:152,ticker:'JSWINFRA',name:'JSW Infrastructure',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:153,ticker:'ADANIPORTS',name:'Adani Ports',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:154,ticker:'ACC',name:'ACC Cement',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:155,ticker:'AMBUJACEM',name:'Ambuja Cements',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:156,ticker:'ULTRACEMCO',name:'UltraTech Cement',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:157,ticker:'SHREECEM',name:'Shree Cement',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:158,ticker:'RAMCOCEM',name:'Ramco Cements',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:159,ticker:'JKCEMENT',name:'JK Cement',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:160,ticker:'DALMIACEM',name:'Dalmia Bharat',sector:'Metals & Materials',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:161,ticker:'HAL',name:'Hindustan Aeronautics',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:162,ticker:'BEL',name:'Bharat Electronics',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:163,ticker:'BEML',name:'BEML',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:164,ticker:'COCHINSHIP',name:'Cochin Shipyard',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:165,ticker:'MAZDOCK',name:'Mazagon Dock',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:166,ticker:'GRSE',name:'Garden Reach Shipbuilders',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:167,ticker:'PARAS',name:'Paras Defence',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:168,ticker:'DATAPATT',name:'Data Patterns',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:169,ticker:'MIDHANI',name:'MIDHANI',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:170,ticker:'ASTRAMICRO',name:'Astra Microwave',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:171,ticker:'MTAR',name:'MTAR Technologies',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:172,ticker:'SOLARINDS',name:'Solar Industries',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:173,ticker:'ZENTEC',name:'Zen Technologies',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:174,ticker:'IDEAFORGE',name:'ideaForge Technology',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:175,ticker:'APOLLOMICRO',name:'Apollo Micro Systems',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:176,ticker:'DCX',name:'DCX Systems',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:177,ticker:'DYNAMATECH',name:'Dynamatic Technologies',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:178,ticker:'ELID',name:'Elid Technology',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:179,ticker:'NIBE',name:'NIBE Defence',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:180,ticker:'HARIOMPIPE',name:'Hariom Pipe Industries',sector:'Defence & Aerospace',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:181,ticker:'AARTIIND',name:'Aarti Industries',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:182,ticker:'DEEPAKNTR',name:'Deepak Nitrite',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:183,ticker:'NAVINFLUOR',name:'Navin Fluorine',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:184,ticker:'SRF',name:'SRF Limited',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:185,ticker:'TATACHEM',name:'Tata Chemicals',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:186,ticker:'GNFC',name:'GNFC',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:187,ticker:'GSFC',name:'GSFC',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:188,ticker:'COROMANDEL',name:'Coromandel International',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:189,ticker:'UPL',name:'UPL',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:190,ticker:'RALLIS',name:'Rallis India',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:191,ticker:'SUPREMEIND',name:'Supreme Industries',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:192,ticker:'ASTRAL',name:'Astral',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:193,ticker:'CLEAN',name:'Clean Science',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:194,ticker:'FINEORG',name:'Fine Organic Industries',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:195,ticker:'GALAXYSURF',name:'Galaxy Surfactants',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:196,ticker:'VINATI',name:'Vinati Organics',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:197,ticker:'PRINCEPIPE',name:'Prince Pipes',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:198,ticker:'APOLLOPIPE',name:'Apollo Pipes',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:199,ticker:'FINPIPE',name:'Finolex Industries',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-  {id:200,ticker:'GUJGASLTD',name:'Gujarat Gas',sector:'Chemicals & Specialty',view:'neutral',action:'hold',conviction:3,target:null,sl:null,trend:null,support:null,resist:null,notes:'',thesisDate:TODAY_STR},
-];
-let state = {
-  stocks: [...DEFAULT_STOCKS],
-  watchlist: [],
-  nextStockId: 201,
-  nextWatchId: 1,
-};
-
-// ─── Persistence ───
-function loadState() {
-  try { const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){}
-}
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); } catch(e){}
-}
-
-
-
-function getCmp(ticker) {
-  if (livePrices[ticker]) return livePrices[ticker].cmp;
-  return null;
-}
-function getChange(ticker) {
-  if (livePrices[ticker]) return livePrices[ticker].change_pct;
-  return null;
-}
-
-// ─── Helpers ───
-function getSectors() { return [...new Set(state.stocks.map(s=>s.sector))].sort(); }
-function upside(cmp,target) { if(!cmp||!target) return null; return ((target-cmp)/cmp*100); }
-function rr(cmp,target,sl) { if(!cmp||!target||!sl) return null; const r=target-cmp,rk=cmp-sl; if(rk<=0) return null; return (r/rk).toFixed(1)+'x'; }
-function fmtN(n) { return n?'₹'+Number(n).toLocaleString('en-IN'):'—'; }
-function fmtPct(v) { if(v===null||v===undefined) return '<span class="muted">—</span>'; const s=v.toFixed(1); return v>=0?`<span class="upside-pos">+${s}%</span>`:`<span class="upside-neg">${s}%</span>`; }
-function fmtChg(v) { if(v===null||v===undefined) return '<span class="muted">—</span>'; const s=v.toFixed(2); return v>=0?`<span class="change-pos">+${s}%</span>`:`<span class="change-neg">${s}%</span>`; }
-function stars(n) { return `<span class="stars">${'★'.repeat(n)}<span class="dim">${'★'.repeat(5-n)}</span></span>`; }
-function thesisAge(d) {
-  if(!d) return '<span class="muted">—</span>';
-  const days=Math.round((TODAY-new Date(d))/86400000);
-  const lbl=days===0?'Today':days<30?days+'d ago':days<365?Math.round(days/30)+'mo ago':Math.round(days/365)+'y ago';
-  return `<span class="${days>90?'stale':''}" title="${d}">${days>90?'⚑ ':''}${lbl}</span>`;
-}
-function isAlerted(w) {
-  const cmp = getCmp(w.ticker) || w.liveCmp;
-  if(!cmp) return false;
-  return (w.above&&cmp>=w.above)||(w.below&&cmp<=w.below);
-}
-function trendBadge(t) {
-  if(!t) return '<span class="muted">—</span>';
-  const cls=t==='uptrend'?'buy':t==='downtrend'?'sell':t==='reversal'?'watch':'hold';
-  return `<span class="badge badge-${cls}">${t}</span>`;
-}
-
-// ─── Navigation ───
-function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(el) el.classList.add('active');
-  if(id==='summary') renderSummary();
-  if(id==='coverage') { renderCoverage(); populateSectorFilter(); }
-  if(id==='sectors') renderSectors();
-  if(id==='watchlist') { renderWatchlist(); renderWatchMetrics(); }
-}
-
-function rerenderAll() {
-  const active = document.querySelector('.page.active');
-  if(!active) return;
-  const id = active.id.replace('page-','');
-  if(id==='summary') renderSummary();
-  if(id==='coverage') renderCoverage();
-  if(id==='sectors') renderSectors();
-  if(id==='watchlist') { renderWatchlist(); renderWatchMetrics(); }
-  updateNavBadges();
-}
-
-// ─── Summary ───
-function renderSummary() {
-  document.getElementById('summary-date').textContent = TODAY.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const lbEl = document.getElementById('live-badge');
-  lbEl.innerHTML = priceUpdatedAt ? `<span class="live-pill"><span class="live-dot"></span>Live · ${priceUpdatedAt}</span>` : '';
-
-  const ss=state.stocks, ww=state.watchlist;
-  const bull=ss.filter(s=>s.view==='bullish').length, bear=ss.filter(s=>s.view==='bearish').length, neut=ss.filter(s=>s.view==='neutral').length;
-  const buy=ss.filter(s=>['buy','accumulate'].includes(s.action)).length;
-  const sell=ss.filter(s=>s.action==='sell').length;
-  const stale=ss.filter(s=>s.thesisDate&&Math.round((TODAY-new Date(s.thesisDate))/86400000)>90).length;
-  const alerts=ww.filter(isAlerted).length;
-
-  document.getElementById('summary-metrics').innerHTML=`
-    <div class="metric-card"><div class="metric-label">Coverage</div><div class="metric-value">${ss.length}</div><div class="metric-sub">${getSectors().length} sectors</div></div>
-    <div class="metric-card"><div class="metric-label">Bullish</div><div class="metric-value green">${bull}</div><div class="metric-sub">${ss.length?Math.round(bull/ss.length*100):0}% of coverage</div></div>
-    <div class="metric-card"><div class="metric-label">Neutral</div><div class="metric-value amber">${neut}</div></div>
-    <div class="metric-card"><div class="metric-label">Bearish</div><div class="metric-value red">${bear}</div></div>
-    <div class="metric-card"><div class="metric-label">Buy / Accum.</div><div class="metric-value green">${buy}</div></div>
-    <div class="metric-card"><div class="metric-label">Sell reco.</div><div class="metric-value${sell>0?' red':''}">${sell}</div></div>
-    <div class="metric-card"><div class="metric-label">Stale theses</div><div class="metric-value${stale>0?' red':''}">${stale}</div><div class="metric-sub">&gt;90 days old</div></div>
-    <div class="metric-card"><div class="metric-label">Watchlist alerts</div><div class="metric-value${alerts>0?' red':''}">${alerts}</div><div class="metric-sub">${alerts>0?'⚑ Levels breached':'No alerts'}</div></div>
-  `;
-
-  let html='';
-  for (const sec of getSectors()) {
-    const ss2=state.stocks.filter(s=>s.sector===sec);
-    const b=ss2.filter(s=>s.view==='bullish').length, n=ss2.filter(s=>s.view==='neutral').length, br=ss2.filter(s=>s.view==='bearish').length;
-    const pct=v=>ss2.length?Math.round(v/ss2.length*100):0;
-    const ov=b>br&&b>=n?'bullish':br>b&&br>=n?'bearish':'neutral';
-    const avgConv=(ss2.reduce((a,s)=>a+(s.conviction||3),0)/ss2.length).toFixed(1);
-    html+=`<div class="sector-card">
-      <div class="sector-card-header"><span class="sector-card-name">${sec}</span><span class="badge badge-${ov}">${ov}</span></div>
-      <div class="sector-bar-row">
-        <span style="font-size:10px;color:var(--green);min-width:26px;">${pct(b)}%</span>
-        <div class="sector-bar"><div class="bar-bull" style="width:${pct(b)}%"></div><div class="bar-neut" style="width:${pct(n)}%"></div><div class="bar-bear" style="width:${pct(br)}%"></div></div>
-        <span style="font-size:10px;color:var(--red);min-width:26px;text-align:right;">${pct(br)}%</span>
-      </div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">${ss2.length} stocks · avg conv. ${avgConv}</div>
-      <div style="font-size:11px;color:var(--muted);font-family:var(--mono);">${ss2.map(s=>s.ticker).join('  ·  ')}</div>
-    </div>`;
-  }
-  if (!getSectors().length) html='<div class="empty">No stocks added yet. Go to Coverage to add your first.</div>';
-  document.getElementById('summary-sectors').innerHTML=html;
-
-  // ── Price alerts panel ──
-  const targetHits = state.stocks.filter(s=>{ const c=getCmp(s.ticker); return c&&s.target&&c>=s.target; });
-  const slHits = state.stocks.filter(s=>{ const c=getCmp(s.ticker); return c&&s.sl&&c<=s.sl; });
-  const bigMovers = state.stocks.filter(s=>{ const ch=getChange(s.ticker); return ch&&Math.abs(ch)>=3; });
-  let alertHtml = '';
-  if(targetHits.length||slHits.length||bigMovers.length){
-    alertHtml += `<div class="alert-panel">
-      <div class="alert-panel-title">⚡ Price alerts <span class="alert-count">${targetHits.length+slHits.length}</span></div>`;
-    targetHits.forEach(s=>{
-      const c=getCmp(s.ticker);
-      alertHtml+=`<div class="alert-item target">
-        <span class="adot" style="background:var(--green)"></span>
-        <span class="tk">${s.ticker}</span>
-        <span style="color:var(--text2)">${s.name}</span>
-        <span style="margin-left:auto;color:var(--green);font-family:var(--mono);font-size:11px;">₹${Number(c).toLocaleString('en-IN')} ≥ Target ₹${Number(s.target).toLocaleString('en-IN')} 🎯</span>
-      </div>`;
-    });
-    slHits.forEach(s=>{
-      const c=getCmp(s.ticker);
-      alertHtml+=`<div class="alert-item sl">
-        <span class="adot"></span>
-        <span class="tk">${s.ticker}</span>
-        <span style="color:var(--text2)">${s.name}</span>
-        <span style="margin-left:auto;color:var(--red);font-family:var(--mono);font-size:11px;">₹${Number(c).toLocaleString('en-IN')} ≤ SL ₹${Number(s.sl).toLocaleString('en-IN')} ⚠</span>
-      </div>`;
-    });
-    if(bigMovers.length){
-      alertHtml+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Big movers (&gt;3%)</div>`;
-      bigMovers.forEach(s=>{
-        const ch=getChange(s.ticker),c=getCmp(s.ticker);
-        alertHtml+=`<div class="alert-item ${ch>0?'target':'sl'}">
-          <span class="tk">${s.ticker}</span>
-          <span style="color:var(--text2)">${s.name}</span>
-          <span style="margin-left:auto;font-family:var(--mono);font-size:11px;color:${ch>0?'var(--green)':'var(--red)'}">${ch>0?'+':''}${ch.toFixed(2)}%</span>
-        </div>`;
-      });
+// ═══════════════════════════════════════════════
+// CLOSE OVERLAYS ON BG CLICK
+// ═══════════════════════════════════════════════
+['edit-overlay','add-overlay','wadd-overlay','settings-overlay','chart-overlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) {
+      if (id === 'chart-overlay') closeChart();
+      else this.classList.remove('open');
     }
-    alertHtml += '</div>';
-  }
-  document.getElementById('alerts-panel').innerHTML=alertHtml;
-  updateNavBadges();
-}
+  });
+});
 
-// ─── Coverage ───
-// ─── Sort state ───
-let sortCol = null, sortDir = 1;
-
-function sortBy(col) {
-  if(sortCol===col) sortDir*=-1; else {sortCol=col;sortDir=1;}
-  document.querySelectorAll('th.sortable').forEach(th=>th.classList.remove('active'));
-  document.querySelectorAll('.sort-icon').forEach(el=>el.textContent='↕');
-  const activeId='sort-'+col;
-  const el=document.getElementById(activeId);
-  if(el){el.textContent=sortDir===1?'↑':'↓';el.closest('th').classList.add('active');}
-  renderCoverage();
-}
-
-function getSortVal(s, col) {
-  const cmp=getCmp(s.ticker);
-  switch(col){
-    case 'ticker': return s.ticker;
-    case 'sector': return s.sector;
-    case 'view': return ['bullish','neutral','bearish'].indexOf(s.view);
-    case 'action': return ['buy','accumulate','hold','watch','sell'].indexOf(s.action);
-    case 'conviction': return s.conviction||3;
-    case 'cmp': return cmp||0;
-    case 'chg': return getChange(s.ticker)||0;
-    case 'upside': return upside(cmp,s.target)||0;
-    case 'trend': return s.trend||'';
-    case 'thesisDate': return s.thesisDate||'';
-    default: return 0;
-  }
-}
-
-function renderCoverage() {
-  const q=(document.getElementById('cov-search').value||'').toLowerCase();
-  const sec=document.getElementById('cov-sector').value;
-  const vw=document.getElementById('cov-view').value;
-  const ac=document.getElementById('cov-action').value;
-  const filtered=state.stocks.filter(s=>
-    (!q||s.ticker.toLowerCase().includes(q)||s.name.toLowerCase().includes(q))&&
-    (!sec||s.sector===sec)&&(!vw||s.view===vw)&&(!ac||s.action===ac)
-  );
-  if(sortCol){
-    filtered.sort((a,b)=>{
-      const av=getSortVal(a,sortCol),bv=getSortVal(b,sortCol);
-      if(av===bv)return 0;
-      return (av>bv?1:-1)*sortDir;
-    });
-  }
-  const tbody=document.getElementById('coverage-tbody');
-  if(!filtered.length){ tbody.innerHTML=`<tr><td colspan="17" class="empty">No stocks match.</td></tr>`; return; }
-  tbody.innerHTML=filtered.map(s=>{
-    const cmp=getCmp(s.ticker);
-    const chg=getChange(s.ticker);
-    const up=upside(cmp,s.target);
-    const cmpDisplay=cmp?'₹'+Number(cmp).toLocaleString('en-IN'):'<span class="muted">—</span>';
-    const atTarget=cmp&&s.target&&cmp>=s.target;
-    const atSL=cmp&&s.sl&&cmp<=s.sl;
-    const bigUp=chg&&chg>=3;
-    const bigDown=chg&&chg<=-3;
-    const rowClass=atTarget?'row-alert-target':atSL?'row-alert-sl':bigUp?'row-up':bigDown?'row-down':'';
-    return `<tr class="${rowClass}">
-      <td><span class="ticker" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;" onclick="openChart('${s.ticker}','${s.name}')" title="View chart">${s.ticker} ↗</span></td>
-      <td>${s.name}</td>
-      <td style="color:var(--muted2);font-size:12px;">${s.sector}</td>
-      <td><span class="badge badge-${s.view}">${s.view}</span></td>
-      <td><span class="badge badge-${s.action}">${s.action}</span></td>
-      <td>${stars(s.conviction||3)}</td>
-      <td class="mono">${cmpDisplay}</td>
-      <td>${fmtChg(chg)}</td>
-      <td class="mono">${fmtN(s.target)}</td>
-      <td class="mono">${fmtN(s.sl)}</td>
-      <td>${fmtPct(up)}</td>
-      <td>${trendBadge(s.trend)}</td>
-      <td class="mono" style="color:var(--muted2)">${fmtN(s.support)}</td>
-      <td class="mono" style="color:var(--muted2)">${fmtN(s.resist)}</td>
-      <td>${thesisAge(s.thesisDate)}</td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px;" title="${(s.notes||'').replace(/"/g,'&quot;')}">${s.notes||'—'}</td>
-      <td style="white-space:nowrap;">
-        <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="editStock(${s.id})">Edit</button>
-        <button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);" onclick="delStock(${s.id})">Del</button>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function populateSectorFilter() {
-  const sel=document.getElementById('cov-sector'), cur=sel.value;
-  sel.innerHTML='<option value="">All sectors</option>'+getSectors().map(s=>`<option value="${s}"${s===cur?' selected':''}>${s}</option>`).join('');
-  const dl=document.getElementById('sector-dl');
-  if(dl) dl.innerHTML=getSectors().map(s=>`<option value="${s}">`).join('');
-}
-
-// ─── Sectors ───
-function renderSectors() {
-  let html='';
-  for (const sec of getSectors()) {
-    const ss=state.stocks.filter(s=>s.sector===sec);
-    const b=ss.filter(s=>s.view==='bullish').length, n=ss.filter(s=>s.view==='neutral').length, br=ss.filter(s=>s.view==='bearish').length;
-    const ov=b>br&&b>=n?'bullish':br>b&&br>=n?'bearish':'neutral';
-    html+=`<div style="margin-bottom:24px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-        <span style="font-size:15px;font-weight:500;">${sec}</span>
-        <span class="badge badge-${ov}">${ov}</span>
-        <span style="font-size:11px;color:var(--muted);">${ss.length} stocks</span>
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Ticker</th><th>Name</th><th>View</th><th>Action</th><th>Conv.</th><th>CMP ₹</th><th>Chg%</th><th>Target ₹</th><th>SL ₹</th><th>Upside</th><th>Trend</th><th>Thesis date</th></tr></thead>
-        <tbody>${ss.map(s=>{
-          const cmp=getCmp(s.ticker); const chg=getChange(s.ticker);
-          return `<tr>
-            <td><span class="ticker">${s.ticker}</span></td><td>${s.name}</td>
-            <td><span class="badge badge-${s.view}">${s.view}</span></td>
-            <td><span class="badge badge-${s.action}">${s.action}</span></td>
-            <td>${stars(s.conviction||3)}</td>
-            <td class="mono">${cmp?'₹'+Number(cmp).toLocaleString('en-IN'):'<span class="muted">—</span>'}</td>
-            <td>${fmtChg(chg)}</td>
-            <td class="mono">${fmtN(s.target)}</td>
-            <td class="mono">${fmtN(s.sl)}</td>
-            <td>${fmtPct(upside(cmp,s.target))}</td>
-            <td>${trendBadge(s.trend)}</td>
-            <td>${thesisAge(s.thesisDate)}</td>
-          </tr>`;
-        }).join('')}</tbody>
-      </table></div>
-    </div>`;
-  }
-  if(!getSectors().length) html='<div class="empty">No stocks yet.</div>';
-  document.getElementById('sectors-content').innerHTML=html;
-}
-
-// ─── Watchlist ───
-function renderWatchMetrics() {
-  const ww=state.watchlist;
-  const alerted=ww.filter(isAlerted).length;
-  const high=ww.filter(w=>w.priority==='high').length;
-  document.getElementById('watch-metrics').innerHTML=`
-    <div class="metric-card"><div class="metric-label">Watching</div><div class="metric-value">${ww.length}</div></div>
-    <div class="metric-card"><div class="metric-label">Alerts triggered</div><div class="metric-value${alerted>0?' red':''}">${alerted}</div><div class="metric-sub">Based on live CMP</div></div>
-    <div class="metric-card"><div class="metric-label">High priority</div><div class="metric-value amber">${high}</div></div>
-  `;
-}
-
-function renderWatchlist() {
-  const q=(document.getElementById('watch-search').value||'').toLowerCase();
-  const f=document.getElementById('watch-filter').value;
-  const filtered=state.watchlist.filter(w=>
-    (!q||w.ticker.toLowerCase().includes(q)||w.name.toLowerCase().includes(q))&&
-    (!f||(f==='alerted'&&isAlerted(w))||(f==='normal'&&!isAlerted(w)))
-  );
-  const tbody=document.getElementById('watch-tbody');
-  if(!filtered.length){ tbody.innerHTML=`<tr><td colspan="14" class="empty">Nothing to show.</td></tr>`; return; }
-  tbody.innerHTML=filtered.map(w=>{
-    const cmp=getCmp(w.ticker)||w.liveCmp;
-    const chg=getChange(w.ticker);
-    const alerted=isAlerted(w);
-    const aboveAlert=w.above&&cmp&&cmp>=w.above;
-    const belowAlert=w.below&&cmp&&cmp<=w.below;
-    const up=upside(cmp,w.target);
-    const rrVal=rr(cmp,w.target,w.sl);
-    const priCls=w.priority==='high'?'sell':w.priority==='medium'?'watch':'none';
-    return `<tr style="${alerted?'background:rgba(239,68,68,0.04);':''}">
-      <td><span class="ticker">${alerted?'<span class="alert-dot"></span>':''}${w.ticker}</span></td>
-      <td>${w.name}</td>
-      <td class="mono">${cmp?'₹'+Number(cmp).toLocaleString('en-IN'):'<span class="muted">—</span>'}</td>
-      <td>${fmtChg(chg)}</td>
-      <td class="mono${aboveAlert?' stale':''}">${w.above?fmtN(w.above)+(aboveAlert?' ⚑':''):'—'}</td>
-      <td class="mono${belowAlert?' stale':''}">${w.below?fmtN(w.below)+(belowAlert?' ⚑':''):'—'}</td>
-      <td class="mono">${fmtN(w.target)}</td>
-      <td class="mono">${fmtN(w.sl)}</td>
-      <td>${fmtPct(up)}</td>
-      <td class="mono" style="color:var(--muted2)">${rrVal||'—'}</td>
-      <td><span class="badge badge-${priCls}">${w.priority}</span></td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px;" title="${(w.notes||'').replace(/"/g,'&quot;')}">${w.notes||'—'}</td>
-      <td style="color:var(--muted);font-size:11px;">${w.added?new Date(w.added).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'—'}</td>
-      <td style="white-space:nowrap;">
-        <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="editWatch(${w.id})">Edit</button>
-        <button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);" onclick="delWatch(${w.id})">Del</button>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function updateNavBadges() {
-  document.getElementById('nav-cov-count').textContent=state.stocks.length;
-  const watchAlerts=state.watchlist.filter(isAlerted).length;
-  const targetHits=state.stocks.filter(s=>{const c=getCmp(s.ticker);return c&&s.target&&c>=s.target;}).length;
-  const slHits=state.stocks.filter(s=>{const c=getCmp(s.ticker);return c&&s.sl&&c<=s.sl;}).length;
-  const totalAlerts=watchAlerts+targetHits+slHits;
-  const el=document.getElementById('nav-alert-count');
-  el.textContent=totalAlerts; el.style.display=totalAlerts>0?'inline-block':'none';
-}
-
-// ─── Stock modal ───
-let editingStockId=null, editingWatchId=null;
-
-function openStockModal() {
-  editingStockId=null;
-  document.getElementById('stock-modal-title').textContent='Add stock';
-  ['ticker','name','sector','notes'].forEach(f=>document.getElementById('s-'+f).value='');
-  document.getElementById('s-view').value='neutral';
-  document.getElementById('s-action').value='hold';
-  document.getElementById('s-conviction').value='3';
-  document.getElementById('s-trend').value='';
-  ['target','sl','support','resist'].forEach(f=>document.getElementById('s-'+f).value='');
-  document.getElementById('s-thesis-date').value=TODAY_STR;
-  populateSectorFilter();
-  document.getElementById('stock-overlay').classList.add('open');
-}
-function closeStockModal(){ document.getElementById('stock-overlay').classList.remove('open'); }
-
-function editStock(id) {
-  const s=state.stocks.find(x=>x.id===id); if(!s) return;
-  editingStockId=id;
-  document.getElementById('stock-modal-title').textContent='Edit — '+s.ticker;
-  document.getElementById('s-ticker').value=s.ticker;
-  document.getElementById('s-name').value=s.name;
-  document.getElementById('s-sector').value=s.sector;
-  document.getElementById('s-view').value=s.view;
-  document.getElementById('s-action').value=s.action;
-  document.getElementById('s-conviction').value=s.conviction||3;
-  document.getElementById('s-trend').value=s.trend||'';
-  document.getElementById('s-target').value=s.target||'';
-  document.getElementById('s-sl').value=s.sl||'';
-  document.getElementById('s-support').value=s.support||'';
-  document.getElementById('s-resist').value=s.resist||'';
-  document.getElementById('s-notes').value=s.notes||'';
-  document.getElementById('s-thesis-date').value=s.thesisDate||TODAY_STR;
-  populateSectorFilter();
-  document.getElementById('stock-overlay').classList.add('open');
-}
-
-function saveStock() {
-  const ticker=document.getElementById('s-ticker').value.trim().toUpperCase();
-  const name=document.getElementById('s-name').value.trim();
-  const sector=document.getElementById('s-sector').value.trim();
-  if(!ticker||!name||!sector){ alert('Ticker, name, and sector are required.'); return; }
-  const obj={ticker,name,sector,
-    view:document.getElementById('s-view').value,
-    action:document.getElementById('s-action').value,
-    conviction:parseInt(document.getElementById('s-conviction').value)||3,
-    trend:document.getElementById('s-trend').value||null,
-    target:parseFloat(document.getElementById('s-target').value)||null,
-    sl:parseFloat(document.getElementById('s-sl').value)||null,
-    support:parseFloat(document.getElementById('s-support').value)||null,
-    resist:parseFloat(document.getElementById('s-resist').value)||null,
-    notes:document.getElementById('s-notes').value.trim(),
-    thesisDate:document.getElementById('s-thesis-date').value||null,
-  };
-  if(editingStockId){ const i=state.stocks.findIndex(x=>x.id===editingStockId); state.stocks[i]={...state.stocks[i],...obj}; }
-  else { state.stocks.push({id:state.nextStockId++,...obj}); }
-  saveState(); closeStockModal(); renderCoverage(); populateSectorFilter(); renderSummary(); updateNavBadges();
-}
-
-function delStock(id) {
-  if(!confirm('Remove from coverage?')) return;
-  state.stocks=state.stocks.filter(s=>s.id!==id);
-  saveState(); renderCoverage(); populateSectorFilter(); renderSummary(); updateNavBadges();
-}
-
-// ─── Watchlist modal ───
-function openWatchModal() {
-  editingWatchId=null;
-  document.getElementById('watch-modal-title').textContent='Add to watchlist';
-  ['ticker','name','notes'].forEach(f=>document.getElementById('w-'+f).value='');
-  ['above','below','target','sl'].forEach(f=>document.getElementById('w-'+f).value='');
-  document.getElementById('w-priority').value='medium';
-  document.getElementById('watch-overlay').classList.add('open');
-}
-function closeWatchModal(){ document.getElementById('watch-overlay').classList.remove('open'); }
-
-function editWatch(id) {
-  const w=state.watchlist.find(x=>x.id===id); if(!w) return;
-  editingWatchId=id;
-  document.getElementById('watch-modal-title').textContent='Edit — '+w.ticker;
-  document.getElementById('w-ticker').value=w.ticker;
-  document.getElementById('w-name').value=w.name;
-  document.getElementById('w-above').value=w.above||'';
-  document.getElementById('w-below').value=w.below||'';
-  document.getElementById('w-target').value=w.target||'';
-  document.getElementById('w-sl').value=w.sl||'';
-  document.getElementById('w-priority').value=w.priority||'medium';
-  document.getElementById('w-notes').value=w.notes||'';
-  document.getElementById('watch-overlay').classList.add('open');
-}
-
-function saveWatch() {
-  const ticker=document.getElementById('w-ticker').value.trim().toUpperCase();
-  const name=document.getElementById('w-name').value.trim();
-  if(!ticker||!name){ alert('Ticker and name are required.'); return; }
-  const obj={ticker,name,
-    above:parseFloat(document.getElementById('w-above').value)||null,
-    below:parseFloat(document.getElementById('w-below').value)||null,
-    target:parseFloat(document.getElementById('w-target').value)||null,
-    sl:parseFloat(document.getElementById('w-sl').value)||null,
-    priority:document.getElementById('w-priority').value,
-    notes:document.getElementById('w-notes').value.trim(),
-    added:editingWatchId?state.watchlist.find(x=>x.id===editingWatchId)?.added:TODAY_STR,
-  };
-  if(editingWatchId){ const i=state.watchlist.findIndex(x=>x.id===editingWatchId); state.watchlist[i]={...state.watchlist[i],...obj}; }
-  else { state.watchlist.push({id:state.nextWatchId++,...obj}); }
-  saveState(); closeWatchModal(); renderWatchlist(); renderWatchMetrics(); updateNavBadges();
-}
-
-function delWatch(id) {
-  if(!confirm('Remove from watchlist?')) return;
-  state.watchlist=state.watchlist.filter(w=>w.id!==id);
-  saveState(); renderWatchlist(); renderWatchMetrics(); updateNavBadges();
-}
-
-document.getElementById('stock-overlay').addEventListener('click',function(e){if(e.target===this)closeStockModal();});
-document.getElementById('watch-overlay').addEventListener('click',function(e){if(e.target===this)closeWatchModal();});
-
-// ─── Init ───
-loadState();
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadLocal();
 renderSummary();
-updateNavBadges();
-if(cfg.token && cfg.user) {
-  // Always pull from GitHub on load to get latest views/signals
-  pullFromGitHub().then(()=>fetchPrices());
+updatePills();
+
+if (cfg.token && cfg.user) {
+  // Pull latest research data first, then prices
+  pullFromGitHub().then(() => fetchPrices());
 } else {
-  document.getElementById('sb-price').textContent='Not configured';
-  document.getElementById('sb-sync').textContent='Not configured';
-  setTimeout(()=>setBanner('warn','⚙ Open Settings (bottom left) to connect GitHub for live prices & sync.'),500);
+  setSb('price','warn','Not configured');
+  setSb('sync','warn','Not configured');
+  setTimeout(() => showBanner('warn','⚙ Open Settings (bottom left) to connect GitHub for live prices & cross-device sync.'), 500);
 }
 </script>
-<!-- CHART MODAL -->
-<div class="overlay" id="chart-overlay" style="align-items:center;">
-  <div class="modal" style="width:820px;max-width:98vw;padding:16px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <div>
-        <span class="tk" id="chart-ticker" style="font-size:15px;"></span>
-        <span style="color:var(--muted);font-size:12px;margin-left:8px;" id="chart-name"></span>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <a id="chart-tv-link" href="#" target="_blank" class="btn" style="font-size:11px;">Open in TradingView ↗</a>
-        <button class="btn" onclick="closeChart()">✕</button>
-      </div>
-    </div>
-    <div id="tv-widget-container" style="height:500px;border-radius:var(--r);overflow:hidden;"></div>
-  </div>
-</div>
-
-<!-- SETTINGS MODAL -->
-<div class="overlay" id="set-overlay">
-  <div class="modal">
-    <div class="modal-title">Settings</div>
-    <div class="fg">
-      <div class="frow"><label>GitHub username</label><input type="text" id="cfg-user" placeholder="your-username"></div>
-      <div class="frow"><label>Repository name</label><input type="text" id="cfg-repo" placeholder="stock-dashboard"></div>
-      <div class="frow full"><label>Personal Access Token (repo scope)</label><input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="font-family:monospace;"></div>
-    </div>
-    <div style="font-size:11px;color:#6b7280;margin-top:8px;">Token stored only in your browser. Never sent anywhere except GitHub API.</div>
-    <div class="modal-foot"><button class="btn" onclick="closeSettings()">Cancel</button><button class="btn btn-accent" onclick="saveSettings()">Save & connect</button></div>
-  </div>
-</div>
 </body>
 </html>
