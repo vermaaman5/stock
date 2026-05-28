@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-05-28T22:39:40.904360+05:30",
-  "updated_at_readable": "28 May 2026 22:39 IST",
+  "updated_at": "2026-05-29T01:17:06.632667+05:30",
+  "updated_at_readable": "29 May 2026 01:17 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 499.0,
@@ -268,7 +268,7 @@
       "prev_close": 698.05,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 1294.2,
+      "week_52_high": 1284.9,
       "week_52_low": 605.0,
       "change_pct": -1.0
     },
@@ -421,7 +421,7 @@
       "prev_close": 2086.0,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 2509.0,
+      "week_52_high": 2504.0,
       "week_52_low": 1782.0,
       "change_pct": 0.24
     },
@@ -440,7 +440,7 @@
       "day_high": null,
       "day_low": null,
       "week_52_high": 6099.0,
-      "week_52_low": 3000.1,
+      "week_52_low": 3185.2,
       "change_pct": 12.01
     },
     "CYIENT": {
@@ -448,7 +448,7 @@
       "prev_close": 925.8,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 1372.4,
+      "week_52_high": 1368.6,
       "week_52_low": 750.3,
       "change_pct": -1.06
     },
@@ -466,7 +466,7 @@
       "prev_close": 1727.1,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 2128.9,
+      "week_52_high": 2100.0,
       "week_52_low": 1280.0,
       "change_pct": -0.41
     },
@@ -1051,9 +1051,18 @@
       "prev_close": 2460.1,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 3775.0,
+      "week_52_high": 3594.0,
       "week_52_low": 2057.4,
       "change_pct": -0.13
+    },
+    "MEDANTA": {
+      "cmp": 1212.0,
+      "prev_close": 1227.9,
+      "day_high": null,
+      "day_low": null,
+      "week_52_high": 1456.5,
+      "week_52_low": 956.0,
+      "change_pct": -1.29
     },
     "METROPOLIS": {
       "cmp": 535.0,
@@ -1124,7 +1133,7 @@
       "day_high": null,
       "day_low": null,
       "week_52_high": 4149.5,
-      "week_52_low": 2058.5,
+      "week_52_low": 2068.0,
       "change_pct": -0.87
     },
     "NAUKRI": {
@@ -1294,7 +1303,7 @@
       "prev_close": 1439.4,
       "day_high": null,
       "day_low": null,
-      "week_52_high": 2371.1,
+      "week_52_high": 2316.6,
       "week_52_low": 1182.0,
       "change_pct": -7.95
     },
@@ -1733,12 +1742,11 @@
     "KECINTER",
     "KPIT",
     "LTIM",
-    "MEDANTA",
     "MTAR",
     "NALCO",
     "TATAMOTORS",
     "TVSMOTORS",
     "VINATI"
   ],
-  "total": 191
+  "total": 192
 }
