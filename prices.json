@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-02T23:43:43.268634+05:30",
-  "updated_at_readable": "02 Jun 2026 23:43 IST",
+  "updated_at": "2026-06-03T03:06:51.582917+05:30",
+  "updated_at_readable": "03 Jun 2026 03:06 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 469.75,
@@ -332,7 +332,7 @@
       "day_high": 5148.0,
       "day_low": 5075.0,
       "week_52_high": 6336.0,
-      "week_52_low": 5122.0,
+      "week_52_low": 5075.0,
       "change_pct": -0.79
     },
     "BSOFT": {
@@ -611,7 +611,7 @@
       "day_high": 2204.3,
       "day_low": 2154.0,
       "week_52_high": 3515.7,
-      "week_52_low": 2183.2,
+      "week_52_low": 2154.0,
       "change_pct": -0.71
     },
     "GMRAIRPORT": {
@@ -746,7 +746,7 @@
       "day_high": 1161.0,
       "day_low": 1136.4,
       "week_52_high": 1176.0,
-      "week_52_low": 629.6,
+      "week_52_low": 630.65,
       "change_pct": 0.12
     },
     "HINDCOPPER": {
@@ -890,7 +890,7 @@
       "day_high": 283.6,
       "day_low": 277.1,
       "week_52_high": 428.55,
-      "week_52_low": 278.3,
+      "week_52_low": 277.1,
       "change_pct": 1.41
     },
     "JKCEMENT": {
@@ -1133,7 +1133,7 @@
       "day_high": 3268.6,
       "day_low": 3179.3,
       "week_52_high": 4149.5,
-      "week_52_low": 2211.0,
+      "week_52_low": 2222.8,
       "change_pct": 0.48
     },
     "NAUKRI": {
@@ -1195,7 +1195,7 @@
       "prev_close": 93.5,
       "day_high": 97.24,
       "day_low": 92.3,
-      "week_52_high": 94.25,
+      "week_52_high": 97.24,
       "week_52_low": 66.8,
       "change_pct": 1.94
     },
@@ -1349,7 +1349,7 @@
       "day_high": 879.0,
       "day_low": 847.3,
       "week_52_high": 1214.5,
-      "week_52_low": 859.0,
+      "week_52_low": 847.3,
       "change_pct": 0.73
     },
     "RATEGAIN": {
@@ -1394,7 +1394,7 @@
       "day_high": 241.75,
       "day_low": 232.73,
       "week_52_high": 442.8,
-      "week_52_low": 240.8,
+      "week_52_low": 232.73,
       "change_pct": -0.14
     },
     "SAIL": {
