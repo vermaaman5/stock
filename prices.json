@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-04T19:42:41.267988+05:30",
-  "updated_at_readable": "04 Jun 2026 19:42 IST",
+  "updated_at": "2026-06-05T00:03:18.927202+05:30",
+  "updated_at_readable": "05 Jun 2026 00:03 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 460.1,
@@ -79,7 +79,7 @@
       "prev_close": 4521.2,
       "day_high": 4664.0,
       "day_low": 4520.5,
-      "week_52_high": 4607.4,
+      "week_52_high": 4664.0,
       "week_52_low": 3001.1,
       "change_pct": 1.67
     },
@@ -205,7 +205,7 @@
       "prev_close": 1510.7,
       "day_high": 1660.0,
       "day_low": 1505.1,
-      "week_52_high": 1570.1,
+      "week_52_high": 1660.0,
       "week_52_low": 777.3,
       "change_pct": 8.41
     },
@@ -332,7 +332,7 @@
       "day_high": 5119.5,
       "day_low": 5035.0,
       "week_52_high": 6336.0,
-      "week_52_low": 5050.0,
+      "week_52_low": 5035.0,
       "change_pct": 0.52
     },
     "BSOFT": {
@@ -385,7 +385,7 @@
       "prev_close": 794.5,
       "day_high": 807.95,
       "day_low": 775.0,
-      "week_52_high": 1566.0,
+      "week_52_high": 1536.0,
       "week_52_low": 652.0,
       "change_pct": -0.73
     },
@@ -466,7 +466,7 @@
       "prev_close": 1698.9,
       "day_high": 1711.2,
       "day_low": 1670.0,
-      "week_52_high": 2019.7,
+      "week_52_high": 2012.0,
       "week_52_low": 1280.0,
       "change_pct": -1.31
     },
@@ -556,7 +556,7 @@
       "prev_close": 302.3,
       "day_high": 303.8,
       "day_low": 295.65,
-      "week_52_high": 302.85,
+      "week_52_high": 303.8,
       "week_52_low": 185.11,
       "change_pct": -0.73
     },
@@ -584,7 +584,7 @@
       "day_high": 948.65,
       "day_low": 923.6,
       "week_52_high": 1104.3,
-      "week_52_low": 736.45,
+      "week_52_low": 742.2,
       "change_pct": 1.12
     },
     "GAIL": {
@@ -610,7 +610,7 @@
       "prev_close": 2181.0,
       "day_high": 2188.5,
       "day_low": 2162.4,
-      "week_52_high": 3515.7,
+      "week_52_high": 3505.0,
       "week_52_low": 2154.0,
       "change_pct": -0.66
     },
@@ -746,7 +746,7 @@
       "day_high": 1137.1,
       "day_low": 1121.4,
       "week_52_high": 1176.0,
-      "week_52_low": 633.5,
+      "week_52_low": 635.0,
       "change_pct": -1.22
     },
     "HINDCOPPER": {
@@ -799,7 +799,7 @@
       "prev_close": 856.25,
       "day_high": 900.0,
       "day_low": 889.9,
-      "week_52_high": 888.0,
+      "week_52_high": 900.0,
       "week_52_low": 366.0,
       "change_pct": 5.11
     },
@@ -890,7 +890,7 @@
       "day_high": 280.65,
       "day_low": 275.05,
       "week_52_high": 428.55,
-      "week_52_low": 275.2,
+      "week_52_low": 275.05,
       "change_pct": 1.28
     },
     "JKCEMENT": {
@@ -917,7 +917,7 @@
       "day_high": 1314.0,
       "day_low": 1294.2,
       "week_52_high": 1328.0,
-      "week_52_low": 964.65,
+      "week_52_low": 967.65,
       "change_pct": -0.53
     },
     "KALYANKJIL": {
@@ -1034,7 +1034,7 @@
       "day_high": 13264.0,
       "day_low": 12949.0,
       "week_52_high": 17370.0,
-      "week_52_low": 12016.0,
+      "week_52_low": 12100.0,
       "change_pct": 0.15
     },
     "MAXHEALTH": {
@@ -1133,7 +1133,7 @@
       "day_high": 3224.0,
       "day_low": 3157.0,
       "week_52_high": 4149.5,
-      "week_52_low": 2267.6,
+      "week_52_low": 2283.0,
       "change_pct": -1.53
     },
     "NAUKRI": {
@@ -1277,7 +1277,7 @@
       "day_high": 4498.0,
       "day_low": 4415.0,
       "week_52_high": 5993.0,
-      "week_52_low": 4449.2,
+      "week_52_low": 4415.0,
       "change_pct": -0.97
     },
     "PIDILITIND": {
@@ -1519,7 +1519,7 @@
       "prev_close": 1195.0,
       "day_high": 1234.0,
       "day_low": 1189.4,
-      "week_52_high": 1214.8,
+      "week_52_high": 1234.0,
       "week_52_low": 500.0,
       "change_pct": 2.23
     },
@@ -1726,7 +1726,7 @@
       "prev_close": 1687.5,
       "day_high": 1885.0,
       "day_low": 1691.0,
-      "week_52_high": 2268.0,
+      "week_52_high": 2218.0,
       "week_52_low": 1223.0,
       "change_pct": 7.25
     }
