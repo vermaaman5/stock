@@ -552,8 +552,7 @@ async function ghPut(path, content, sha) {
 }
 
 function decodeGH(b64) {
-  return JSON.parse(decodeURIComponent(escape(atob(b64.replace(/
-/g,'')))));
+  return JSON.parse(decodeURIComponent(escape(atob(b64.replace(/\s/g, '')))));
 }
 
 // ═══════════════════════════════════════════════
