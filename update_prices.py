@@ -53,42 +53,31 @@ def load_tickers_from_json():
 
 
 def fetch_prices(tickers):
-    prices = {}
-    failed = []
-
-    for ticker in tickers:
-        # Skip placeholder/invalid tickers
-        if not ticker or len(ticker) < 2:
-            continue
-        yf_symbol = ticker + ".NS"
+    syms = [t + ".NS" for t in tickers if t and len(t) >= 2]
+    raw = yf.download(syms, period="1y", interval="1d", group_by="ticker",
+                      threads=False, progress=False, auto_adjust=False)
+    prices, failed = {}, []
+    for t in tickers:
         try:
-            data = yf.Ticker(yf_symbol)
-            info = data.fast_info
-            price = round(info.last_price, 2) if info.last_price else None
-
-            if price:
-                prices[ticker] = {
-                    "cmp": price,
-                    "prev_close": round(info.previous_close, 2) if info.previous_close else None,
-                    "day_high": round(info.day_high, 2) if info.day_high else None,
-                    "day_low": round(info.day_low, 2) if info.day_low else None,
-                    "week_52_high": round(info.year_high, 2) if info.year_high else None,
-                    "week_52_low": round(info.year_low, 2) if info.year_low else None,
-                    "change_pct": round(
-                        (price - info.previous_close) / info.previous_close * 100, 2
-                    ) if info.previous_close else None,
-                }
-                print(f"  ✓ {ticker}: ₹{price}")
-            else:
-                failed.append(ticker)
-                print(f"  ✗ {ticker}: no price returned")
-
-        except Exception as e:
-            failed.append(ticker)
-            print(f"  ✗ {ticker}: {e}")
-
+            df = raw[t + ".NS"].dropna()
+            if df.empty:
+                raise ValueError("no data")
+            last = float(df["Close"].iloc[-1])
+            prev = float(df["Close"].iloc[-2])
+            prices[t] = {
+                "cmp": round(last, 2),
+                "prev_close": round(prev, 2),
+                "day_high": round(float(df["High"].iloc[-1]), 2),
+                "day_low": round(float(df["Low"].iloc[-1]), 2),
+                "week_52_high": round(float(df["High"].tail(250).max()), 2),
+                "week_52_low": round(float(df["Low"].tail(250).min()), 2),
+                "change_pct": round((last - prev) / prev * 100, 2),
+            }
+        except Exception:
+            failed.append(t)
+    if len(failed) > len(tickers) * 0.5:
+        raise SystemExit(f"Aborting: {len(failed)}/{len(tickers)} failed — likely rate-limited by Yahoo")
     return prices, failed
-
 
 def main():
     IST = timezone(timedelta(hours=5, minutes=30))
