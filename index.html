@@ -559,15 +559,14 @@ function decodeGH(b64) {
 // PRICES
 // ═══════════════════════════════════════════════
 async function fetchPrices() {
-  if (!cfg.token || !cfg.user) {
-    setSb('price','warn','Not configured');
-    showBanner('warn','⚙ Open Settings to connect GitHub for live prices.');
-    return;
-  }
   setSb('price','','Fetching…');
   try {
-    const f = await ghGet('/prices.json');
-    const data = decodeGH(f.content);
+    const u = cfg.user || 'vermaaman5';
+    const repo = cfg.repo || 'stock';
+    const url = `https://raw.githubusercontent.com/${u}/${repo}/main/prices.json?t=${Date.now()}`;
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
     livePrices = data.prices || {};
     priceUpdatedAt = data.updated_at_readable || null;
     setSb('price','ok', priceUpdatedAt || 'Updated');
@@ -575,7 +574,7 @@ async function fetchPrices() {
     hideBanner();
   } catch(e) {
     setSb('price','err','Fetch failed');
-    showBanner('err','✗ Could not fetch prices. Check Settings.');
+    showBanner('err','✗ Could not fetch prices.');
   }
 }
 
