@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-25T18:07:20.478607+05:30",
-  "updated_at_readable": "25 Jun 2026 18:07 IST",
+  "updated_at": "2026-06-26T12:36:19.095357+05:30",
+  "updated_at_readable": "26 Jun 2026 12:36 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 466.05,
@@ -71,7 +71,7 @@
       "day_high": 232.49,
       "day_low": 228.65,
       "week_52_high": 254.2,
-      "week_52_low": 109.75,
+      "week_52_low": 110.45,
       "change_pct": -0.21
     },
     "AIAENG": {
@@ -385,7 +385,7 @@
       "prev_close": 788.6,
       "day_high": 806.4,
       "day_low": 766.85,
-      "week_52_high": 1521.9,
+      "week_52_high": 1512.7,
       "week_52_low": 652.0,
       "change_pct": -1.21
     },
@@ -403,7 +403,7 @@
       "prev_close": 1487.1,
       "day_high": 1496.0,
       "day_low": 1451.1,
-      "week_52_high": 2186.0,
+      "week_52_high": 2182.0,
       "week_52_low": 1187.0,
       "change_pct": -1.93
     },
@@ -440,7 +440,7 @@
       "day_high": 5698.5,
       "day_low": 5550.5,
       "week_52_high": 6100.0,
-      "week_52_low": 3278.5,
+      "week_52_low": 3312.4,
       "change_pct": 1.56
     },
     "CYIENT": {
@@ -448,7 +448,7 @@
       "prev_close": 893.95,
       "day_high": 899.9,
       "day_low": 882.4,
-      "week_52_high": 1327.4,
+      "week_52_high": 1324.9,
       "week_52_low": 750.3,
       "change_pct": -0.86
     },
@@ -620,7 +620,7 @@
       "day_high": 109.85,
       "day_low": 108.2,
       "week_52_high": 111.15,
-      "week_52_low": 82.96,
+      "week_52_low": 83.29,
       "change_pct": 0.34
     },
     "GNFC": {
@@ -917,7 +917,7 @@
       "day_high": 1238.6,
       "day_low": 1224.1,
       "week_52_high": 1328.0,
-      "week_52_low": 1008.0,
+      "week_52_low": 1014.5,
       "change_pct": -0.02
     },
     "KALYANKJIL": {
@@ -1456,7 +1456,7 @@
       "prev_close": 72.91,
       "day_high": 73.44,
       "day_low": 72.0,
-      "week_52_high": 102.3,
+      "week_52_high": 101.59,
       "week_52_low": 63.02,
       "change_pct": -1.12
     },
@@ -1520,7 +1520,7 @@
       "day_high": 1517.7,
       "day_low": 1426.5,
       "week_52_high": 1517.7,
-      "week_52_low": 528.6,
+      "week_52_low": 530.3,
       "change_pct": 1.11
     },
     "TARIL": {
@@ -1646,7 +1646,7 @@
       "day_high": 4549.8,
       "day_low": 4472.4,
       "week_52_high": 4712.9,
-      "week_52_low": 3165.0,
+      "week_52_low": 3171.9,
       "change_pct": 0.26
     },
     "TORNTPOWER": {
