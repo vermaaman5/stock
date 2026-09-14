@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-11T20:01:54.864291+05:30",
-  "updated_at_readable": "11 Sep 2026 20:01 IST",
+  "updated_at": "2026-09-14T14:37:47.688560+05:30",
+  "updated_at_readable": "14 Sep 2026 14:37 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 492.7,
@@ -80,7 +80,7 @@
       "day_high": 4125.9,
       "day_low": 4055.6,
       "week_52_high": 5180.0,
-      "week_52_low": 3002.0,
+      "week_52_low": 3034.0,
       "change_pct": -0.48
     },
     "ALKEM": {
@@ -197,7 +197,7 @@
       "day_high": 1681.4,
       "day_low": 1655.5,
       "week_52_high": 1717.0,
-      "week_52_low": 1061.3,
+      "week_52_low": 1066.8,
       "change_pct": 0.68
     },
     "AVALON": {
@@ -215,7 +215,7 @@
       "day_high": 1252.8,
       "day_low": 1229.8,
       "week_52_high": 1418.3,
-      "week_52_low": 1088.4,
+      "week_52_low": 1100.0,
       "change_pct": 0.0
     },
     "BAJAJ-AUTO": {
@@ -503,7 +503,7 @@
       "day_high": 12300.0,
       "day_low": 11250.0,
       "week_52_high": 12875.0,
-      "week_52_low": 6621.5,
+      "week_52_low": 6700.5,
       "change_pct": 4.8
     },
     "EICHERMOT": {
@@ -1312,7 +1312,7 @@
       "prev_close": 279.9,
       "day_high": 278.45,
       "day_low": 264.15,
-      "week_52_high": 353.4,
+      "week_52_high": 352.2,
       "week_52_low": 205.0,
       "change_pct": -4.73
     },
