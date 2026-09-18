@@ -1,1725 +1,1725 @@
 {
-  "updated_at": "2026-09-17T20:38:44.296117+05:30",
-  "updated_at_readable": "17 Sep 2026 20:38 IST",
+  "updated_at": "2026-09-18T13:53:24.859189+05:30",
+  "updated_at_readable": "18 Sep 2026 13:53 IST",
   "prices": {
     "AARTIIND": {
-      "cmp": 476.6,
-      "prev_close": 472.85,
-      "day_high": 482.95,
-      "day_low": 469.5,
+      "cmp": 487.4,
+      "prev_close": 476.6,
+      "day_high": 487.55,
+      "day_low": 476.25,
       "week_52_high": 551.75,
       "week_52_low": 338.05,
-      "change_pct": 0.79
+      "change_pct": 2.27
     },
     "ABB": {
-      "cmp": 7130.5,
+      "cmp": 7189.0,
       "prev_close": 6980.0,
-      "day_high": 7168.0,
-      "day_low": 6975.5,
+      "day_high": 7307.0,
+      "day_low": 7151.0,
       "week_52_high": 7924.5,
       "week_52_low": 4637.5,
-      "change_pct": 2.16
+      "change_pct": 2.99
     },
     "ABBOTINDIA": {
-      "cmp": 25910.0,
+      "cmp": 26780.0,
       "prev_close": 26125.0,
-      "day_high": 26280.0,
-      "day_low": 25830.0,
+      "day_high": 26850.0,
+      "day_low": 26035.0,
       "week_52_high": 31355.0,
       "week_52_low": 25135.0,
-      "change_pct": -0.82
+      "change_pct": 2.51
     },
     "ABFRL": {
-      "cmp": 50.45,
-      "prev_close": 49.74,
-      "day_high": 50.63,
-      "day_low": 49.41,
+      "cmp": 50.12,
+      "prev_close": 50.45,
+      "day_high": 50.6,
+      "day_low": 49.96,
       "week_52_high": 94.95,
       "week_52_low": 48.71,
-      "change_pct": 1.43
+      "change_pct": -0.65
     },
     "ACC": {
-      "cmp": 1232.5,
-      "prev_close": 1226.6,
-      "day_high": 1240.4,
-      "day_low": 1225.0,
+      "cmp": 1248.4,
+      "prev_close": 1232.5,
+      "day_high": 1263.0,
+      "day_low": 1236.6,
       "week_52_high": 1987.0,
       "week_52_low": 1219.1,
-      "change_pct": 0.48
+      "change_pct": 1.29
     },
     "ADANIGREEN": {
-      "cmp": 1274.2,
+      "cmp": 1317.8,
       "prev_close": 1270.2,
-      "day_high": 1291.0,
-      "day_low": 1261.5,
+      "day_high": 1337.9,
+      "day_low": 1274.2,
       "week_52_high": 1631.5,
       "week_52_low": 765.0,
-      "change_pct": 0.31
+      "change_pct": 3.75
     },
     "ADANIPORTS": {
-      "cmp": 1738.3,
-      "prev_close": 1723.8,
-      "day_high": 1738.8,
-      "day_low": 1725.1,
+      "cmp": 1775.9,
+      "prev_close": 1738.3,
+      "day_high": 1778.7,
+      "day_low": 1744.0,
       "week_52_high": 1891.1,
       "week_52_low": 1292.0,
-      "change_pct": 0.84
+      "change_pct": 2.16
     },
     "ADANIPOWER": {
-      "cmp": 205.92,
-      "prev_close": 202.34,
-      "day_high": 205.92,
-      "day_low": 202.3,
+      "cmp": 208.29,
+      "prev_close": 205.92,
+      "day_high": 209.6,
+      "day_low": 205.64,
       "week_52_high": 254.2,
       "week_52_low": 128.1,
-      "change_pct": 1.77
+      "change_pct": 1.15
     },
     "AIAENG": {
-      "cmp": 3983.4,
+      "cmp": 3957.6,
       "prev_close": 3805.8,
-      "day_high": 3998.0,
-      "day_low": 3790.0,
+      "day_high": 4039.8,
+      "day_low": 3900.0,
       "week_52_high": 5180.0,
       "week_52_low": 3034.0,
-      "change_pct": 4.67
+      "change_pct": 3.99
     },
     "ALKEM": {
-      "cmp": 5348.5,
-      "prev_close": 5175.0,
-      "day_high": 5361.0,
-      "day_low": 5161.5,
+      "cmp": 5364.5,
+      "prev_close": 5348.5,
+      "day_high": 5380.0,
+      "day_low": 5310.5,
       "week_52_high": 5933.5,
       "week_52_low": 5051.0,
-      "change_pct": 3.35
+      "change_pct": 0.3
     },
     "AMBUJACEM": {
-      "cmp": 383.25,
-      "prev_close": 381.05,
-      "day_high": 386.3,
-      "day_low": 380.55,
+      "cmp": 389.8,
+      "prev_close": 383.25,
+      "day_high": 394.9,
+      "day_low": 383.9,
       "week_52_high": 600.8,
       "week_52_low": 379.55,
-      "change_pct": 0.58
+      "change_pct": 1.71
     },
     "APARINDS": {
-      "cmp": 17801.0,
-      "prev_close": 17075.0,
-      "day_high": 17925.0,
-      "day_low": 16884.0,
+      "cmp": 18344.0,
+      "prev_close": 17801.0,
+      "day_high": 18420.0,
+      "day_low": 17745.0,
       "week_52_high": 18465.0,
       "week_52_low": 6801.0,
-      "change_pct": 4.25
+      "change_pct": 3.05
     },
     "APLAPOLLO": {
-      "cmp": 2148.5,
+      "cmp": 2192.6,
       "prev_close": 2120.0,
-      "day_high": 2170.0,
-      "day_low": 2110.0,
+      "day_high": 2203.5,
+      "day_low": 2146.3,
       "week_52_high": 2301.4,
       "week_52_low": 1653.3,
-      "change_pct": 1.34
+      "change_pct": 3.42
     },
     "APOLLOHOSP": {
-      "cmp": 8768.5,
-      "prev_close": 8696.5,
-      "day_high": 8799.0,
-      "day_low": 8686.5,
+      "cmp": 8842.5,
+      "prev_close": 8768.5,
+      "day_high": 8872.5,
+      "day_low": 8798.0,
       "week_52_high": 9050.0,
       "week_52_low": 6696.5,
-      "change_pct": 0.83
+      "change_pct": 0.84
     },
     "APOLLOPIPE": {
-      "cmp": 525.85,
+      "cmp": 536.75,
       "prev_close": 508.9,
-      "day_high": 530.5,
-      "day_low": 507.0,
+      "day_high": 541.45,
+      "day_low": 522.35,
       "week_52_high": 668.8,
       "week_52_low": 252.1,
-      "change_pct": 3.33
+      "change_pct": 5.47
     },
     "APOLLOTYRE": {
       "cmp": 412.15,
-      "prev_close": 411.95,
-      "day_high": 414.3,
-      "day_low": 403.25,
+      "prev_close": 412.15,
+      "day_high": 415.0,
+      "day_low": 409.15,
       "week_52_high": 540.5,
       "week_52_low": 365.3,
-      "change_pct": 0.05
+      "change_pct": 0.0
     },
     "ASHOKLEY": {
-      "cmp": 158.62,
-      "prev_close": 156.5,
-      "day_high": 159.64,
-      "day_low": 156.08,
+      "cmp": 162.34,
+      "prev_close": 158.62,
+      "day_high": 162.57,
+      "day_low": 158.51,
       "week_52_high": 215.42,
       "week_52_low": 134.21,
-      "change_pct": 1.35
+      "change_pct": 2.35
     },
     "ASIANPAINT": {
-      "cmp": 2454.0,
-      "prev_close": 2416.6,
-      "day_high": 2454.0,
-      "day_low": 2421.0,
+      "cmp": 2450.7,
+      "prev_close": 2454.0,
+      "day_high": 2474.0,
+      "day_low": 2438.0,
       "week_52_high": 2985.7,
       "week_52_low": 2115.0,
-      "change_pct": 1.55
+      "change_pct": -0.13
     },
     "ASTRAL": {
-      "cmp": 1398.9,
-      "prev_close": 1382.5,
-      "day_high": 1401.0,
-      "day_low": 1355.0,
+      "cmp": 1412.2,
+      "prev_close": 1398.9,
+      "day_high": 1424.5,
+      "day_low": 1397.5,
       "week_52_high": 1768.7,
       "week_52_low": 1311.6,
-      "change_pct": 1.19
-    },
-    "ASTRAMICRO": {
-      "cmp": 1607.8,
-      "prev_close": 1621.9,
-      "day_high": 1635.0,
-      "day_low": 1599.0,
-      "week_52_high": 1960.0,
-      "week_52_low": 851.0,
-      "change_pct": -0.87
-    },
-    "AUBANK": {
-      "cmp": 1039.3,
-      "prev_close": 1033.2,
-      "day_high": 1048.0,
-      "day_low": 1026.2,
-      "week_52_high": 1144.1,
-      "week_52_low": 698.3,
-      "change_pct": 0.59
-    },
-    "AUROPHARMA": {
-      "cmp": 1690.0,
-      "prev_close": 1643.0,
-      "day_high": 1692.3,
-      "day_low": 1634.0,
-      "week_52_high": 1717.0,
-      "week_52_low": 1066.8,
-      "change_pct": 2.86
-    },
-    "AVALON": {
-      "cmp": 2230.0,
-      "prev_close": 2216.1,
-      "day_high": 2305.0,
-      "day_low": 2204.3,
-      "week_52_high": 2400.0,
-      "week_52_low": 777.3,
-      "change_pct": 0.63
-    },
-    "AXISBANK": {
-      "cmp": 1240.0,
-      "prev_close": 1241.0,
-      "day_high": 1257.6,
-      "day_low": 1233.0,
-      "week_52_high": 1418.3,
-      "week_52_low": 1121.2,
-      "change_pct": -0.08
-    },
-    "BAJAJ-AUTO": {
-      "cmp": 11500.0,
-      "prev_close": 11593.0,
-      "day_high": 11576.0,
-      "day_low": 11435.0,
-      "week_52_high": 12470.0,
-      "week_52_low": 8491.5,
-      "change_pct": -0.8
-    },
-    "BAJAJFINSV": {
-      "cmp": 1859.2,
-      "prev_close": 1837.0,
-      "day_high": 1863.0,
-      "day_low": 1832.1,
-      "week_52_high": 2195.0,
-      "week_52_low": 1597.0,
-      "change_pct": 1.21
-    },
-    "BAJFINANCE": {
-      "cmp": 1015.0,
-      "prev_close": 1006.2,
-      "day_high": 1027.9,
-      "day_low": 1010.0,
-      "week_52_high": 1176.4,
-      "week_52_low": 787.9,
-      "change_pct": 0.87
-    },
-    "BALKRISIND": {
-      "cmp": 2170.8,
-      "prev_close": 2124.9,
-      "day_high": 2180.0,
-      "day_low": 2120.0,
-      "week_52_high": 2775.0,
-      "week_52_low": 1970.0,
-      "change_pct": 2.16
-    },
-    "BANDHANBNK": {
-      "cmp": 171.5,
-      "prev_close": 172.5,
-      "day_high": 175.0,
-      "day_low": 170.98,
-      "week_52_high": 220.76,
-      "week_52_low": 134.25,
-      "change_pct": -0.58
-    },
-    "BATAINDIA": {
-      "cmp": 636.65,
-      "prev_close": 630.65,
-      "day_high": 639.25,
-      "day_low": 630.65,
-      "week_52_high": 1255.0,
-      "week_52_low": 605.0,
       "change_pct": 0.95
     },
+    "ASTRAMICRO": {
+      "cmp": 1619.7,
+      "prev_close": 1607.8,
+      "day_high": 1650.6,
+      "day_low": 1611.0,
+      "week_52_high": 1960.0,
+      "week_52_low": 851.0,
+      "change_pct": 0.74
+    },
+    "AUBANK": {
+      "cmp": 1035.7,
+      "prev_close": 1033.2,
+      "day_high": 1046.7,
+      "day_low": 1033.3,
+      "week_52_high": 1144.1,
+      "week_52_low": 703.85,
+      "change_pct": 0.24
+    },
+    "AUROPHARMA": {
+      "cmp": 1689.0,
+      "prev_close": 1643.0,
+      "day_high": 1701.9,
+      "day_low": 1676.1,
+      "week_52_high": 1717.0,
+      "week_52_low": 1066.8,
+      "change_pct": 2.8
+    },
+    "AVALON": {
+      "cmp": 2440.5,
+      "prev_close": 2216.1,
+      "day_high": 2479.8,
+      "day_low": 2218.3,
+      "week_52_high": 2479.8,
+      "week_52_low": 777.3,
+      "change_pct": 10.13
+    },
+    "AXISBANK": {
+      "cmp": 1242.9,
+      "prev_close": 1240.0,
+      "day_high": 1249.9,
+      "day_low": 1240.5,
+      "week_52_high": 1418.3,
+      "week_52_low": 1125.4,
+      "change_pct": 0.23
+    },
+    "BAJAJ-AUTO": {
+      "cmp": 11472.0,
+      "prev_close": 11593.0,
+      "day_high": 11540.0,
+      "day_low": 11420.0,
+      "week_52_high": 12470.0,
+      "week_52_low": 8491.5,
+      "change_pct": -1.04
+    },
+    "BAJAJFINSV": {
+      "cmp": 1857.4,
+      "prev_close": 1837.0,
+      "day_high": 1871.4,
+      "day_low": 1854.3,
+      "week_52_high": 2195.0,
+      "week_52_low": 1597.0,
+      "change_pct": 1.11
+    },
+    "BAJFINANCE": {
+      "cmp": 1027.1,
+      "prev_close": 1006.2,
+      "day_high": 1030.4,
+      "day_low": 1019.1,
+      "week_52_high": 1176.4,
+      "week_52_low": 787.9,
+      "change_pct": 2.08
+    },
+    "BALKRISIND": {
+      "cmp": 2229.7,
+      "prev_close": 2124.9,
+      "day_high": 2253.5,
+      "day_low": 2166.0,
+      "week_52_high": 2775.0,
+      "week_52_low": 1970.0,
+      "change_pct": 4.93
+    },
+    "BANDHANBNK": {
+      "cmp": 176.91,
+      "prev_close": 172.5,
+      "day_high": 178.3,
+      "day_low": 172.5,
+      "week_52_high": 220.76,
+      "week_52_low": 134.25,
+      "change_pct": 2.56
+    },
+    "BATAINDIA": {
+      "cmp": 630.75,
+      "prev_close": 636.65,
+      "day_high": 642.45,
+      "day_low": 625.65,
+      "week_52_high": 1249.5,
+      "week_52_low": 605.0,
+      "change_pct": -0.93
+    },
     "BEL": {
-      "cmp": 395.45,
-      "prev_close": 385.75,
-      "day_high": 395.9,
-      "day_low": 387.0,
+      "cmp": 398.2,
+      "prev_close": 395.45,
+      "day_high": 399.2,
+      "day_low": 395.15,
       "week_52_high": 473.45,
       "week_52_low": 380.45,
-      "change_pct": 2.51
+      "change_pct": 0.7
     },
     "BEML": {
-      "cmp": 2013.3,
+      "cmp": 2079.7,
       "prev_close": 1991.9,
-      "day_high": 2068.6,
-      "day_low": 1985.2,
+      "day_high": 2121.0,
+      "day_low": 2030.4,
       "week_52_high": 2275.75,
       "week_52_low": 1355.0,
-      "change_pct": 1.07
+      "change_pct": 4.41
     },
     "BHARATFORG": {
-      "cmp": 1918.7,
+      "cmp": 1988.8,
       "prev_close": 1885.0,
-      "day_high": 1941.0,
-      "day_low": 1878.0,
+      "day_high": 1994.9,
+      "day_low": 1940.1,
       "week_52_high": 2295.0,
       "week_52_low": 1179.0,
-      "change_pct": 1.79
+      "change_pct": 5.51
     },
     "BHEL": {
-      "cmp": 429.2,
-      "prev_close": 410.6,
-      "day_high": 430.75,
-      "day_low": 410.8,
+      "cmp": 432.3,
+      "prev_close": 429.2,
+      "day_high": 435.5,
+      "day_low": 427.25,
       "week_52_high": 446.5,
       "week_52_low": 229.54,
-      "change_pct": 4.53
+      "change_pct": 0.72
     },
     "BOSCHLTD": {
-      "cmp": 47735.0,
+      "cmp": 47755.0,
       "prev_close": 47555.0,
-      "day_high": 48160.0,
-      "day_low": 47595.0,
+      "day_high": 48650.0,
+      "day_low": 47735.0,
       "week_52_high": 50000.0,
       "week_52_low": 28610.0,
-      "change_pct": 0.38
+      "change_pct": 0.42
     },
     "BPCL": {
-      "cmp": 307.0,
-      "prev_close": 303.35,
-      "day_high": 308.0,
-      "day_low": 303.15,
+      "cmp": 312.3,
+      "prev_close": 307.0,
+      "day_high": 314.2,
+      "day_low": 308.25,
       "week_52_high": 391.65,
       "week_52_low": 266.6,
-      "change_pct": 1.2
+      "change_pct": 1.73
     },
     "BRITANNIA": {
-      "cmp": 4982.0,
-      "prev_close": 4999.5,
-      "day_high": 5040.0,
-      "day_low": 4982.0,
+      "cmp": 5004.0,
+      "prev_close": 4982.0,
+      "day_high": 5026.5,
+      "day_low": 4968.0,
       "week_52_high": 6271.0,
       "week_52_low": 4933.0,
-      "change_pct": -0.35
+      "change_pct": 0.44
     },
     "BSOFT": {
-      "cmp": 283.8,
+      "cmp": 279.8,
       "prev_close": 281.25,
-      "day_high": 286.95,
-      "day_low": 281.65,
+      "day_high": 285.05,
+      "day_low": 278.45,
       "week_52_high": 474.0,
       "week_52_low": 270.2,
-      "change_pct": 0.91
+      "change_pct": -0.52
     },
     "CEATLTD": {
-      "cmp": 3431.1,
+      "cmp": 3517.2,
       "prev_close": 3305.6,
-      "day_high": 3442.0,
-      "day_low": 3290.0,
+      "day_high": 3529.0,
+      "day_low": 3418.1,
       "week_52_high": 4438.0,
       "week_52_low": 3061.2,
-      "change_pct": 3.8
+      "change_pct": 6.4
     },
     "CESC": {
-      "cmp": 141.56,
+      "cmp": 140.89,
       "prev_close": 141.67,
-      "day_high": 143.21,
-      "day_low": 140.88,
+      "day_high": 142.93,
+      "day_low": 140.71,
       "week_52_high": 204.5,
       "week_52_low": 138.12,
-      "change_pct": -0.08
+      "change_pct": -0.55
     },
     "CHOLAFIN": {
-      "cmp": 1764.5,
+      "cmp": 1787.7,
       "prev_close": 1765.6,
-      "day_high": 1793.2,
-      "day_low": 1747.6,
+      "day_high": 1794.5,
+      "day_low": 1766.0,
       "week_52_high": 1952.5,
       "week_52_low": 1299.4,
-      "change_pct": -0.06
+      "change_pct": 1.25
     },
     "CIPLA": {
-      "cmp": 1376.3,
+      "cmp": 1375.5,
       "prev_close": 1358.0,
-      "day_high": 1385.0,
-      "day_low": 1351.6,
+      "day_high": 1392.6,
+      "day_low": 1371.7,
       "week_52_high": 1673.0,
       "week_52_low": 1165.7,
-      "change_pct": 1.35
+      "change_pct": 1.29
     },
     "CLEAN": {
-      "cmp": 828.15,
+      "cmp": 853.85,
       "prev_close": 820.0,
-      "day_high": 834.8,
-      "day_low": 816.4,
-      "week_52_high": 1212.0,
+      "day_high": 872.85,
+      "day_low": 826.7,
+      "week_52_high": 1207.9,
       "week_52_low": 652.0,
-      "change_pct": 0.99
+      "change_pct": 4.13
     },
     "COALINDIA": {
-      "cmp": 418.0,
-      "prev_close": 422.25,
-      "day_high": 422.8,
-      "day_low": 416.55,
+      "cmp": 411.65,
+      "prev_close": 418.0,
+      "day_high": 419.95,
+      "day_low": 409.65,
       "week_52_high": 491.25,
       "week_52_low": 369.6,
-      "change_pct": -1.01
+      "change_pct": -1.52
     },
     "COCHINSHIP": {
-      "cmp": 1334.3,
-      "prev_close": 1319.0,
-      "day_high": 1349.9,
-      "day_low": 1310.1,
+      "cmp": 1372.8,
+      "prev_close": 1334.3,
+      "day_high": 1375.0,
+      "day_low": 1333.0,
       "week_52_high": 1979.9,
       "week_52_low": 1187.0,
-      "change_pct": 1.16
+      "change_pct": 2.89
     },
     "COFORGE": {
-      "cmp": 1793.0,
+      "cmp": 1777.8,
       "prev_close": 1766.7,
-      "day_high": 1797.4,
-      "day_low": 1759.4,
+      "day_high": 1794.2,
+      "day_low": 1754.2,
       "week_52_high": 2021.2,
       "week_52_low": 1008.1,
-      "change_pct": 1.49
+      "change_pct": 0.63
     },
     "COLPAL": {
-      "cmp": 1840.3,
+      "cmp": 1881.4,
       "prev_close": 1860.0,
-      "day_high": 1886.0,
-      "day_low": 1840.0,
+      "day_high": 1886.5,
+      "day_low": 1836.9,
       "week_52_high": 2379.2,
       "week_52_low": 1782.0,
-      "change_pct": -1.06
+      "change_pct": 1.15
     },
     "COROMANDEL": {
-      "cmp": 1929.8,
-      "prev_close": 1937.8,
-      "day_high": 1947.3,
-      "day_low": 1922.0,
+      "cmp": 1974.9,
+      "prev_close": 1929.8,
+      "day_high": 1977.0,
+      "day_low": 1919.5,
       "week_52_high": 2499.0,
       "week_52_low": 1706.5,
-      "change_pct": -0.41
+      "change_pct": 2.34
     },
     "CUMMINSIND": {
-      "cmp": 5020.0,
-      "prev_close": 4940.0,
-      "day_high": 5043.5,
-      "day_low": 4920.0,
+      "cmp": 5091.0,
+      "prev_close": 5020.0,
+      "day_high": 5115.0,
+      "day_low": 5000.0,
       "week_52_high": 6100.0,
       "week_52_low": 3833.0,
-      "change_pct": 1.62
+      "change_pct": 1.41
     },
     "CYIENT": {
-      "cmp": 1064.0,
+      "cmp": 1052.0,
       "prev_close": 1054.5,
-      "day_high": 1084.0,
-      "day_low": 1047.1,
+      "day_high": 1071.7,
+      "day_low": 1050.4,
       "week_52_high": 1280.2,
       "week_52_low": 750.3,
-      "change_pct": 0.9
-    },
-    "DABUR": {
-      "cmp": 384.55,
-      "prev_close": 382.0,
-      "day_high": 386.4,
-      "day_low": 381.3,
-      "week_52_high": 542.8,
-      "week_52_low": 368.05,
-      "change_pct": 0.67
-    },
-    "DEEPAKNTR": {
-      "cmp": 1604.8,
-      "prev_close": 1590.5,
-      "day_high": 1611.9,
-      "day_low": 1589.9,
-      "week_52_high": 1904.4,
-      "week_52_low": 1280.0,
-      "change_pct": 0.9
-    },
-    "DIVISLAB": {
-      "cmp": 9323.0,
-      "prev_close": 9158.0,
-      "day_high": 9371.0,
-      "day_low": 9135.5,
-      "week_52_high": 9615.0,
-      "week_52_low": 5636.5,
-      "change_pct": 1.8
-    },
-    "DMART": {
-      "cmp": 3711.2,
-      "prev_close": 3720.0,
-      "day_high": 3759.0,
-      "day_low": 3700.1,
-      "week_52_high": 4798.0,
-      "week_52_low": 3600.0,
       "change_pct": -0.24
     },
+    "DABUR": {
+      "cmp": 387.5,
+      "prev_close": 384.55,
+      "day_high": 387.8,
+      "day_low": 382.95,
+      "week_52_high": 536.75,
+      "week_52_low": 368.05,
+      "change_pct": 0.77
+    },
+    "DEEPAKNTR": {
+      "cmp": 1607.5,
+      "prev_close": 1590.5,
+      "day_high": 1616.0,
+      "day_low": 1601.2,
+      "week_52_high": 1904.4,
+      "week_52_low": 1280.0,
+      "change_pct": 1.07
+    },
+    "DIVISLAB": {
+      "cmp": 9393.5,
+      "prev_close": 9323.0,
+      "day_high": 9445.0,
+      "day_low": 9328.5,
+      "week_52_high": 9615.0,
+      "week_52_low": 5636.5,
+      "change_pct": 0.76
+    },
+    "DMART": {
+      "cmp": 3739.8,
+      "prev_close": 3711.2,
+      "day_high": 3755.8,
+      "day_low": 3680.0,
+      "week_52_high": 4789.8,
+      "week_52_low": 3600.0,
+      "change_pct": 0.77
+    },
     "DRREDDY": {
-      "cmp": 1175.0,
+      "cmp": 1190.4,
       "prev_close": 1140.0,
-      "day_high": 1189.8,
-      "day_low": 1140.0,
+      "day_high": 1207.5,
+      "day_low": 1182.1,
       "week_52_high": 1414.9,
       "week_52_low": 1101.0,
-      "change_pct": 3.07
+      "change_pct": 4.42
     },
     "DYNAMATECH": {
-      "cmp": 11819.0,
-      "prev_close": 12077.0,
-      "day_high": 12454.0,
-      "day_low": 11762.0,
+      "cmp": 12032.0,
+      "prev_close": 11819.0,
+      "day_high": 12215.0,
+      "day_low": 11743.0,
       "week_52_high": 12875.0,
       "week_52_low": 6716.0,
-      "change_pct": -2.14
+      "change_pct": 1.8
     },
     "EICHERMOT": {
-      "cmp": 7493.5,
-      "prev_close": 7500.0,
-      "day_high": 7552.5,
-      "day_low": 7489.0,
+      "cmp": 7535.0,
+      "prev_close": 7493.5,
+      "day_high": 7559.0,
+      "day_low": 7477.0,
       "week_52_high": 8230.0,
       "week_52_low": 6442.0,
-      "change_pct": -0.09
+      "change_pct": 0.55
     },
     "ELGIEQUIP": {
-      "cmp": 593.3,
-      "prev_close": 592.5,
-      "day_high": 603.8,
-      "day_low": 585.0,
+      "cmp": 602.7,
+      "prev_close": 593.3,
+      "day_high": 606.0,
+      "day_low": 593.3,
       "week_52_high": 645.9,
       "week_52_low": 408.25,
-      "change_pct": 0.14
+      "change_pct": 1.58
     },
     "EMAMILTD": {
-      "cmp": 376.1,
+      "cmp": 368.2,
       "prev_close": 369.3,
-      "day_high": 396.45,
-      "day_low": 370.0,
+      "day_high": 380.05,
+      "day_low": 367.15,
       "week_52_high": 605.55,
       "week_52_low": 361.15,
-      "change_pct": 1.84
+      "change_pct": -0.3
     },
     "ENGINERSIN": {
-      "cmp": 263.75,
-      "prev_close": 260.65,
-      "day_high": 267.95,
-      "day_low": 259.95,
+      "cmp": 266.9,
+      "prev_close": 263.75,
+      "day_high": 267.7,
+      "day_low": 263.5,
       "week_52_high": 289.65,
       "week_52_low": 163.55,
       "change_pct": 1.19
     },
     "EXIDEIND": {
-      "cmp": 418.6,
-      "prev_close": 415.5,
-      "day_high": 421.95,
-      "day_low": 411.0,
+      "cmp": 439.0,
+      "prev_close": 418.6,
+      "day_high": 439.4,
+      "day_low": 419.35,
       "week_52_high": 496.4,
       "week_52_low": 287.0,
-      "change_pct": 0.75
+      "change_pct": 4.87
     },
     "FEDERALBNK": {
-      "cmp": 332.75,
-      "prev_close": 341.8,
-      "day_high": 343.75,
-      "day_low": 332.45,
+      "cmp": 331.75,
+      "prev_close": 332.75,
+      "day_high": 334.45,
+      "day_low": 325.4,
       "week_52_high": 371.7,
       "week_52_low": 189.05,
-      "change_pct": -2.65
+      "change_pct": -0.3
     },
     "FINEORG": {
-      "cmp": 5202.0,
+      "cmp": 5170.0,
       "prev_close": 5193.0,
-      "day_high": 5220.0,
-      "day_low": 5111.0,
+      "day_high": 5271.0,
+      "day_low": 5160.0,
       "week_52_high": 5407.0,
       "week_52_low": 3856.0,
-      "change_pct": 0.17
+      "change_pct": -0.44
     },
     "FINPIPE": {
-      "cmp": 154.43,
-      "prev_close": 151.05,
-      "day_high": 157.5,
-      "day_low": 150.83,
-      "week_52_high": 220.8,
+      "cmp": 154.51,
+      "prev_close": 154.43,
+      "day_high": 156.0,
+      "day_low": 153.03,
+      "week_52_high": 219.16,
       "week_52_low": 147.54,
-      "change_pct": 2.24
+      "change_pct": 0.05
     },
     "FORTIS": {
-      "cmp": 886.1,
+      "cmp": 895.75,
       "prev_close": 870.3,
-      "day_high": 897.0,
-      "day_low": 874.35,
+      "day_high": 896.4,
+      "day_low": 884.7,
       "week_52_high": 1104.3,
       "week_52_low": 766.8,
-      "change_pct": 1.82
+      "change_pct": 2.92
     },
     "GAIL": {
-      "cmp": 172.0,
-      "prev_close": 170.65,
-      "day_high": 172.82,
-      "day_low": 171.24,
+      "cmp": 173.74,
+      "prev_close": 172.0,
+      "day_high": 173.95,
+      "day_low": 172.0,
       "week_52_high": 186.87,
       "week_52_low": 134.36,
-      "change_pct": 0.79
+      "change_pct": 1.01
     },
     "GALAXYSURF": {
-      "cmp": 2257.0,
+      "cmp": 2205.0,
       "prev_close": 2156.3,
-      "day_high": 2271.0,
-      "day_low": 2144.0,
+      "day_high": 2271.1,
+      "day_low": 2202.5,
       "week_52_high": 2648.0,
       "week_52_low": 1510.0,
-      "change_pct": 4.67
+      "change_pct": 2.26
     },
     "GLAXO": {
-      "cmp": 2799.9,
+      "cmp": 2835.6,
       "prev_close": 2856.2,
-      "day_high": 2862.3,
-      "day_low": 2794.5,
+      "day_high": 2853.0,
+      "day_low": 2800.0,
       "week_52_high": 3120.7,
       "week_52_low": 2088.1,
-      "change_pct": -1.97
+      "change_pct": -0.72
     },
     "GMRAIRPORT": {
-      "cmp": 95.04,
+      "cmp": 97.25,
       "prev_close": 92.46,
-      "day_high": 95.72,
-      "day_low": 92.46,
+      "day_high": 97.8,
+      "day_low": 95.41,
       "week_52_high": 115.64,
       "week_52_low": 84.11,
-      "change_pct": 2.79
+      "change_pct": 5.18
     },
     "GNFC": {
-      "cmp": 584.85,
-      "prev_close": 539.75,
-      "day_high": 599.0,
-      "day_low": 538.2,
+      "cmp": 586.4,
+      "prev_close": 584.85,
+      "day_high": 594.35,
+      "day_low": 574.0,
       "week_52_high": 619.0,
       "week_52_low": 365.0,
-      "change_pct": 8.36
+      "change_pct": 0.27
     },
     "GODREJCP": {
-      "cmp": 873.0,
+      "cmp": 881.0,
       "prev_close": 863.0,
-      "day_high": 876.0,
-      "day_low": 865.15,
+      "day_high": 886.0,
+      "day_low": 870.45,
       "week_52_high": 1273.9,
       "week_52_low": 855.15,
-      "change_pct": 1.16
-    },
-    "GRINDWELL": {
-      "cmp": 1862.2,
-      "prev_close": 1852.9,
-      "day_high": 1869.9,
-      "day_low": 1840.9,
-      "week_52_high": 2455.0,
-      "week_52_low": 1329.0,
-      "change_pct": 0.5
-    },
-    "GRSE": {
-      "cmp": 2339.8,
-      "prev_close": 2314.6,
-      "day_high": 2371.9,
-      "day_low": 2319.7,
-      "week_52_high": 3339.0,
-      "week_52_low": 1963.7,
-      "change_pct": 1.09
-    },
-    "GSFC": {
-      "cmp": 152.27,
-      "prev_close": 149.16,
-      "day_high": 154.3,
-      "day_low": 148.6,
-      "week_52_high": 211.75,
-      "week_52_low": 138.83,
       "change_pct": 2.09
     },
+    "GRINDWELL": {
+      "cmp": 1898.1,
+      "prev_close": 1862.2,
+      "day_high": 1913.5,
+      "day_low": 1862.0,
+      "week_52_high": 2455.0,
+      "week_52_low": 1329.0,
+      "change_pct": 1.93
+    },
+    "GRSE": {
+      "cmp": 2389.8,
+      "prev_close": 2339.8,
+      "day_high": 2404.1,
+      "day_low": 2345.0,
+      "week_52_high": 3339.0,
+      "week_52_low": 1963.7,
+      "change_pct": 2.14
+    },
+    "GSFC": {
+      "cmp": 151.73,
+      "prev_close": 152.27,
+      "day_high": 153.72,
+      "day_low": 150.35,
+      "week_52_high": 211.0,
+      "week_52_low": 138.83,
+      "change_pct": -0.35
+    },
     "HAL": {
-      "cmp": 4788.0,
-      "prev_close": 4695.6,
-      "day_high": 4799.0,
-      "day_low": 4687.0,
+      "cmp": 4871.7,
+      "prev_close": 4788.0,
+      "day_high": 4873.8,
+      "day_low": 4780.0,
       "week_52_high": 5149.9,
       "week_52_low": 3479.1,
-      "change_pct": 1.97
+      "change_pct": 1.75
     },
     "HAPPSTMNDS": {
-      "cmp": 327.9,
-      "prev_close": 327.45,
-      "day_high": 328.75,
-      "day_low": 323.8,
-      "week_52_high": 583.0,
+      "cmp": 324.0,
+      "prev_close": 327.9,
+      "day_high": 329.8,
+      "day_low": 323.35,
+      "week_52_high": 578.35,
       "week_52_low": 322.85,
-      "change_pct": 0.14
+      "change_pct": -1.19
     },
     "HARIOMPIPE": {
-      "cmp": 349.65,
+      "cmp": 362.8,
       "prev_close": 350.35,
-      "day_high": 357.35,
-      "day_low": 348.55,
+      "day_high": 369.95,
+      "day_low": 348.9,
       "week_52_high": 572.2,
       "week_52_low": 268.05,
-      "change_pct": -0.2
+      "change_pct": 3.55
     },
     "HCLTECH": {
-      "cmp": 1258.3,
-      "prev_close": 1253.0,
-      "day_high": 1258.3,
-      "day_low": 1235.3,
+      "cmp": 1245.1,
+      "prev_close": 1258.3,
+      "day_high": 1260.8,
+      "day_low": 1235.6,
       "week_52_high": 1780.1,
       "week_52_low": 1030.0,
-      "change_pct": 0.42
+      "change_pct": -1.05
     },
     "HDFCBANK": {
-      "cmp": 713.0,
-      "prev_close": 721.5,
-      "day_high": 719.4,
-      "day_low": 713.0,
+      "cmp": 731.4,
+      "prev_close": 713.0,
+      "day_high": 732.65,
+      "day_low": 715.25,
       "week_52_high": 1020.5,
       "week_52_low": 681.9,
-      "change_pct": -1.18
+      "change_pct": 2.58
     },
     "HDFCLIFE": {
-      "cmp": 557.0,
-      "prev_close": 530.2,
-      "day_high": 560.95,
-      "day_low": 529.95,
+      "cmp": 559.35,
+      "prev_close": 557.0,
+      "day_high": 564.95,
+      "day_low": 555.15,
       "week_52_high": 796.9,
       "week_52_low": 508.7,
-      "change_pct": 5.05
+      "change_pct": 0.42
     },
     "HEROMOTOCO": {
-      "cmp": 5325.0,
-      "prev_close": 5235.0,
-      "day_high": 5341.0,
-      "day_low": 5243.5,
+      "cmp": 5310.5,
+      "prev_close": 5325.0,
+      "day_high": 5362.5,
+      "day_low": 5291.0,
       "week_52_high": 6388.5,
       "week_52_low": 4671.5,
-      "change_pct": 1.72
+      "change_pct": -0.27
     },
     "HINDALCO": {
-      "cmp": 980.5,
+      "cmp": 984.5,
       "prev_close": 972.7,
-      "day_high": 987.2,
-      "day_low": 970.5,
+      "day_high": 999.3,
+      "day_low": 982.3,
       "week_52_high": 1176.0,
       "week_52_low": 731.95,
-      "change_pct": 0.8
+      "change_pct": 1.21
     },
     "HINDCOPPER": {
-      "cmp": 485.5,
-      "prev_close": 481.6,
-      "day_high": 489.3,
-      "day_low": 480.7,
+      "cmp": 496.9,
+      "prev_close": 485.5,
+      "day_high": 497.4,
+      "day_low": 487.05,
       "week_52_high": 760.05,
-      "week_52_low": 276.25,
-      "change_pct": 0.81
+      "week_52_low": 282.0,
+      "change_pct": 2.35
     },
     "HINDPETRO": {
-      "cmp": 350.6,
+      "cmp": 353.85,
       "prev_close": 350.05,
-      "day_high": 353.65,
-      "day_low": 350.35,
+      "day_high": 354.8,
+      "day_low": 350.5,
       "week_52_high": 508.45,
       "week_52_low": 316.2,
-      "change_pct": 0.16
+      "change_pct": 1.09
     },
     "HINDUNILVR": {
-      "cmp": 1942.2,
-      "prev_close": 1962.0,
-      "day_high": 1968.9,
-      "day_low": 1942.2,
+      "cmp": 1949.2,
+      "prev_close": 1942.2,
+      "day_high": 1959.6,
+      "day_low": 1944.0,
       "week_52_high": 2667.2,
       "week_52_low": 1926.2,
-      "change_pct": -1.01
+      "change_pct": 0.36
     },
     "ICICIBANK": {
-      "cmp": 1347.6,
-      "prev_close": 1358.8,
-      "day_high": 1363.0,
-      "day_low": 1347.6,
+      "cmp": 1340.8,
+      "prev_close": 1347.6,
+      "day_high": 1359.8,
+      "day_low": 1339.2,
       "week_52_high": 1480.0,
       "week_52_low": 1187.6,
-      "change_pct": -0.82
+      "change_pct": -0.5
     },
     "ICICIGI": {
-      "cmp": 1486.7,
+      "cmp": 1475.9,
       "prev_close": 1440.0,
-      "day_high": 1498.1,
-      "day_low": 1435.5,
+      "day_high": 1486.8,
+      "day_low": 1466.2,
       "week_52_high": 2064.9,
       "week_52_low": 1423.1,
-      "change_pct": 3.24
+      "change_pct": 2.49
     },
     "IDEAFORGE": {
-      "cmp": 717.95,
+      "cmp": 723.4,
       "prev_close": 702.35,
-      "day_high": 732.0,
-      "day_low": 705.55,
+      "day_high": 727.6,
+      "day_low": 713.55,
       "week_52_high": 992.25,
       "week_52_low": 366.0,
-      "change_pct": 2.22
+      "change_pct": 3.0
     },
     "IDFCFIRSTB": {
-      "cmp": 86.33,
-      "prev_close": 85.01,
-      "day_high": 86.49,
-      "day_low": 84.53,
+      "cmp": 86.81,
+      "prev_close": 86.33,
+      "day_high": 87.17,
+      "day_low": 86.0,
       "week_52_high": 88.76,
       "week_52_low": 58.08,
-      "change_pct": 1.55
+      "change_pct": 0.56
     },
     "IGL": {
-      "cmp": 148.67,
-      "prev_close": 148.77,
-      "day_high": 149.67,
-      "day_low": 147.9,
+      "cmp": 150.2,
+      "prev_close": 148.67,
+      "day_high": 150.58,
+      "day_low": 148.1,
       "week_52_high": 223.5,
       "week_52_low": 141.74,
-      "change_pct": -0.07
+      "change_pct": 1.03
     },
     "INDUSINDBK": {
-      "cmp": 958.2,
-      "prev_close": 946.5,
-      "day_high": 970.7,
-      "day_low": 945.2,
+      "cmp": 961.5,
+      "prev_close": 958.2,
+      "day_high": 969.3,
+      "day_low": 958.5,
       "week_52_high": 1077.85,
       "week_52_low": 710.6,
-      "change_pct": 1.24
+      "change_pct": 0.34
     },
     "INFY": {
-      "cmp": 1058.6,
-      "prev_close": 1060.0,
-      "day_high": 1063.6,
-      "day_low": 1048.6,
+      "cmp": 1043.6,
+      "prev_close": 1058.6,
+      "day_high": 1061.9,
+      "day_low": 1039.3,
       "week_52_high": 1728.0,
       "week_52_low": 982.4,
-      "change_pct": -0.13
+      "change_pct": -1.42
     },
     "INTELLECT": {
       "cmp": 651.3,
-      "prev_close": 659.45,
-      "day_high": 663.7,
-      "day_low": 649.0,
+      "prev_close": 651.3,
+      "day_high": 654.0,
+      "day_low": 641.4,
       "week_52_high": 1244.6,
       "week_52_low": 595.2,
-      "change_pct": -1.24
+      "change_pct": 0.0
     },
     "IOC": {
-      "cmp": 134.27,
-      "prev_close": 134.75,
-      "day_high": 135.33,
-      "day_low": 134.0,
+      "cmp": 135.79,
+      "prev_close": 134.27,
+      "day_high": 135.8,
+      "day_low": 134.6,
       "week_52_high": 188.96,
       "week_52_low": 130.22,
-      "change_pct": -0.36
+      "change_pct": 1.13
     },
     "IPCALAB": {
-      "cmp": 1970.3,
-      "prev_close": 1950.7,
-      "day_high": 2014.0,
-      "day_low": 1937.9,
+      "cmp": 1981.7,
+      "prev_close": 1970.3,
+      "day_high": 2005.0,
+      "day_low": 1964.0,
       "week_52_high": 2014.0,
       "week_52_low": 1251.6,
-      "change_pct": 1.0
+      "change_pct": 0.58
     },
     "IRB": {
-      "cmp": 18.85,
-      "prev_close": 19.05,
-      "day_high": 19.14,
-      "day_low": 18.8,
+      "cmp": 18.77,
+      "prev_close": 18.85,
+      "day_high": 18.99,
+      "day_low": 18.73,
       "week_52_high": 23.95,
       "week_52_low": 18.66,
-      "change_pct": -1.05
+      "change_pct": -0.42
     },
     "IRFC": {
-      "cmp": 79.31,
-      "prev_close": 78.95,
-      "day_high": 79.92,
-      "day_low": 78.65,
+      "cmp": 80.53,
+      "prev_close": 79.31,
+      "day_high": 80.88,
+      "day_low": 79.32,
       "week_52_high": 137.17,
       "week_52_low": 78.16,
-      "change_pct": 0.46
+      "change_pct": 1.54
     },
     "ITC": {
-      "cmp": 266.2,
-      "prev_close": 264.15,
-      "day_high": 268.5,
-      "day_low": 264.1,
+      "cmp": 264.3,
+      "prev_close": 266.2,
+      "day_high": 266.6,
+      "day_low": 264.15,
       "week_52_high": 426.4,
       "week_52_low": 255.5,
-      "change_pct": 0.78
+      "change_pct": -0.71
     },
     "JKCEMENT": {
-      "cmp": 5027.0,
-      "prev_close": 4750.0,
-      "day_high": 5055.0,
-      "day_low": 4745.5,
+      "cmp": 5075.0,
+      "prev_close": 5027.0,
+      "day_high": 5139.0,
+      "day_low": 5010.0,
       "week_52_high": 7000.0,
       "week_52_low": 4671.5,
-      "change_pct": 5.83
+      "change_pct": 0.95
     },
     "JSWINFRA": {
-      "cmp": 326.65,
-      "prev_close": 325.55,
-      "day_high": 329.45,
-      "day_low": 322.8,
+      "cmp": 338.15,
+      "prev_close": 326.65,
+      "day_high": 341.25,
+      "day_low": 326.1,
       "week_52_high": 355.8,
       "week_52_low": 233.42,
-      "change_pct": 0.34
+      "change_pct": 3.52
     },
     "JSWSTEEL": {
-      "cmp": 1253.4,
+      "cmp": 1268.7,
       "prev_close": 1248.9,
-      "day_high": 1260.0,
-      "day_low": 1242.1,
+      "day_high": 1278.7,
+      "day_low": 1262.7,
       "week_52_high": 1351.0,
       "week_52_low": 1073.2,
-      "change_pct": 0.36
+      "change_pct": 1.59
     },
     "KALYANKJIL": {
-      "cmp": 581.45,
-      "prev_close": 580.9,
-      "day_high": 592.5,
-      "day_low": 578.5,
+      "cmp": 584.8,
+      "prev_close": 581.45,
+      "day_high": 588.5,
+      "day_low": 580.0,
       "week_52_high": 648.95,
       "week_52_low": 327.05,
-      "change_pct": 0.09
+      "change_pct": 0.58
     },
     "KNRCON": {
-      "cmp": 120.86,
+      "cmp": 123.0,
       "prev_close": 121.82,
-      "day_high": 125.42,
-      "day_low": 120.1,
+      "day_high": 123.71,
+      "day_low": 121.11,
       "week_52_high": 214.0,
       "week_52_low": 108.65,
-      "change_pct": -0.79
+      "change_pct": 0.97
     },
     "KOTAKBANK": {
-      "cmp": 416.5,
-      "prev_close": 415.0,
-      "day_high": 417.6,
-      "day_low": 412.5,
+      "cmp": 417.65,
+      "prev_close": 416.5,
+      "day_high": 417.75,
+      "day_low": 414.95,
       "week_52_high": 453.2,
       "week_52_low": 345.5,
-      "change_pct": 0.36
-    },
-    "LALPATHLAB": {
-      "cmp": 1924.7,
-      "prev_close": 1895.7,
-      "day_high": 1941.1,
-      "day_low": 1888.0,
-      "week_52_high": 2038.6,
-      "week_52_low": 1272.6,
-      "change_pct": 1.53
-    },
-    "LICI": {
-      "cmp": 400.0,
-      "prev_close": 395.5,
-      "day_high": 406.0,
-      "day_low": 392.55,
-      "week_52_high": 468.48,
-      "week_52_low": 360.75,
-      "change_pct": 1.14
-    },
-    "LT": {
-      "cmp": 3836.2,
-      "prev_close": 3807.7,
-      "day_high": 3875.0,
-      "day_low": 3811.0,
-      "week_52_high": 4440.0,
-      "week_52_low": 3288.1,
-      "change_pct": 0.75
-    },
-    "LTTS": {
-      "cmp": 3324.3,
-      "prev_close": 3351.5,
-      "day_high": 3377.0,
-      "day_low": 3307.3,
-      "week_52_high": 4726.0,
-      "week_52_low": 3010.0,
-      "change_pct": -0.81
-    },
-    "LUPIN": {
-      "cmp": 2098.1,
-      "prev_close": 2045.0,
-      "day_high": 2098.1,
-      "day_low": 2046.3,
-      "week_52_high": 2529.5,
-      "week_52_low": 1900.0,
-      "change_pct": 2.6
-    },
-    "M&M": {
-      "cmp": 3076.5,
-      "prev_close": 3070.0,
-      "day_high": 3127.8,
-      "day_low": 3047.0,
-      "week_52_high": 3839.9,
-      "week_52_low": 2896.0,
-      "change_pct": 0.21
-    },
-    "MANKIND": {
-      "cmp": 2300.0,
-      "prev_close": 2246.0,
-      "day_high": 2308.8,
-      "day_low": 2242.1,
-      "week_52_high": 2674.0,
-      "week_52_low": 1909.7,
-      "change_pct": 2.4
-    },
-    "MAPMYINDIA": {
-      "cmp": 889.8,
-      "prev_close": 883.1,
-      "day_high": 897.8,
-      "day_low": 881.0,
-      "week_52_high": 1998.0,
-      "week_52_low": 795.0,
-      "change_pct": 0.76
-    },
-    "MARICO": {
-      "cmp": 817.0,
-      "prev_close": 810.15,
-      "day_high": 826.3,
-      "day_low": 810.15,
-      "week_52_high": 889.1,
-      "week_52_low": 690.3,
-      "change_pct": 0.85
-    },
-    "MARUTI": {
-      "cmp": 12338.0,
-      "prev_close": 12166.0,
-      "day_high": 12409.0,
-      "day_low": 12127.0,
-      "week_52_high": 17370.0,
-      "week_52_low": 12127.0,
-      "change_pct": 1.41
-    },
-    "MAXHEALTH": {
-      "cmp": 1037.0,
-      "prev_close": 1025.0,
-      "day_high": 1045.7,
-      "day_low": 1021.1,
-      "week_52_high": 1221.9,
-      "week_52_low": 903.0,
-      "change_pct": 1.17
-    },
-    "MAZDOCK": {
-      "cmp": 2210.0,
-      "prev_close": 2231.9,
-      "day_high": 2264.9,
-      "day_low": 2176.0,
-      "week_52_high": 3061.4,
-      "week_52_low": 2057.4,
-      "change_pct": -0.98
-    },
-    "MEDANTA": {
-      "cmp": 1424.0,
-      "prev_close": 1404.6,
-      "day_high": 1438.3,
-      "day_low": 1404.2,
-      "week_52_high": 1544.0,
-      "week_52_low": 956.0,
-      "change_pct": 1.38
-    },
-    "METROPOLIS": {
-      "cmp": 586.3,
-      "prev_close": 580.85,
-      "day_high": 590.1,
-      "day_low": 577.55,
-      "week_52_high": 609.05,
-      "week_52_low": 412.25,
-      "change_pct": 0.94
-    },
-    "MGL": {
-      "cmp": 1071.2,
-      "prev_close": 1080.1,
-      "day_high": 1079.9,
-      "day_low": 1065.0,
-      "week_52_high": 1378.0,
-      "week_52_low": 900.0,
-      "change_pct": -0.82
-    },
-    "MIDHANI": {
-      "cmp": 407.85,
-      "prev_close": 399.25,
-      "day_high": 410.9,
-      "day_low": 398.7,
-      "week_52_high": 482.4,
-      "week_52_low": 266.65,
-      "change_pct": 2.15
-    },
-    "MOIL": {
-      "cmp": 243.06,
-      "prev_close": 237.36,
-      "day_high": 244.21,
-      "day_low": 238.0,
-      "week_52_high": 404.9,
-      "week_52_low": 234.06,
-      "change_pct": 2.4
-    },
-    "MOTHERSON": {
-      "cmp": 161.87,
-      "prev_close": 158.27,
-      "day_high": 162.84,
-      "day_low": 158.66,
-      "week_52_high": 173.27,
-      "week_52_low": 101.01,
-      "change_pct": 2.27
-    },
-    "MPHASIS": {
-      "cmp": 2320.0,
-      "prev_close": 2316.7,
-      "day_high": 2325.1,
-      "day_low": 2288.0,
-      "week_52_high": 3037.2,
-      "week_52_low": 2013.0,
-      "change_pct": 0.14
-    },
-    "MRF": {
-      "cmp": 124585.0,
-      "prev_close": 125010.0,
-      "day_high": 125850.0,
-      "day_low": 124300.0,
-      "week_52_high": 163600.0,
-      "week_52_low": 122000.0,
-      "change_pct": -0.34
-    },
-    "MUTHOOTFIN": {
-      "cmp": 2770.2,
-      "prev_close": 2771.4,
-      "day_high": 2790.0,
-      "day_low": 2740.0,
-      "week_52_high": 4149.5,
-      "week_52_low": 2671.0,
-      "change_pct": -0.04
-    },
-    "NAUKRI": {
-      "cmp": 1265.0,
-      "prev_close": 1256.0,
-      "day_high": 1283.1,
-      "day_low": 1242.8,
-      "week_52_high": 1433.6,
-      "week_52_low": 908.3,
-      "change_pct": 0.72
-    },
-    "NAVINFLUOR": {
-      "cmp": 8220.0,
-      "prev_close": 8160.5,
-      "day_high": 8325.0,
-      "day_low": 8120.0,
-      "week_52_high": 8949.5,
-      "week_52_low": 4498.5,
-      "change_pct": 0.73
-    },
-    "NCC": {
-      "cmp": 135.6,
-      "prev_close": 135.01,
-      "day_high": 137.1,
-      "day_low": 133.6,
-      "week_52_high": 217.5,
-      "week_52_low": 130.0,
-      "change_pct": 0.44
-    },
-    "NESTLEIND": {
-      "cmp": 1370.6,
-      "prev_close": 1384.5,
-      "day_high": 1391.7,
-      "day_low": 1370.1,
-      "week_52_high": 1553.0,
-      "week_52_low": 1145.0,
-      "change_pct": -1.0
-    },
-    "NHPC": {
-      "cmp": 75.2,
-      "prev_close": 75.41,
-      "day_high": 75.88,
-      "day_low": 74.99,
-      "week_52_high": 89.22,
-      "week_52_low": 71.62,
-      "change_pct": -0.28
-    },
-    "NIBE": {
-      "cmp": 1250.1,
-      "prev_close": 1212.0,
-      "day_high": 1259.0,
-      "day_low": 1213.9,
-      "week_52_high": 1848.0,
-      "week_52_low": 809.6,
-      "change_pct": 3.14
-    },
-    "NMDC": {
-      "cmp": 80.8,
-      "prev_close": 80.32,
-      "day_high": 81.35,
-      "day_low": 80.4,
-      "week_52_high": 97.49,
-      "week_52_low": 72.24,
-      "change_pct": 0.6
-    },
-    "NTPC": {
-      "cmp": 329.6,
-      "prev_close": 327.0,
-      "day_high": 331.3,
-      "day_low": 327.2,
-      "week_52_high": 414.4,
-      "week_52_low": 315.55,
-      "change_pct": 0.8
-    },
-    "OIL": {
-      "cmp": 477.4,
-      "prev_close": 487.6,
-      "day_high": 491.0,
-      "day_low": 474.25,
-      "week_52_high": 531.0,
-      "week_52_low": 395.6,
-      "change_pct": -2.09
-    },
-    "ONGC": {
-      "cmp": 232.43,
-      "prev_close": 236.8,
-      "day_high": 235.65,
-      "day_low": 231.25,
-      "week_52_high": 307.5,
-      "week_52_low": 227.65,
-      "change_pct": -1.85
-    },
-    "PAGEIND": {
-      "cmp": 35020.0,
-      "prev_close": 34275.0,
-      "day_high": 35290.0,
-      "day_low": 34300.0,
-      "week_52_high": 45890.0,
-      "week_52_low": 29805.0,
-      "change_pct": 2.17
-    },
-    "PARAS": {
-      "cmp": 1370.9,
-      "prev_close": 1318.8,
-      "day_high": 1379.9,
-      "day_low": 1303.0,
-      "week_52_high": 1585.0,
-      "week_52_low": 580.5,
-      "change_pct": 3.95
-    },
-    "PERSISTENT": {
-      "cmp": 5473.0,
-      "prev_close": 5440.0,
-      "day_high": 5502.0,
-      "day_low": 5405.5,
-      "week_52_high": 6599.0,
-      "week_52_low": 4244.5,
-      "change_pct": 0.61
-    },
-    "PETRONET": {
-      "cmp": 283.45,
-      "prev_close": 282.1,
-      "day_high": 285.0,
-      "day_low": 281.7,
-      "week_52_high": 326.4,
-      "week_52_low": 235.35,
-      "change_pct": 0.48
-    },
-    "PFC": {
-      "cmp": 344.95,
-      "prev_close": 346.0,
-      "day_high": 348.5,
-      "day_low": 344.75,
-      "week_52_high": 486.5,
-      "week_52_low": 329.9,
-      "change_pct": -0.3
-    },
-    "PFIZER": {
-      "cmp": 4014.8,
-      "prev_close": 4014.4,
-      "day_high": 4040.0,
-      "day_low": 3985.5,
-      "week_52_high": 5578.5,
-      "week_52_low": 3955.5,
-      "change_pct": 0.01
-    },
-    "PIDILITIND": {
-      "cmp": 1551.5,
-      "prev_close": 1543.8,
-      "day_high": 1561.1,
-      "day_low": 1535.0,
-      "week_52_high": 1707.5,
-      "week_52_low": 1259.0,
-      "change_pct": 0.5
-    },
-    "POLICYBZR": {
-      "cmp": 1765.0,
-      "prev_close": 1827.1,
-      "day_high": 1845.0,
-      "day_low": 1718.1,
-      "week_52_high": 1964.2,
-      "week_52_low": 1364.0,
-      "change_pct": -3.4
-    },
-    "POLYMED": {
-      "cmp": 1712.7,
-      "prev_close": 1704.6,
-      "day_high": 1753.0,
-      "day_low": 1700.1,
-      "week_52_high": 2107.8,
-      "week_52_low": 1182.0,
-      "change_pct": 0.48
-    },
-    "POWERGRID": {
-      "cmp": 263.75,
-      "prev_close": 262.8,
-      "day_high": 265.7,
-      "day_low": 263.25,
-      "week_52_high": 324.95,
-      "week_52_low": 250.0,
-      "change_pct": 0.36
-    },
-    "PRINCEPIPE": {
-      "cmp": 258.7,
-      "prev_close": 257.3,
-      "day_high": 261.0,
-      "day_low": 255.45,
-      "week_52_high": 352.2,
-      "week_52_low": 205.0,
-      "change_pct": 0.54
-    },
-    "PTC": {
-      "cmp": 155.93,
-      "prev_close": 151.96,
-      "day_high": 156.45,
-      "day_low": 151.71,
-      "week_52_high": 229.51,
-      "week_52_low": 149.59,
-      "change_pct": 2.61
-    },
-    "RALLIS": {
-      "cmp": 204.14,
-      "prev_close": 202.65,
-      "day_high": 206.24,
-      "day_low": 200.6,
-      "week_52_high": 342.1,
-      "week_52_low": 196.81,
-      "change_pct": 0.74
-    },
-    "RAMCOCEM": {
-      "cmp": 858.95,
-      "prev_close": 863.15,
-      "day_high": 864.8,
-      "day_low": 852.8,
-      "week_52_high": 1214.5,
-      "week_52_low": 838.3,
-      "change_pct": -0.49
-    },
-    "RATEGAIN": {
-      "cmp": 865.45,
-      "prev_close": 860.95,
-      "day_high": 871.0,
-      "day_low": 853.95,
-      "week_52_high": 1050.0,
-      "week_52_low": 437.0,
-      "change_pct": 0.52
-    },
-    "RATNAMANI": {
-      "cmp": 2702.6,
-      "prev_close": 2695.0,
-      "day_high": 2735.6,
-      "day_low": 2656.5,
-      "week_52_high": 3345.0,
-      "week_52_low": 1936.5,
       "change_pct": 0.28
     },
-    "RECLTD": {
-      "cmp": 310.5,
-      "prev_close": 312.65,
-      "day_high": 315.05,
-      "day_low": 310.5,
-      "week_52_high": 390.3,
-      "week_52_low": 304.05,
-      "change_pct": -0.69
+    "LALPATHLAB": {
+      "cmp": 1926.3,
+      "prev_close": 1895.7,
+      "day_high": 1959.4,
+      "day_low": 1915.5,
+      "week_52_high": 2038.6,
+      "week_52_low": 1272.6,
+      "change_pct": 1.61
     },
-    "RELIANCE": {
-      "cmp": 1243.9,
-      "prev_close": 1240.0,
-      "day_high": 1253.4,
-      "day_low": 1238.5,
-      "week_52_high": 1611.8,
-      "week_52_low": 1235.3,
-      "change_pct": 0.31
+    "LICI": {
+      "cmp": 399.95,
+      "prev_close": 400.0,
+      "day_high": 401.7,
+      "day_low": 399.1,
+      "week_52_high": 468.48,
+      "week_52_low": 360.75,
+      "change_pct": -0.01
     },
-    "RVNL": {
-      "cmp": 201.7,
-      "prev_close": 197.5,
-      "day_high": 201.9,
-      "day_low": 196.5,
-      "week_52_high": 400.7,
-      "week_52_low": 195.15,
-      "change_pct": 2.13
+    "LT": {
+      "cmp": 3869.3,
+      "prev_close": 3836.2,
+      "day_high": 3884.6,
+      "day_low": 3846.0,
+      "week_52_high": 4440.0,
+      "week_52_low": 3288.1,
+      "change_pct": 0.86
     },
-    "SAIL": {
-      "cmp": 175.01,
-      "prev_close": 173.55,
-      "day_high": 176.25,
-      "day_low": 173.0,
-      "week_52_high": 209.7,
-      "week_52_low": 124.0,
-      "change_pct": 0.84
+    "LTTS": {
+      "cmp": 3316.5,
+      "prev_close": 3351.5,
+      "day_high": 3341.0,
+      "day_low": 3286.8,
+      "week_52_high": 4726.0,
+      "week_52_low": 3010.0,
+      "change_pct": -1.04
     },
-    "SANSERA": {
-      "cmp": 4017.5,
-      "prev_close": 3971.2,
-      "day_high": 4048.0,
-      "day_low": 3938.5,
-      "week_52_high": 4183.6,
-      "week_52_low": 1364.2,
-      "change_pct": 1.17
+    "LUPIN": {
+      "cmp": 2088.3,
+      "prev_close": 2098.1,
+      "day_high": 2114.7,
+      "day_low": 2081.1,
+      "week_52_high": 2529.5,
+      "week_52_low": 1900.0,
+      "change_pct": -0.47
     },
-    "SBILIFE": {
-      "cmp": 1766.9,
-      "prev_close": 1697.9,
-      "day_high": 1771.1,
-      "day_low": 1689.0,
-      "week_52_high": 2132.0,
-      "week_52_low": 1652.9,
-      "change_pct": 4.06
-    },
-    "SBIN": {
-      "cmp": 988.7,
-      "prev_close": 991.4,
-      "day_high": 1000.9,
-      "day_low": 985.2,
-      "week_52_high": 1234.7,
-      "week_52_low": 849.3,
-      "change_pct": -0.27
-    },
-    "SHREECEM": {
-      "cmp": 21960.0,
-      "prev_close": 21795.0,
-      "day_high": 22080.0,
-      "day_low": 21685.0,
-      "week_52_high": 30285.0,
-      "week_52_low": 21665.0,
-      "change_pct": 0.76
-    },
-    "SIEMENS": {
-      "cmp": 3763.5,
-      "prev_close": 3742.0,
-      "day_high": 3817.4,
-      "day_low": 3742.0,
-      "week_52_high": 4149.4,
-      "week_52_low": 2826.0,
-      "change_pct": 0.57
-    },
-    "SJVN": {
-      "cmp": 64.75,
-      "prev_close": 64.06,
-      "day_high": 64.96,
-      "day_low": 63.8,
-      "week_52_high": 95.4,
-      "week_52_low": 63.02,
-      "change_pct": 1.08
-    },
-    "SOLARINDS": {
-      "cmp": 18815.0,
-      "prev_close": 18900.0,
-      "day_high": 19075.0,
-      "day_low": 18590.0,
-      "week_52_high": 22700.0,
-      "week_52_low": 11646.0,
-      "change_pct": -0.45
-    },
-    "SRF": {
-      "cmp": 2536.0,
-      "prev_close": 2480.1,
-      "day_high": 2554.0,
-      "day_low": 2501.0,
-      "week_52_high": 3210.0,
-      "week_52_low": 2355.0,
-      "change_pct": 2.25
-    },
-    "SUNDRMFAST": {
-      "cmp": 1226.7,
-      "prev_close": 1219.9,
-      "day_high": 1236.9,
-      "day_low": 1207.7,
-      "week_52_high": 1347.2,
-      "week_52_low": 730.1,
-      "change_pct": 0.56
-    },
-    "SUNPHARMA": {
-      "cmp": 1867.3,
-      "prev_close": 1853.5,
-      "day_high": 1867.3,
-      "day_low": 1847.4,
-      "week_52_high": 2046.9,
-      "week_52_low": 1548.0,
-      "change_pct": 0.74
-    },
-    "SUPRAJIT": {
-      "cmp": 484.75,
-      "prev_close": 488.15,
-      "day_high": 492.6,
-      "day_low": 481.1,
-      "week_52_high": 559.25,
-      "week_52_low": 389.95,
-      "change_pct": -0.7
-    },
-    "SUPREMEIND": {
-      "cmp": 3344.4,
-      "prev_close": 3300.0,
-      "day_high": 3381.4,
-      "day_low": 3300.0,
-      "week_52_high": 4548.7,
-      "week_52_low": 3140.0,
-      "change_pct": 1.35
-    },
-    "SYRMA": {
-      "cmp": 1617.7,
-      "prev_close": 1511.2,
-      "day_high": 1658.0,
-      "day_low": 1513.5,
-      "week_52_high": 1660.0,
-      "week_52_low": 634.5,
-      "change_pct": 7.05
-    },
-    "TARIL": {
-      "cmp": 276.0,
-      "prev_close": 277.1,
-      "day_high": 286.4,
-      "day_low": 275.0,
-      "week_52_high": 552.0,
-      "week_52_low": 224.05,
-      "change_pct": -0.4
-    },
-    "TATACHEM": {
-      "cmp": 779.3,
-      "prev_close": 731.8,
-      "day_high": 832.0,
-      "day_low": 724.75,
-      "week_52_high": 1001.8,
-      "week_52_low": 580.3,
-      "change_pct": 6.49
-    },
-    "TATACONSUM": {
-      "cmp": 1013.7,
-      "prev_close": 1000.1,
-      "day_high": 1020.3,
-      "day_low": 999.0,
-      "week_52_high": 1282.7,
-      "week_52_low": 986.0,
-      "change_pct": 1.36
-    },
-    "TATAELXSI": {
-      "cmp": 3381.8,
-      "prev_close": 3373.0,
-      "day_high": 3405.0,
-      "day_low": 3343.5,
-      "week_52_high": 5950.0,
-      "week_52_low": 3343.5,
-      "change_pct": 0.26
-    },
-    "TATAPOWER": {
-      "cmp": 369.0,
-      "prev_close": 360.4,
-      "day_high": 370.4,
-      "day_low": 360.2,
-      "week_52_high": 464.9,
-      "week_52_low": 342.5,
-      "change_pct": 2.39
-    },
-    "TATASTEEL": {
-      "cmp": 187.29,
-      "prev_close": 183.0,
-      "day_high": 189.49,
-      "day_low": 182.87,
-      "week_52_high": 224.4,
-      "week_52_low": 160.06,
-      "change_pct": 2.34
-    },
-    "TCS": {
-      "cmp": 2190.0,
-      "prev_close": 2188.8,
-      "day_high": 2263.6,
-      "day_low": 2162.5,
-      "week_52_high": 3350.0,
-      "week_52_low": 1976.8,
-      "change_pct": 0.05
-    },
-    "TECHM": {
-      "cmp": 1561.0,
-      "prev_close": 1558.0,
-      "day_high": 1569.7,
-      "day_low": 1538.0,
-      "week_52_high": 1854.0,
-      "week_52_low": 1304.1,
-      "change_pct": 0.19
-    },
-    "TECHNOE": {
-      "cmp": 984.7,
-      "prev_close": 971.05,
-      "day_high": 998.7,
-      "day_low": 975.0,
-      "week_52_high": 1460.0,
-      "week_52_low": 870.0,
-      "change_pct": 1.41
-    },
-    "THERMAX": {
-      "cmp": 3569.5,
-      "prev_close": 3536.8,
-      "day_high": 3591.4,
-      "day_low": 3502.1,
-      "week_52_high": 5277.8,
-      "week_52_low": 2742.7,
-      "change_pct": 0.92
-    },
-    "TIINDIA": {
-      "cmp": 2598.8,
-      "prev_close": 2566.6,
-      "day_high": 2626.6,
-      "day_low": 2560.4,
-      "week_52_high": 3403.7,
-      "week_52_low": 2164.9,
-      "change_pct": 1.25
-    },
-    "TITAGARH": {
-      "cmp": 827.15,
-      "prev_close": 813.15,
-      "day_high": 845.0,
-      "day_low": 813.1,
-      "week_52_high": 971.0,
-      "week_52_low": 568.7,
-      "change_pct": 1.72
-    },
-    "TITAN": {
-      "cmp": 4841.0,
-      "prev_close": 4908.5,
-      "day_high": 4915.5,
-      "day_low": 4838.5,
-      "week_52_high": 5186.7,
-      "week_52_low": 3303.1,
-      "change_pct": -1.38
-    },
-    "TORNTPHARM": {
-      "cmp": 4875.0,
-      "prev_close": 4812.5,
-      "day_high": 4899.0,
-      "day_low": 4794.5,
-      "week_52_high": 5250.0,
-      "week_52_low": 3480.6,
-      "change_pct": 1.3
-    },
-    "TORNTPOWER": {
-      "cmp": 1276.4,
-      "prev_close": 1295.3,
-      "day_high": 1310.6,
-      "day_low": 1271.0,
-      "week_52_high": 1824.1,
-      "week_52_low": 1188.0,
-      "change_pct": -1.46
-    },
-    "TRENT": {
-      "cmp": 2789.0,
-      "prev_close": 2769.7,
-      "day_high": 2811.0,
-      "day_low": 2760.0,
-      "week_52_high": 5158.0,
-      "week_52_low": 2183.67,
-      "change_pct": 0.7
-    },
-    "ULTRACEMCO": {
-      "cmp": 10764.0,
-      "prev_close": 10700.0,
-      "day_high": 10841.0,
-      "day_low": 10703.0,
-      "week_52_high": 13110.0,
-      "week_52_low": 10325.0,
-      "change_pct": 0.6
-    },
-    "UPL": {
-      "cmp": 554.75,
-      "prev_close": 550.6,
-      "day_high": 558.0,
-      "day_low": 549.8,
-      "week_52_high": 812.2,
-      "week_52_low": 549.8,
-      "change_pct": 0.75
-    },
-    "VBL": {
-      "cmp": 415.45,
-      "prev_close": 410.4,
-      "day_high": 419.5,
-      "day_low": 411.0,
-      "week_52_high": 555.8,
-      "week_52_low": 381.0,
-      "change_pct": 1.23
-    },
-    "VEDL": {
-      "cmp": 257.45,
-      "prev_close": 256.0,
-      "day_high": 257.7,
-      "day_low": 253.95,
-      "week_52_high": 795.0,
-      "week_52_low": 249.7,
-      "change_pct": 0.57
-    },
-    "WIPRO": {
-      "cmp": 166.4,
-      "prev_close": 166.89,
-      "day_high": 167.6,
-      "day_low": 165.02,
-      "week_52_high": 273.1,
-      "week_52_low": 165.02,
+    "M&M": {
+      "cmp": 3067.7,
+      "prev_close": 3076.5,
+      "day_high": 3098.2,
+      "day_low": 3060.7,
+      "week_52_high": 3839.9,
+      "week_52_low": 2896.0,
       "change_pct": -0.29
     },
+    "MANKIND": {
+      "cmp": 2316.8,
+      "prev_close": 2300.0,
+      "day_high": 2329.0,
+      "day_low": 2287.7,
+      "week_52_high": 2674.0,
+      "week_52_low": 1909.7,
+      "change_pct": 0.73
+    },
+    "MAPMYINDIA": {
+      "cmp": 893.7,
+      "prev_close": 883.1,
+      "day_high": 905.2,
+      "day_low": 885.6,
+      "week_52_high": 1998.0,
+      "week_52_low": 795.0,
+      "change_pct": 1.2
+    },
+    "MARICO": {
+      "cmp": 818.5,
+      "prev_close": 810.15,
+      "day_high": 822.45,
+      "day_low": 815.0,
+      "week_52_high": 889.1,
+      "week_52_low": 690.3,
+      "change_pct": 1.03
+    },
+    "MARUTI": {
+      "cmp": 12159.0,
+      "prev_close": 12338.0,
+      "day_high": 12458.0,
+      "day_low": 12157.0,
+      "week_52_high": 17370.0,
+      "week_52_low": 12127.0,
+      "change_pct": -1.45
+    },
+    "MAXHEALTH": {
+      "cmp": 1052.6,
+      "prev_close": 1037.0,
+      "day_high": 1053.7,
+      "day_low": 1034.9,
+      "week_52_high": 1221.9,
+      "week_52_low": 903.0,
+      "change_pct": 1.5
+    },
+    "MAZDOCK": {
+      "cmp": 2257.1,
+      "prev_close": 2210.0,
+      "day_high": 2269.8,
+      "day_low": 2205.1,
+      "week_52_high": 3061.4,
+      "week_52_low": 2057.4,
+      "change_pct": 2.13
+    },
+    "MEDANTA": {
+      "cmp": 1492.2,
+      "prev_close": 1404.6,
+      "day_high": 1497.5,
+      "day_low": 1430.0,
+      "week_52_high": 1544.0,
+      "week_52_low": 956.0,
+      "change_pct": 6.24
+    },
+    "METROPOLIS": {
+      "cmp": 594.25,
+      "prev_close": 586.3,
+      "day_high": 602.05,
+      "day_low": 582.0,
+      "week_52_high": 609.05,
+      "week_52_low": 412.25,
+      "change_pct": 1.36
+    },
+    "MGL": {
+      "cmp": 1080.8,
+      "prev_close": 1071.2,
+      "day_high": 1082.0,
+      "day_low": 1066.2,
+      "week_52_high": 1374.4,
+      "week_52_low": 900.0,
+      "change_pct": 0.9
+    },
+    "MIDHANI": {
+      "cmp": 419.65,
+      "prev_close": 407.85,
+      "day_high": 421.5,
+      "day_low": 408.85,
+      "week_52_high": 482.4,
+      "week_52_low": 266.65,
+      "change_pct": 2.89
+    },
+    "MOIL": {
+      "cmp": 243.2,
+      "prev_close": 243.06,
+      "day_high": 245.1,
+      "day_low": 240.98,
+      "week_52_high": 404.9,
+      "week_52_low": 234.06,
+      "change_pct": 0.06
+    },
+    "MOTHERSON": {
+      "cmp": 164.45,
+      "prev_close": 161.87,
+      "day_high": 165.08,
+      "day_low": 161.84,
+      "week_52_high": 173.27,
+      "week_52_low": 101.01,
+      "change_pct": 1.59
+    },
+    "MPHASIS": {
+      "cmp": 2291.6,
+      "prev_close": 2316.7,
+      "day_high": 2327.9,
+      "day_low": 2275.0,
+      "week_52_high": 3037.2,
+      "week_52_low": 2013.0,
+      "change_pct": -1.08
+    },
+    "MRF": {
+      "cmp": 124000.0,
+      "prev_close": 125010.0,
+      "day_high": 125000.0,
+      "day_low": 123815.0,
+      "week_52_high": 163600.0,
+      "week_52_low": 122000.0,
+      "change_pct": -0.81
+    },
+    "MUTHOOTFIN": {
+      "cmp": 2838.0,
+      "prev_close": 2771.4,
+      "day_high": 2852.0,
+      "day_low": 2784.3,
+      "week_52_high": 4149.5,
+      "week_52_low": 2671.0,
+      "change_pct": 2.4
+    },
+    "NAUKRI": {
+      "cmp": 1275.2,
+      "prev_close": 1256.0,
+      "day_high": 1275.8,
+      "day_low": 1256.0,
+      "week_52_high": 1433.6,
+      "week_52_low": 908.3,
+      "change_pct": 1.53
+    },
+    "NAVINFLUOR": {
+      "cmp": 8404.5,
+      "prev_close": 8220.0,
+      "day_high": 8449.0,
+      "day_low": 8231.5,
+      "week_52_high": 8949.5,
+      "week_52_low": 4498.5,
+      "change_pct": 2.24
+    },
+    "NCC": {
+      "cmp": 137.28,
+      "prev_close": 135.6,
+      "day_high": 137.4,
+      "day_low": 134.84,
+      "week_52_high": 217.25,
+      "week_52_low": 130.0,
+      "change_pct": 1.24
+    },
+    "NESTLEIND": {
+      "cmp": 1354.0,
+      "prev_close": 1384.5,
+      "day_high": 1390.0,
+      "day_low": 1332.8,
+      "week_52_high": 1553.0,
+      "week_52_low": 1145.0,
+      "change_pct": -2.2
+    },
+    "NHPC": {
+      "cmp": 75.91,
+      "prev_close": 75.2,
+      "day_high": 75.96,
+      "day_low": 75.09,
+      "week_52_high": 88.6,
+      "week_52_low": 71.62,
+      "change_pct": 0.94
+    },
+    "NIBE": {
+      "cmp": 1236.7,
+      "prev_close": 1212.0,
+      "day_high": 1264.7,
+      "day_low": 1228.3,
+      "week_52_high": 1848.0,
+      "week_52_low": 809.6,
+      "change_pct": 2.04
+    },
+    "NMDC": {
+      "cmp": 80.66,
+      "prev_close": 80.8,
+      "day_high": 81.7,
+      "day_low": 80.18,
+      "week_52_high": 97.49,
+      "week_52_low": 72.24,
+      "change_pct": -0.17
+    },
+    "NTPC": {
+      "cmp": 328.4,
+      "prev_close": 329.6,
+      "day_high": 330.85,
+      "day_low": 327.15,
+      "week_52_high": 414.4,
+      "week_52_low": 315.55,
+      "change_pct": -0.36
+    },
+    "OIL": {
+      "cmp": 475.6,
+      "prev_close": 477.4,
+      "day_high": 479.9,
+      "day_low": 472.0,
+      "week_52_high": 531.0,
+      "week_52_low": 395.6,
+      "change_pct": -0.38
+    },
+    "ONGC": {
+      "cmp": 233.02,
+      "prev_close": 232.43,
+      "day_high": 234.09,
+      "day_low": 231.75,
+      "week_52_high": 307.5,
+      "week_52_low": 227.65,
+      "change_pct": 0.25
+    },
+    "PAGEIND": {
+      "cmp": 35645.0,
+      "prev_close": 35020.0,
+      "day_high": 36015.0,
+      "day_low": 34900.0,
+      "week_52_high": 45650.0,
+      "week_52_low": 29805.0,
+      "change_pct": 1.78
+    },
+    "PARAS": {
+      "cmp": 1372.6,
+      "prev_close": 1370.9,
+      "day_high": 1397.7,
+      "day_low": 1366.4,
+      "week_52_high": 1585.0,
+      "week_52_low": 580.5,
+      "change_pct": 0.12
+    },
+    "PERSISTENT": {
+      "cmp": 5438.5,
+      "prev_close": 5440.0,
+      "day_high": 5500.0,
+      "day_low": 5389.0,
+      "week_52_high": 6599.0,
+      "week_52_low": 4244.5,
+      "change_pct": -0.03
+    },
+    "PETRONET": {
+      "cmp": 287.1,
+      "prev_close": 283.45,
+      "day_high": 287.75,
+      "day_low": 284.1,
+      "week_52_high": 326.4,
+      "week_52_low": 235.35,
+      "change_pct": 1.29
+    },
+    "PFC": {
+      "cmp": 345.0,
+      "prev_close": 346.0,
+      "day_high": 347.05,
+      "day_low": 344.3,
+      "week_52_high": 486.5,
+      "week_52_low": 329.9,
+      "change_pct": -0.29
+    },
+    "PFIZER": {
+      "cmp": 3978.1,
+      "prev_close": 4014.8,
+      "day_high": 4054.9,
+      "day_low": 3972.7,
+      "week_52_high": 5578.5,
+      "week_52_low": 3955.5,
+      "change_pct": -0.91
+    },
+    "PIDILITIND": {
+      "cmp": 1594.9,
+      "prev_close": 1551.5,
+      "day_high": 1598.9,
+      "day_low": 1559.9,
+      "week_52_high": 1707.5,
+      "week_52_low": 1259.0,
+      "change_pct": 2.8
+    },
+    "POLICYBZR": {
+      "cmp": 1773.8,
+      "prev_close": 1765.0,
+      "day_high": 1798.0,
+      "day_low": 1768.0,
+      "week_52_high": 1964.2,
+      "week_52_low": 1364.0,
+      "change_pct": 0.5
+    },
+    "POLYMED": {
+      "cmp": 1709.1,
+      "prev_close": 1704.6,
+      "day_high": 1748.0,
+      "day_low": 1705.1,
+      "week_52_high": 2107.8,
+      "week_52_low": 1182.0,
+      "change_pct": 0.26
+    },
+    "POWERGRID": {
+      "cmp": 265.6,
+      "prev_close": 262.8,
+      "day_high": 266.75,
+      "day_low": 263.4,
+      "week_52_high": 324.95,
+      "week_52_low": 250.0,
+      "change_pct": 1.07
+    },
+    "PRINCEPIPE": {
+      "cmp": 261.25,
+      "prev_close": 257.3,
+      "day_high": 262.3,
+      "day_low": 257.55,
+      "week_52_high": 352.2,
+      "week_52_low": 205.0,
+      "change_pct": 1.54
+    },
+    "PTC": {
+      "cmp": 155.13,
+      "prev_close": 155.93,
+      "day_high": 157.0,
+      "day_low": 153.8,
+      "week_52_high": 229.51,
+      "week_52_low": 149.59,
+      "change_pct": -0.51
+    },
+    "RALLIS": {
+      "cmp": 203.01,
+      "prev_close": 202.65,
+      "day_high": 204.29,
+      "day_low": 202.0,
+      "week_52_high": 342.1,
+      "week_52_low": 196.81,
+      "change_pct": 0.18
+    },
+    "RAMCOCEM": {
+      "cmp": 868.8,
+      "prev_close": 863.15,
+      "day_high": 881.95,
+      "day_low": 857.5,
+      "week_52_high": 1214.5,
+      "week_52_low": 838.3,
+      "change_pct": 0.65
+    },
+    "RATEGAIN": {
+      "cmp": 859.25,
+      "prev_close": 860.95,
+      "day_high": 873.85,
+      "day_low": 851.0,
+      "week_52_high": 1050.0,
+      "week_52_low": 437.0,
+      "change_pct": -0.2
+    },
+    "RATNAMANI": {
+      "cmp": 2807.7,
+      "prev_close": 2695.0,
+      "day_high": 2816.3,
+      "day_low": 2701.6,
+      "week_52_high": 3345.0,
+      "week_52_low": 1936.5,
+      "change_pct": 4.18
+    },
+    "RECLTD": {
+      "cmp": 310.7,
+      "prev_close": 312.65,
+      "day_high": 312.5,
+      "day_low": 309.05,
+      "week_52_high": 390.3,
+      "week_52_low": 304.05,
+      "change_pct": -0.62
+    },
+    "RELIANCE": {
+      "cmp": 1242.5,
+      "prev_close": 1243.9,
+      "day_high": 1247.3,
+      "day_low": 1238.3,
+      "week_52_high": 1611.8,
+      "week_52_low": 1235.3,
+      "change_pct": -0.11
+    },
+    "RVNL": {
+      "cmp": 207.37,
+      "prev_close": 201.7,
+      "day_high": 208.0,
+      "day_low": 200.78,
+      "week_52_high": 400.7,
+      "week_52_low": 195.15,
+      "change_pct": 2.81
+    },
+    "SAIL": {
+      "cmp": 177.76,
+      "prev_close": 175.01,
+      "day_high": 178.2,
+      "day_low": 176.03,
+      "week_52_high": 209.7,
+      "week_52_low": 124.0,
+      "change_pct": 1.57
+    },
+    "SANSERA": {
+      "cmp": 4223.3,
+      "prev_close": 3971.2,
+      "day_high": 4260.0,
+      "day_low": 4017.5,
+      "week_52_high": 4260.0,
+      "week_52_low": 1364.2,
+      "change_pct": 6.35
+    },
+    "SBILIFE": {
+      "cmp": 1764.0,
+      "prev_close": 1766.9,
+      "day_high": 1770.0,
+      "day_low": 1751.3,
+      "week_52_high": 2132.0,
+      "week_52_low": 1652.9,
+      "change_pct": -0.16
+    },
+    "SBIN": {
+      "cmp": 991.0,
+      "prev_close": 988.7,
+      "day_high": 994.4,
+      "day_low": 985.1,
+      "week_52_high": 1234.7,
+      "week_52_low": 851.2,
+      "change_pct": 0.23
+    },
+    "SHREECEM": {
+      "cmp": 22480.0,
+      "prev_close": 21960.0,
+      "day_high": 23000.0,
+      "day_low": 22100.0,
+      "week_52_high": 30285.0,
+      "week_52_low": 21665.0,
+      "change_pct": 2.37
+    },
+    "SIEMENS": {
+      "cmp": 3804.1,
+      "prev_close": 3742.0,
+      "day_high": 3844.0,
+      "day_low": 3770.0,
+      "week_52_high": 4149.4,
+      "week_52_low": 2826.0,
+      "change_pct": 1.66
+    },
+    "SJVN": {
+      "cmp": 65.03,
+      "prev_close": 64.75,
+      "day_high": 65.11,
+      "day_low": 64.1,
+      "week_52_high": 95.4,
+      "week_52_low": 63.02,
+      "change_pct": 0.43
+    },
+    "SOLARINDS": {
+      "cmp": 18940.0,
+      "prev_close": 18815.0,
+      "day_high": 19080.0,
+      "day_low": 18720.0,
+      "week_52_high": 22700.0,
+      "week_52_low": 11646.0,
+      "change_pct": 0.66
+    },
+    "SRF": {
+      "cmp": 2555.0,
+      "prev_close": 2536.0,
+      "day_high": 2569.9,
+      "day_low": 2530.5,
+      "week_52_high": 3210.0,
+      "week_52_low": 2355.0,
+      "change_pct": 0.75
+    },
+    "SUNDRMFAST": {
+      "cmp": 1224.9,
+      "prev_close": 1219.9,
+      "day_high": 1240.6,
+      "day_low": 1223.0,
+      "week_52_high": 1347.2,
+      "week_52_low": 730.1,
+      "change_pct": 0.41
+    },
+    "SUNPHARMA": {
+      "cmp": 1852.9,
+      "prev_close": 1867.3,
+      "day_high": 1877.2,
+      "day_low": 1845.0,
+      "week_52_high": 2046.9,
+      "week_52_low": 1548.0,
+      "change_pct": -0.77
+    },
+    "SUPRAJIT": {
+      "cmp": 488.4,
+      "prev_close": 488.15,
+      "day_high": 493.8,
+      "day_low": 482.25,
+      "week_52_high": 559.25,
+      "week_52_low": 389.95,
+      "change_pct": 0.05
+    },
+    "SUPREMEIND": {
+      "cmp": 3475.6,
+      "prev_close": 3300.0,
+      "day_high": 3482.0,
+      "day_low": 3347.4,
+      "week_52_high": 4548.7,
+      "week_52_low": 3140.0,
+      "change_pct": 5.32
+    },
+    "SYRMA": {
+      "cmp": 1743.0,
+      "prev_close": 1617.7,
+      "day_high": 1764.0,
+      "day_low": 1612.0,
+      "week_52_high": 1764.0,
+      "week_52_low": 634.5,
+      "change_pct": 7.75
+    },
+    "TARIL": {
+      "cmp": 282.15,
+      "prev_close": 276.0,
+      "day_high": 285.25,
+      "day_low": 278.1,
+      "week_52_high": 552.0,
+      "week_52_low": 224.05,
+      "change_pct": 2.23
+    },
+    "TATACHEM": {
+      "cmp": 698.9,
+      "prev_close": 779.3,
+      "day_high": 741.35,
+      "day_low": 695.05,
+      "week_52_high": 1001.6,
+      "week_52_low": 580.3,
+      "change_pct": -10.32
+    },
+    "TATACONSUM": {
+      "cmp": 1003.7,
+      "prev_close": 1013.7,
+      "day_high": 1018.7,
+      "day_low": 1002.0,
+      "week_52_high": 1282.7,
+      "week_52_low": 986.0,
+      "change_pct": -0.99
+    },
+    "TATAELXSI": {
+      "cmp": 3335.5,
+      "prev_close": 3373.0,
+      "day_high": 3399.0,
+      "day_low": 3325.7,
+      "week_52_high": 5950.0,
+      "week_52_low": 3325.7,
+      "change_pct": -1.11
+    },
+    "TATAPOWER": {
+      "cmp": 367.95,
+      "prev_close": 369.0,
+      "day_high": 368.9,
+      "day_low": 360.9,
+      "week_52_high": 464.9,
+      "week_52_low": 342.5,
+      "change_pct": -0.28
+    },
+    "TATASTEEL": {
+      "cmp": 186.67,
+      "prev_close": 187.29,
+      "day_high": 187.96,
+      "day_low": 185.54,
+      "week_52_high": 224.4,
+      "week_52_low": 160.06,
+      "change_pct": -0.33
+    },
+    "TCS": {
+      "cmp": 2114.7,
+      "prev_close": 2190.0,
+      "day_high": 2177.3,
+      "day_low": 2111.0,
+      "week_52_high": 3350.0,
+      "week_52_low": 1976.8,
+      "change_pct": -3.44
+    },
+    "TECHM": {
+      "cmp": 1540.0,
+      "prev_close": 1558.0,
+      "day_high": 1561.2,
+      "day_low": 1523.1,
+      "week_52_high": 1854.0,
+      "week_52_low": 1304.1,
+      "change_pct": -1.16
+    },
+    "TECHNOE": {
+      "cmp": 1003.65,
+      "prev_close": 971.05,
+      "day_high": 1008.0,
+      "day_low": 989.6,
+      "week_52_high": 1460.0,
+      "week_52_low": 870.0,
+      "change_pct": 3.36
+    },
+    "THERMAX": {
+      "cmp": 3560.9,
+      "prev_close": 3536.8,
+      "day_high": 3599.0,
+      "day_low": 3535.8,
+      "week_52_high": 5277.8,
+      "week_52_low": 2742.7,
+      "change_pct": 0.68
+    },
+    "TIINDIA": {
+      "cmp": 2592.0,
+      "prev_close": 2598.8,
+      "day_high": 2637.8,
+      "day_low": 2571.5,
+      "week_52_high": 3399.9,
+      "week_52_low": 2164.9,
+      "change_pct": -0.26
+    },
+    "TITAGARH": {
+      "cmp": 838.0,
+      "prev_close": 813.15,
+      "day_high": 844.5,
+      "day_low": 827.15,
+      "week_52_high": 971.0,
+      "week_52_low": 568.7,
+      "change_pct": 3.06
+    },
+    "TITAN": {
+      "cmp": 4809.0,
+      "prev_close": 4841.0,
+      "day_high": 4864.5,
+      "day_low": 4772.0,
+      "week_52_high": 5186.7,
+      "week_52_low": 3303.1,
+      "change_pct": -0.66
+    },
+    "TORNTPHARM": {
+      "cmp": 4855.5,
+      "prev_close": 4812.5,
+      "day_high": 4928.0,
+      "day_low": 4827.0,
+      "week_52_high": 5250.0,
+      "week_52_low": 3480.6,
+      "change_pct": 0.89
+    },
+    "TORNTPOWER": {
+      "cmp": 1267.8,
+      "prev_close": 1276.4,
+      "day_high": 1285.7,
+      "day_low": 1260.1,
+      "week_52_high": 1824.1,
+      "week_52_low": 1188.0,
+      "change_pct": -0.67
+    },
+    "TRENT": {
+      "cmp": 2798.1,
+      "prev_close": 2789.0,
+      "day_high": 2802.2,
+      "day_low": 2776.1,
+      "week_52_high": 5138.0,
+      "week_52_low": 2183.67,
+      "change_pct": 0.33
+    },
+    "ULTRACEMCO": {
+      "cmp": 10978.0,
+      "prev_close": 10764.0,
+      "day_high": 11060.0,
+      "day_low": 10819.0,
+      "week_52_high": 13110.0,
+      "week_52_low": 10325.0,
+      "change_pct": 1.99
+    },
+    "UPL": {
+      "cmp": 561.55,
+      "prev_close": 554.75,
+      "day_high": 562.3,
+      "day_low": 553.4,
+      "week_52_high": 812.2,
+      "week_52_low": 549.8,
+      "change_pct": 1.23
+    },
+    "VBL": {
+      "cmp": 420.25,
+      "prev_close": 415.45,
+      "day_high": 422.7,
+      "day_low": 416.25,
+      "week_52_high": 555.8,
+      "week_52_low": 381.0,
+      "change_pct": 1.16
+    },
+    "VEDL": {
+      "cmp": 261.5,
+      "prev_close": 257.45,
+      "day_high": 261.9,
+      "day_low": 258.0,
+      "week_52_high": 795.0,
+      "week_52_low": 249.7,
+      "change_pct": 1.57
+    },
+    "WIPRO": {
+      "cmp": 163.52,
+      "prev_close": 166.4,
+      "day_high": 166.9,
+      "day_low": 163.3,
+      "week_52_high": 273.1,
+      "week_52_low": 163.3,
+      "change_pct": -1.73
+    },
     "ZENSARTECH": {
-      "cmp": 441.85,
-      "prev_close": 450.15,
-      "day_high": 450.15,
-      "day_low": 431.6,
-      "week_52_high": 862.0,
+      "cmp": 435.0,
+      "prev_close": 441.85,
+      "day_high": 443.85,
+      "day_low": 433.0,
+      "week_52_high": 842.15,
       "week_52_low": 421.0,
-      "change_pct": -1.84
+      "change_pct": -1.55
     },
     "ZENTEC": {
-      "cmp": 1681.7,
+      "cmp": 1686.7,
       "prev_close": 1662.8,
-      "day_high": 1695.8,
-      "day_low": 1656.9,
+      "day_high": 1706.0,
+      "day_low": 1680.1,
       "week_52_high": 2043.7,
       "week_52_low": 1223.0,
-      "change_pct": 1.14
+      "change_pct": 1.44
     }
   },
   "failed": [
