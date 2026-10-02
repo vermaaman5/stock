@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-01T22:34:58.013217+05:30",
-  "updated_at_readable": "01 Oct 2026 22:34 IST",
+  "updated_at": "2026-10-02T15:26:40.144452+05:30",
+  "updated_at_readable": "02 Oct 2026 15:26 IST",
   "prices": {
     "AARTIIND": {
       "cmp": 465.1,
@@ -80,7 +80,7 @@
       "day_high": 3865.5,
       "day_low": 3756.9,
       "week_52_high": 5180.0,
-      "week_52_low": 3053.3,
+      "week_52_low": 3150.6,
       "change_pct": -1.15
     },
     "ALKEM": {
