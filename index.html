@@ -413,10 +413,10 @@ td.num, th.num { text-align:right; white-space:nowrap; }
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input class="si" type="text" id="eq-q" placeholder="Search…" oninput="renderEarnings()">
           </div>
-          <select id="eq-scope" onchange="renderEarnings()">
-            <option value="holdings">My holdings</option>
-            <option value="issues">Weak &amp; watch</option>
+          <select id="eq-scope" onchange="try{localStorage.setItem('mkts_eq_scope',this.value)}catch(e){};renderEarnings()">
             <option value="all">All coverage</option>
+            <option value="issues">Weak &amp; watch</option>
+            <option value="holdings">My holdings</option>
           </select>
           <select id="eq-sec" onchange="renderEarnings()"><option value="">All sectors</option></select>
         </div>
@@ -1734,7 +1734,7 @@ function bps(v) { return v === null || v === undefined ? '<span class="dim">—<
 function renderEarnings() {
   const held = new Set(holdings.map(h => h.ticker));
   const scopeEl = document.getElementById('eq-scope');
-  if (!scopeEl.dataset.init) { scopeEl.value = held.size ? 'holdings' : 'issues'; scopeEl.dataset.init = '1'; }
+  if (!scopeEl.dataset.init) { let v = null; try { v = localStorage.getItem('mkts_eq_scope'); } catch(e) {} scopeEl.value = v || 'all'; scopeEl.dataset.init = '1'; }
   const secEl = document.getElementById('eq-sec');
   if (secEl.options.length <= 1) getSectors().forEach(x => { const o = document.createElement('option'); o.value = x; o.textContent = x; secEl.appendChild(o); });
   const all = stocks.map(st => ({ st, a: eqAnalyse(st.ticker) }));
