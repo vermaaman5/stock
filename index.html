@@ -189,6 +189,25 @@ tbody tr.row-sl td:first-child { border-left:3px solid var(--red); }
 .live-badge { display:inline-flex; align-items:center; gap:5px; background:var(--green-dim); border:1px solid var(--green-border); color:var(--green); font-size:9px; padding:2px 8px; border-radius:99px; font-family:var(--mono); }
 .live-dot { width:4px; height:4px; border-radius:50%; background:var(--green); animation:pulse 1.5s infinite; }
 .empty { text-align:center; padding:36px; color:var(--muted); font-size:12px; }
+
+/* Portfolio */
+.pf-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:10px; margin-bottom:16px; }
+@media (max-width:900px) { .pf-grid { grid-template-columns:minmax(0,1fr); } }
+.pf-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--rl); padding:14px; }
+.pf-row { display:grid; grid-template-columns:120px minmax(0,1fr) 64px; align-items:center; gap:10px; padding:5px 0; font-size:12px; }
+.pf-row .lbl { color:var(--text2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pf-row .val { font-family:var(--mono); font-size:11px; text-align:right; color:var(--text2); }
+.pf-track { height:6px; border-radius:99px; background:var(--surface2); overflow:hidden; }
+.pf-fill { height:100%; background:var(--blue); border-radius:99px; }
+.pf-fill.hot { background:var(--amber); }
+.att { display:flex; align-items:flex-start; gap:10px; padding:8px 10px; border-radius:var(--r); margin-bottom:4px; background:var(--surface2); border:1px solid var(--border2); font-size:12px; }
+.att.r { background:rgba(240,78,78,0.07); border-color:var(--red-border); }
+.att.a { background:rgba(240,160,64,0.06); border-color:var(--amber-border); }
+.att .why { color:var(--text2); font-size:11px; margin-top:2px; }
+.flags { display:flex; gap:4px; flex-wrap:wrap; }
+td.num, th.num { text-align:right; white-space:nowrap; }
+.pf-note { font-size:10px; color:var(--muted); margin-top:10px; }
+.pf-foot td { font-weight:500; background:var(--surface2); }
 </style>
 </head>
 <body>
@@ -220,6 +239,11 @@ tbody tr.row-sl td:first-child { border-left:3px solid var(--red); }
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
       Watchlist
       <span class="nav-pill hot" id="np-alert" style="display:none">0</span>
+    </div>
+    <div class="nav-item" id="nav-portfolio" onclick="showPage('portfolio',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M3 12h18"/></svg>
+      Portfolio
+      <span class="nav-pill hot" id="np-pf" style="display:none">0</span>
     </div>
   </nav>
   <div class="sidebar-bottom">
@@ -354,7 +378,116 @@ tbody tr.row-sl td:first-child { border-left:3px solid var(--red); }
       </div>
     </div>
   </div>
+
+  <!-- PORTFOLIO -->
+  <div class="page" id="page-portfolio">
+    <div class="ph">
+      <div class="ph-left"><h1>Portfolio</h1><p id="pf-sub">Your holdings, P&amp;L and what needs attention</p></div>
+      <div class="ph-right">
+        <button class="btn" onclick="openPfBackup()">Backup / restore</button>
+        <button class="btn" onclick="openPfBulk()">Paste holdings</button>
+        <button class="btn btn-accent" onclick="openPfModal()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Add holding
+        </button>
+      </div>
+    </div>
+    <div class="metrics" id="pf-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="pf-grid">
+        <div class="pf-card">
+          <div class="alert-panel-title">Needs attention</div>
+          <div id="pf-attention"></div>
+        </div>
+        <div class="pf-card">
+          <div class="alert-panel-title">Sector allocation</div>
+          <div id="pf-sectors"></div>
+        </div>
+      </div>
+      <div class="sec-hdr">
+        <span class="sec-title">Holdings</span>
+        <div class="toolbar">
+          <select id="pf-sort" onchange="renderPortfolio()">
+            <option value="value">Sort: value</option>
+            <option value="pnlp">Sort: P&amp;L %</option>
+            <option value="day">Sort: today</option>
+            <option value="dd">Sort: off 52w high</option>
+            <option value="ticker">Sort: ticker</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th class="num">Qty</th><th class="num">Avg ₹</th><th class="num">CMP ₹</th><th class="num">Today</th>
+            <th class="num">Value ₹</th><th class="num">P&amp;L ₹</th><th class="num">P&amp;L %</th><th class="num">Weight</th>
+            <th class="num">Off 52w hi</th><th>View</th><th>Flags</th><th></th>
+          </tr></thead>
+          <tbody id="pf-body"></tbody>
+        </table>
+      </div>
+      <div class="pf-note">Holdings are saved only in this browser, never on GitHub (your repo is public). Use Backup / restore to move them to another device.</div>
+    </div>
+  </div>
 </main>
+</div>
+
+<!-- HOLDING MODAL -->
+<div class="overlay" id="pf-overlay">
+  <div class="modal">
+    <div class="modal-title" id="pf-title">Add holding</div>
+    <div class="fg">
+      <div class="frow"><label>NSE ticker *</label><input type="text" id="pf-ticker" placeholder="COALINDIA" oninput="pfTickerHint()"></div>
+      <div class="frow"><label>Quantity *</label><input type="number" id="pf-qty" min="0" step="1"></div>
+      <div class="frow"><label>Avg cost ₹ *</label><input type="number" id="pf-avg" min="0" step="0.01"></div>
+      <div class="frow"><label>Buy date</label><input type="date" id="pf-date"></div>
+      <div class="frow full" id="pf-newfields" style="display:none">
+        <div class="fg">
+          <div class="frow"><label>Company name</label><input type="text" id="pf-name"></div>
+          <div class="frow"><label>Sector</label><input type="text" id="pf-sector" list="sec-dl"></div>
+        </div>
+      </div>
+      <div class="frow full"><div class="pf-note" id="pf-hint" style="margin-top:0"></div></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeOverlay('pf-overlay')">Cancel</button>
+      <button class="btn btn-accent" onclick="savePfHolding()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK HOLDINGS MODAL -->
+<div class="overlay" id="pfbulk-overlay">
+  <div class="modal">
+    <div class="modal-title">Paste holdings</div>
+    <div class="frow full">
+      <label>One per line: ticker, quantity, average cost</label>
+      <textarea id="pf-bulk" style="min-height:200px;font-family:var(--mono);font-size:12px" placeholder="AUTOAXLES 20 1650&#10;BEML 30 1900&#10;COALINDIA 200 410"></textarea>
+    </div>
+    <div class="pf-note" id="pf-bulk-msg">Existing holdings with the same ticker are replaced. New tickers are added to Coverage so prices start after your next Sync to GitHub.</div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeOverlay('pfbulk-overlay')">Cancel</button>
+      <button class="btn btn-accent" onclick="savePfBulk()">Add holdings</button>
+    </div>
+  </div>
+</div>
+
+<!-- BACKUP MODAL -->
+<div class="overlay" id="pfbak-overlay">
+  <div class="modal">
+    <div class="modal-title">Backup / restore holdings</div>
+    <div class="frow full">
+      <label>Copy this text to keep a backup, or paste a backup here and restore</label>
+      <textarea id="pf-bak" style="min-height:200px;font-family:var(--mono);font-size:11px"></textarea>
+    </div>
+    <div class="pf-note" id="pf-bak-msg"></div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeOverlay('pfbak-overlay')">Close</button>
+      <button class="btn" onclick="copyPfBackup()">Copy</button>
+      <button class="btn btn-accent" onclick="restorePfBackup()">Restore from text</button>
+    </div>
+  </div>
 </div>
 
 <!-- EDIT STOCK MODAL -->
@@ -711,6 +844,7 @@ function showPage(id, el) {
   if (id === 'coverage') { renderCoverage(); populateSecFilter(); }
   if (id === 'sectors') renderSectors();
   if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
+  if (id === 'portfolio') renderPortfolio();
 }
 
 function rerenderActive() {
@@ -721,6 +855,7 @@ function rerenderActive() {
   else if (id === 'coverage') renderCoverage();
   else if (id === 'sectors') renderSectors();
   else if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
+  else if (id === 'portfolio') renderPortfolio();
 }
 
 function updatePills() {
@@ -732,6 +867,10 @@ function updatePills() {
   const el = document.getElementById('np-alert');
   el.textContent = total;
   el.style.display = total > 0 ? 'inline-block' : 'none';
+  const pfn = pfRows().filter(r => r.sev >= 2).length;
+  const pe = document.getElementById('np-pf');
+  pe.textContent = pfn;
+  pe.style.display = pfn > 0 ? 'inline-block' : 'none';
 }
 
 // ═══════════════════════════════════════════════
@@ -1196,10 +1335,249 @@ function closeChart() {
   });
 });
 
+
+// ═══════════════════════════════════════════════
+// PORTFOLIO  (holdings live in this browser only)
+// ═══════════════════════════════════════════════
+const PF_KEY = 'mkts_pf_v1';
+let holdings = [];
+let pfEditing = null;
+const PF_KNOWN = {
+  AUTOAXLES:['Automotive Axles','Auto & Ancillaries'], MAHSEAMLES:['Maharashtra Seamless','Metals & Materials'],
+  LXCHEM:['Laxmi Organic Industries','Chemicals & Specialty'], NSDL:['National Securities Depository','BFSI'],
+  POCL:['Pondy Oxides & Chemicals','Metals & Materials'], DBL:['Dilip Buildcon','Capital Goods & Infra'],
+  NLCINDIA:['NLC India','Energy & Power'], SGFIN:['SG Finserve','BFSI']
+};
+function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function inr(v, dp) {
+  if (v === null || v === undefined || isNaN(v)) return '<span class="dim">—</span>';
+  return '₹' + Number(v).toLocaleString('en-IN', { maximumFractionDigits: dp ?? 0, minimumFractionDigits: dp ?? 0 });
+}
+function inrShort(v) {
+  const a = Math.abs(v), sg = v < 0 ? '−' : '';
+  if (a >= 1e7) return sg + '₹' + (a/1e7).toFixed(2) + ' Cr';
+  if (a >= 1e5) return sg + '₹' + (a/1e5).toFixed(2) + ' L';
+  return sg + '₹' + Math.round(a).toLocaleString('en-IN');
+}
+function signed(v, txt) { return '<span class="' + (v >= 0 ? 'pos' : 'neg') + '">' + (v >= 0 ? '+' : '−') + txt + '</span>'; }
+function loadPf() { try { holdings = JSON.parse(localStorage.getItem(PF_KEY) || '[]') || []; } catch(e) { holdings = []; } }
+function savePf() { try { localStorage.setItem(PF_KEY, JSON.stringify(holdings)); } catch(e) {} }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+
+// Make sure a held ticker is in Coverage so the price script fetches it.
+function ensureCoverage(t, name, sector) {
+  if (stocks.some(s => s.ticker === t)) return false;
+  const k = PF_KNOWN[t] || [];
+  stocks.push({ id: nextSid++, ticker: t, name: name || k[0] || t, sector: sector || k[1] || 'Other',
+    view: 'neutral', action: 'hold', conviction: 3, target: null, sl: null, trend: null,
+    support: null, resist: null, notes: '', thesisDate: TODAY_STR });
+  saveLocal();
+  return true;
+}
+
+function pfRows() {
+  const rows = holdings.map(h => {
+    const cs = stocks.find(s => s.ticker === h.ticker) || {};
+    const lp = livePrices[h.ticker] || null;
+    const cmp = lp ? lp.cmp : null;
+    const inv = h.qty * h.avg;
+    const val = cmp !== null ? h.qty * cmp : null;
+    const pnl = val !== null ? val - inv : null;
+    const pnlp = pnl !== null && inv ? pnl / inv * 100 : null;
+    const day = lp && lp.prev_close ? h.qty * (lp.cmp - lp.prev_close) : null;
+    const dd = lp && lp.week_52_high ? (lp.cmp / lp.week_52_high - 1) * 100 : null;
+    const nearLow = lp && lp.week_52_low ? lp.cmp <= lp.week_52_low * 1.05 : false;
+    return { h, cs, lp, cmp, inv, val, pnl, pnlp, day, dd, nearLow, flags: [], sev: 0 };
+  });
+  const tot = rows.reduce((a, r) => a + (r.val ?? r.inv), 0);
+  rows.forEach(r => {
+    r.w = tot ? (r.val ?? r.inv) / tot * 100 : 0;
+    const f = (cls, txt, sev, why) => { r.flags.push({ cls, txt, why }); r.sev = Math.max(r.sev, sev); };
+    if (r.cmp === null) f('b-low', 'No price yet', 1, 'Not in today’s prices.json — Sync to GitHub, then prices arrive on the next run');
+    if (r.cmp !== null && r.cs.sl && r.cmp <= r.cs.sl) f('b-high', 'Below SL', 3, 'CMP ' + inr(r.cmp) + ' is at or below your stop loss ' + inr(r.cs.sl));
+    if (r.nearLow) f('b-high', 'Near 52w low', 3, 'Within 5% of the 52-week low ' + inr(r.lp.week_52_low));
+    if (r.dd !== null && r.dd <= -25) f('b-medium', Math.round(-r.dd) + '% off high', 2, 'Down ' + Math.round(-r.dd) + '% from the 52-week high ' + inr(r.lp.week_52_high));
+    if (r.pnlp !== null && r.pnlp <= -15) f('b-medium', 'Loss ' + Math.round(r.pnlp) + '%', 2, 'Position is ' + r.pnlp.toFixed(1) + '% below your cost');
+    if (r.w > 20) f('b-medium', 'Weight ' + Math.round(r.w) + '%', 2, 'More than 20% of the portfolio in one stock');
+    if (r.cmp !== null && r.cs.target && r.cmp >= r.cs.target) f('b-buy', 'Target hit', 2, 'CMP is above your target ' + inr(r.cs.target) + ' — book or raise target?');
+    const age = r.cs.thesisDate ? Math.round((TODAY - new Date(r.cs.thesisDate)) / 86400000) : 999;
+    if (!r.cs.notes || age > 90) f('b-low', 'Review thesis', 1, !r.cs.notes ? 'No thesis written for a stock you own' : 'Thesis is ' + age + ' days old');
+    if (!r.cs.sl && r.cmp !== null) f('b-low', 'No SL', 1, 'No stop loss set in Coverage');
+  });
+  return rows;
+}
+
+function renderPortfolio() {
+  const rows = pfRows();
+  const priced = rows.filter(r => r.val !== null);
+  const inv = rows.reduce((a, r) => a + r.inv, 0);
+  const invP = priced.reduce((a, r) => a + r.inv, 0);
+  const val = priced.reduce((a, r) => a + r.val, 0);
+  const pnl = val - invP;
+  const day = priced.reduce((a, r) => a + (r.day || 0), 0);
+  const big = rows.slice().sort((a, b) => b.w - a.w)[0];
+  const att = rows.filter(r => r.sev >= 2);
+  document.getElementById('pf-sub').textContent = rows.length
+    ? rows.length + ' holdings · prices ' + (priceUpdatedAt || 'not loaded')
+    : 'Your holdings, P&L and what needs attention';
+  const m = (l, v, sub, cls) => '<div class="mc"><div class="mc-label">' + l + '</div><div class="mc-val ' + (cls || '') + '" style="font-size:19px">' + v + '</div><div class="mc-sub">' + sub + '</div></div>';
+  document.getElementById('pf-metrics').innerHTML = !rows.length ? '' :
+    m('Invested', inrShort(inv), rows.length + ' holdings') +
+    m('Current value', inrShort(val), priced.length + ' of ' + rows.length + ' priced') +
+    m('Total P&L', inrShort(pnl), invP ? (pnl >= 0 ? '+' : '') + (pnl / invP * 100).toFixed(1) + '% on priced' : '—', pnl >= 0 ? 'g' : 'r') +
+    m('Today', inrShort(day), val ? (day >= 0 ? '+' : '') + (day / (val - day) * 100).toFixed(2) + '%' : '—', day >= 0 ? 'g' : 'r') +
+    m('Largest position', big ? esc(big.h.ticker) : '—', big ? big.w.toFixed(1) + '% of portfolio' : '', big && big.w > 20 ? 'a' : '') +
+    m('Needs attention', att.length, att.filter(r => r.sev >= 3).length + ' urgent', att.length ? 'r' : 'g');
+
+  // Attention list: urgent first, then biggest weight
+  const al = rows.filter(r => r.sev >= 2).sort((a, b) => b.sev - a.sev || b.w - a.w);
+  document.getElementById('pf-attention').innerHTML = !rows.length
+    ? '<div class="empty" style="padding:18px">Add holdings to see what needs attention.</div>'
+    : !al.length ? '<div class="empty" style="padding:18px">Nothing urgent. No stop-loss breaches, big drawdowns or concentration issues.</div>'
+    : al.map(r => '<div class="att ' + (r.sev >= 3 ? 'r' : 'a') + '"><div style="min-width:0"><span class="tk" onclick="openChart(\'' + esc(r.h.ticker) + '\',\'' + esc(r.cs.name || r.h.ticker) + '\')">' + esc(r.h.ticker) + '</span> <span class="dim">' + r.w.toFixed(1) + '% weight</span>' +
+        '<div class="why">' + r.flags.filter(f => f.cls !== 'b-low').map(f => f.why).join(' · ') + '</div></div></div>').join('');
+
+  // Sector allocation
+  const sec = {};
+  rows.forEach(r => { const k = r.cs.sector || 'Other'; sec[k] = (sec[k] || 0) + r.w; });
+  const secRows = Object.entries(sec).sort((a, b) => b[1] - a[1]);
+  document.getElementById('pf-sectors').innerHTML = !secRows.length ? '<div class="empty" style="padding:18px">—</div>' :
+    secRows.map(([k, w]) => '<div class="pf-row"><span class="lbl" title="' + esc(k) + '">' + esc(k) + '</span><div class="pf-track"><div class="pf-fill' + (w > 35 ? ' hot' : '') + '" style="width:' + Math.min(100, w).toFixed(1) + '%"></div></div><span class="val">' + w.toFixed(1) + '%</span></div>').join('') +
+    (secRows[0][1] > 35 ? '<div class="pf-note">' + esc(secRows[0][0]) + ' is over 35% of the portfolio.</div>' : '');
+
+  // Table
+  const sk = document.getElementById('pf-sort').value;
+  const key = { value: r => -(r.val ?? r.inv), pnlp: r => r.pnlp ?? 1e9, day: r => r.day ?? 1e12, dd: r => r.dd ?? 1e9, ticker: r => r.h.ticker };
+  rows.sort((a, b) => { const x = key[sk](a), y = key[sk](b); return x < y ? -1 : x > y ? 1 : 0; });
+  const body = document.getElementById('pf-body');
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="13"><div class="empty">No holdings yet. Use <b>Paste holdings</b> to add them all at once.</div></td></tr>';
+    return;
+  }
+  body.innerHTML = rows.map(r => {
+    const cls = r.sev >= 3 ? 'row-sl' : '';
+    return '<tr class="' + cls + '">' +
+      '<td><span class="tk" onclick="openChart(\'' + esc(r.h.ticker) + '\',\'' + esc(r.cs.name || r.h.ticker) + '\')">' + esc(r.h.ticker) + '</span><div class="dim" style="font-size:10px;margin-top:2px">' + esc(r.cs.name || '') + '</div></td>' +
+      '<td class="num mono">' + Number(r.h.qty).toLocaleString('en-IN') + '</td>' +
+      '<td class="num mono">' + inr(r.h.avg, 2) + '</td>' +
+      '<td class="num mono">' + inr(r.cmp, 2) + '</td>' +
+      '<td class="num">' + (r.lp ? fChg(r.lp.change_pct) : '<span class="dim">—</span>') + '</td>' +
+      '<td class="num mono">' + inr(r.val) + '</td>' +
+      '<td class="num">' + (r.pnl !== null ? signed(r.pnl, inr(Math.abs(r.pnl))) : '<span class="dim">—</span>') + '</td>' +
+      '<td class="num">' + fPct(r.pnlp) + '</td>' +
+      '<td class="num mono">' + r.w.toFixed(1) + '%</td>' +
+      '<td class="num">' + fPct(r.dd) + '</td>' +
+      '<td>' + (r.cs.view ? '<span class="b b-' + esc(r.cs.view) + '">' + esc(r.cs.view) + '</span>' : '') + '</td>' +
+      '<td><div class="flags">' + r.flags.map(f => '<span class="b ' + f.cls + '" title="' + esc(f.why.replace(/<[^>]+>/g, '')) + '">' + esc(f.txt) + '</span>').join('') + '</div></td>' +
+      '<td style="white-space:nowrap"><button class="btn btn-sm" onclick="openPfModal(\'' + esc(r.h.ticker) + '\')">Edit</button> ' +
+      '<button class="btn btn-sm" onclick="pfConfirmDelete(this,\'' + esc(r.h.ticker) + '\')">Remove</button></td></tr>';
+  }).join('') +
+  '<tr class="pf-foot"><td>Total</td><td></td><td></td><td></td><td></td><td class="num mono">' + inr(val) + '</td><td class="num">' + signed(pnl, inr(Math.abs(pnl))) + '</td><td class="num">' + (invP ? fPct(pnl / invP * 100) : '') + '</td><td class="num mono">100%</td><td colspan="4"></td></tr>';
+}
+
+function pfTickerHint() {
+  const t = document.getElementById('pf-ticker').value.trim().toUpperCase();
+  const known = stocks.find(s => s.ticker === t);
+  document.getElementById('pf-newfields').style.display = t && !known ? 'block' : 'none';
+  if (t && !known && PF_KNOWN[t]) {
+    document.getElementById('pf-name').value = PF_KNOWN[t][0];
+    document.getElementById('pf-sector').value = PF_KNOWN[t][1];
+  }
+  document.getElementById('pf-hint').textContent = !t ? '' : known
+    ? known.name + ' · ' + known.sector + (getCmp(t) ? ' · CMP ₹' + getCmp(t) : ' · no price yet')
+    : 'Not in Coverage yet — it will be added. Click Sync to GitHub afterwards so prices start on the next run.';
+}
+function openPfModal(t) {
+  pfEditing = t || null;
+  const h = holdings.find(x => x.ticker === t) || {};
+  document.getElementById('pf-title').textContent = t ? 'Edit ' + t : 'Add holding';
+  document.getElementById('pf-ticker').value = h.ticker || '';
+  document.getElementById('pf-ticker').readOnly = !!t;
+  document.getElementById('pf-qty').value = h.qty ?? '';
+  document.getElementById('pf-avg').value = h.avg ?? '';
+  document.getElementById('pf-date').value = h.date || '';
+  document.getElementById('pf-name').value = '';
+  document.getElementById('pf-sector').value = '';
+  pfTickerHint();
+  document.getElementById('pf-overlay').classList.add('open');
+}
+function savePfHolding() {
+  const t = document.getElementById('pf-ticker').value.trim().toUpperCase().replace(/\.NS$/, '');
+  const qty = parseFloat(document.getElementById('pf-qty').value);
+  const avg = parseFloat(document.getElementById('pf-avg').value);
+  if (!t || !(qty > 0) || !(avg > 0)) { document.getElementById('pf-hint').textContent = 'Enter a ticker, a quantity and an average cost above zero.'; return; }
+  const added = ensureCoverage(t, document.getElementById('pf-name').value.trim(), document.getElementById('pf-sector').value.trim());
+  holdings = holdings.filter(x => x.ticker !== t);
+  holdings.push({ ticker: t, qty, avg, date: document.getElementById('pf-date').value || null });
+  savePf(); closeOverlay('pf-overlay'); renderPortfolio(); updatePills();
+  if (added) showBanner('warn', t + ' was added to Coverage. Click "Sync to GitHub" so its price is fetched on the next run.');
+}
+function pfConfirmDelete(btn, t) {
+  if (btn.dataset.armed) {
+    holdings = holdings.filter(x => x.ticker !== t);
+    savePf(); renderPortfolio(); updatePills();
+  } else {
+    btn.dataset.armed = '1'; btn.textContent = 'Confirm'; btn.style.color = 'var(--red)';
+    setTimeout(() => { if (btn.isConnected) { delete btn.dataset.armed; btn.textContent = 'Remove'; btn.style.color = ''; } }, 3000);
+  }
+}
+function openPfBulk() {
+  document.getElementById('pf-bulk').value = holdings.map(h => h.ticker + ' ' + h.qty + ' ' + h.avg).join('\n');
+  document.getElementById('pfbulk-overlay').classList.add('open');
+}
+function savePfBulk() {
+  const lines = document.getElementById('pf-bulk').value.split('\n').map(l => l.trim()).filter(Boolean);
+  const bad = [], added = [];
+  let n = 0;
+  lines.forEach(l => {
+    const p = l.replace(/₹/g, '').split(/[\s,;\t]+/);
+    const t = (p[0] || '').toUpperCase().replace(/\.NS$/, '');
+    const qty = parseFloat(p[1]), avg = parseFloat(p[2]);
+    if (!/^[A-Z0-9&\-]{2,20}$/.test(t) || !(qty > 0) || !(avg > 0)) { bad.push(l); return; }
+    if (ensureCoverage(t)) added.push(t);
+    holdings = holdings.filter(x => x.ticker !== t);
+    holdings.push({ ticker: t, qty, avg, date: null });
+    n++;
+  });
+  savePf(); renderPortfolio(); updatePills();
+  const msg = document.getElementById('pf-bulk-msg');
+  if (bad.length) {
+    msg.innerHTML = '<span class="neg">Skipped ' + bad.length + ' line(s): ' + esc(bad.join(' | ')) + '</span> — format is TICKER QTY AVG. ' + n + ' saved.' + (added.length ? ' Added to Coverage: ' + esc(added.join(', ')) + ' — click Sync to GitHub.' : '');
+    return;
+  }
+  closeOverlay('pfbulk-overlay');
+  if (added.length) showBanner('warn', 'Added to Coverage: ' + added.join(', ') + '. Click "Sync to GitHub" so their prices are fetched on the next run.');
+}
+function openPfBackup() {
+  document.getElementById('pf-bak').value = JSON.stringify(holdings, null, 1);
+  document.getElementById('pf-bak-msg').textContent = '';
+  document.getElementById('pfbak-overlay').classList.add('open');
+}
+async function copyPfBackup() {
+  const msg = document.getElementById('pf-bak-msg');
+  try { await navigator.clipboard.writeText(document.getElementById('pf-bak').value); msg.textContent = 'Copied. Paste it somewhere safe (not in the public repo).'; }
+  catch(e) { document.getElementById('pf-bak').select(); msg.textContent = 'Press Ctrl+C to copy the selected text.'; }
+}
+function restorePfBackup() {
+  const msg = document.getElementById('pf-bak-msg');
+  try {
+    const d = JSON.parse(document.getElementById('pf-bak').value);
+    if (!Array.isArray(d) || !d.every(h => h && h.ticker && h.qty > 0 && h.avg > 0)) throw new Error('bad');
+    holdings = d.map(h => ({ ticker: String(h.ticker).toUpperCase(), qty: +h.qty, avg: +h.avg, date: h.date || null }));
+    holdings.forEach(h => ensureCoverage(h.ticker));
+    savePf(); renderPortfolio(); updatePills();
+    msg.textContent = 'Restored ' + holdings.length + ' holdings.';
+  } catch(e) { msg.innerHTML = '<span class="neg">That text isn’t a valid backup.</span>'; }
+}
+document.getElementById('pf-overlay') && ['pf-overlay','pfbulk-overlay','pfbak-overlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
+});
+
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 loadLocal();
+loadPf();
 renderSummary();
 updatePills();
 
