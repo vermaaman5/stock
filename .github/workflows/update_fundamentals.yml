@@ -1,0 +1,40 @@
+name: Update fundamentals
+
+on:
+  schedule:
+    # 8:30 PM IST = 15:00 UTC, weekdays (results usually come out after market hours)
+    - cron: "0 15 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  update-fundamentals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -U yfinance
+
+      - name: Fetch quarterly results
+        run: python update_fundamentals.py
+
+      - name: Commit fundamentals.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git stash
+          git pull --rebase origin main
+          git stash pop
+          git add fundamentals.json
+          git diff --cached --quiet || git commit -m "chore: update fundamentals $(date +'%Y-%m-%d %H:%M IST' -d '+5 hours 30 minutes')"
+          git push
