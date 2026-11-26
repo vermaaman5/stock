@@ -190,6 +190,20 @@ tbody tr.row-sl td:first-child { border-left:3px solid var(--red); }
 .live-dot { width:4px; height:4px; border-radius:50%; background:var(--green); animation:pulse 1.5s infinite; }
 .empty { text-align:center; padding:36px; color:var(--muted); font-size:12px; }
 
+/* Earnings */
+.eq-grade { display:inline-flex; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:500; border:1px solid transparent; white-space:nowrap; }
+.eq-weak { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.eq-watch { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.eq-good { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.eq-none { background:rgba(92,100,112,0.15); color:var(--muted); border-color:rgba(92,100,112,0.25); }
+tr.eq-row { cursor:pointer; }
+tr.eq-detail > td { background:var(--surface2); padding:12px 16px 16px; }
+.eq-qt { width:auto; min-width:520px; }
+.eq-qt th, .eq-qt td { padding:5px 10px; font-size:11px; border-bottom:1px solid var(--border); text-align:right; white-space:nowrap; }
+.eq-qt th:first-child, .eq-qt td:first-child { text-align:left; }
+.eq-why { margin-top:10px; font-size:11px; color:var(--text2); line-height:1.6; }
+.spark { display:block; }
+
 /* Portfolio */
 .pf-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:10px; margin-bottom:16px; }
 @media (max-width:900px) { .pf-grid { grid-template-columns:minmax(0,1fr); } }
@@ -233,6 +247,11 @@ td.num, th.num { text-align:right; white-space:nowrap; }
     <div class="nav-item" id="nav-sectors" onclick="showPage('sectors',this)">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
       Sectors
+    </div>
+    <div class="nav-item" id="nav-earnings" onclick="showPage('earnings',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 19h16M7 16V10m5 6V6m5 10v-4"/></svg>
+      Earnings
+      <span class="nav-pill hot" id="np-eq" style="display:none">0</span>
     </div>
     <div class="nav-group">Trading</div>
     <div class="nav-item" id="nav-watchlist" onclick="showPage('watchlist',this)">
@@ -376,6 +395,43 @@ td.num, th.num { text-align:right; white-space:nowrap; }
           <tbody id="w-body"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- EARNINGS -->
+  <div class="page" id="page-earnings">
+    <div class="ph">
+      <div class="ph-left"><h1>Earnings quality</h1><p id="eq-sub">Latest quarter vs the same quarter last year</p></div>
+    </div>
+    <div class="metrics" id="eq-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-title">Quarterly results · ₹ crore</span>
+        <div class="toolbar">
+          <div class="sw">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input class="si" type="text" id="eq-q" placeholder="Search…" oninput="renderEarnings()">
+          </div>
+          <select id="eq-scope" onchange="renderEarnings()">
+            <option value="holdings">My holdings</option>
+            <option value="issues">Weak &amp; watch</option>
+            <option value="all">All coverage</option>
+          </select>
+          <select id="eq-sec" onchange="renderEarnings()"><option value="">All sectors</option></select>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th>Quarter</th><th class="num">Revenue</th><th class="num">Rev YoY</th>
+            <th class="num">EBITDA mgn</th><th class="num">Mgn Δ YoY</th><th class="num">PAT</th><th class="num">PAT YoY</th>
+            <th class="num">Tax rate</th><th>PAT, 8 qtrs</th><th>Flags</th><th>Grade</th>
+          </tr></thead>
+          <tbody id="eq-body"></tbody>
+        </table>
+      </div>
+      <div class="pf-note">Click a row for the quarter-by-quarter numbers. Source: Yahoo Finance quarterly statements, refreshed weekday evenings by the "Update fundamentals" GitHub Action. Treat flags as prompts to read the actual results, not verdicts.</div>
     </div>
   </div>
 
@@ -772,6 +828,7 @@ async function syncToGitHub() {
 async function refreshAll() {
   await pullFromGitHub();
   await fetchPrices();
+  await fetchFundamentals();
 }
 
 // ═══════════════════════════════════════════════
@@ -845,6 +902,7 @@ function showPage(id, el) {
   if (id === 'sectors') renderSectors();
   if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
   if (id === 'portfolio') renderPortfolio();
+  if (id === 'earnings') renderEarnings();
 }
 
 function rerenderActive() {
@@ -856,6 +914,7 @@ function rerenderActive() {
   else if (id === 'sectors') renderSectors();
   else if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
   else if (id === 'portfolio') renderPortfolio();
+  else if (id === 'earnings') renderEarnings();
 }
 
 function updatePills() {
@@ -871,6 +930,10 @@ function updatePills() {
   const pe = document.getElementById('np-pf');
   pe.textContent = pfn;
   pe.style.display = pfn > 0 ? 'inline-block' : 'none';
+  const eqn = stocks.filter(x => eqAnalyse(x.ticker).grade === 'weak').length;
+  const ee = document.getElementById('np-eq');
+  ee.textContent = eqn;
+  ee.style.display = eqn > 0 ? 'inline-block' : 'none';
 }
 
 // ═══════════════════════════════════════════════
@@ -1403,6 +1466,9 @@ function pfRows() {
     const age = r.cs.thesisDate ? Math.round((TODAY - new Date(r.cs.thesisDate)) / 86400000) : 999;
     if (!r.cs.notes || age > 90) f('b-low', 'Review thesis', 1, !r.cs.notes ? 'No thesis written for a stock you own' : 'Thesis is ' + age + ' days old');
     if (!r.cs.sl && r.cmp !== null) f('b-low', 'No SL', 1, 'No stop loss set in Coverage');
+    const eq = eqAnalyse(r.h.ticker);
+    if (eq.grade === 'weak') f('b-high', 'Weak results', 2, 'Latest results: ' + eq.flags.filter(x => x.sev >= 2).map(x => x.txt.toLowerCase()).join(', '));
+    else if (eq.grade === 'watch') f('b-medium', 'Results: watch', 2, 'Latest results: ' + eq.flags.filter(x => x.sev >= 2).map(x => x.txt.toLowerCase()).join(', '));
   });
   return rows;
 }
@@ -1574,6 +1640,154 @@ document.getElementById('pf-overlay') && ['pf-overlay','pfbulk-overlay','pfbak-o
 });
 
 // ═══════════════════════════════════════════════
+// EARNINGS QUALITY
+// ═══════════════════════════════════════════════
+let fundamentals = {};
+let fundUpdatedAt = null;
+let fundMissing = false;
+const eqOpen = new Set();
+async function fetchFundamentals() {
+  try {
+    const r = await fetch(rawUrl('fundamentals.json'), { cache: 'no-store' });
+    if (r.status === 404) { fundMissing = true; return; }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    fundamentals = d.data || {};
+    fundUpdatedAt = d.updated_at_readable || null;
+    fundMissing = false;
+  } catch(e) { fundMissing = !Object.keys(fundamentals).length; }
+  rerenderActive(); updatePills();
+}
+function qLabel(d) {
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleString('en-IN', { month: 'short' }) + " '" + String(dt.getFullYear()).slice(2);
+}
+function eqMargin(q) { return q && q.rev > 0 && q.ebitda !== null && q.ebitda !== undefined ? q.ebitda / q.rev * 100 : null; }
+function eqYearAgo(Q, i) {
+  const t = new Date(Q[i].q).getTime();
+  for (let j = i - 1; j >= 0; j--) {
+    const gap = (t - new Date(Q[j].q).getTime()) / 86400000;
+    if (gap > 330 && gap < 400) return Q[j];
+    if (gap >= 400) break;
+  }
+  return null;
+}
+function growth(a, b) { return a !== null && a !== undefined && b !== null && b !== undefined && b !== 0 ? (a - b) / Math.abs(b) * 100 : null; }
+const eqCache = {};
+function eqAnalyse(t) {
+  const Q = fundamentals[t] || [];
+  const key = t + ':' + Q.length + ':' + (Q.length ? Q[Q.length - 1].q : '');
+  if (eqCache[t] && eqCache[t].key === key) return eqCache[t];
+  const res = { key, Q, grade: 'none', flags: [] };
+  eqCache[t] = res;
+  if (!Q.length) return res;
+  const i = Q.length - 1, L = Q[i], Y = eqYearAgo(Q, i), P = Q[i - 1] || null;
+  res.L = L; res.Y = Y;
+  res.revYoY = Y ? growth(L.rev, Y.rev) : null;
+  res.patYoY = Y ? growth(L.pat, Y.pat) : null;
+  res.m = eqMargin(L);
+  res.mDelta = Y && res.m !== null && eqMargin(Y) !== null ? (res.m - eqMargin(Y)) * 100 : null; // bps
+  res.etr = L.pbt > 0 && L.tax !== null && L.tax !== undefined ? L.tax / L.pbt * 100 : null;
+  res.oneoff = L.unusual !== null && L.unusual !== undefined && L.pbt ? Math.abs(L.unusual) / Math.abs(L.pbt) * 100 : null;
+  const f = (txt, sev, why) => res.flags.push({ txt, sev, why });
+  if (L.pat !== null && L.pat < 0) f('Loss quarter', 3, 'Net loss of ₹' + Math.abs(L.pat).toFixed(0) + ' cr');
+  if (res.revYoY !== null && res.revYoY >= 5 && res.patYoY !== null && res.patYoY <= -15)
+    f('Profit down, sales up', 3, 'Revenue +' + res.revYoY.toFixed(0) + '% but PAT ' + res.patYoY.toFixed(0) + '% YoY — costs or interest are eating the growth');
+  if (res.mDelta !== null && res.mDelta <= -300)
+    f('Margin squeeze', res.mDelta <= -600 ? 3 : 2, 'EBITDA margin ' + res.m.toFixed(1) + '%, down ' + Math.round(-res.mDelta) + ' bps YoY');
+  if (P && res.mDelta !== null && res.mDelta < -100) {
+    const PY = eqYearAgo(Q, i - 1), pm = eqMargin(P), pym = eqMargin(PY);
+    if (pm !== null && pym !== null && pm < pym - 1) f('2nd quarter of lower margins', 2, 'Margins also fell YoY in ' + qLabel(P.q) + ' — looks like a trend, not a blip');
+  }
+  if (L.pbt > 0 && L.tax !== null && L.tax !== undefined && (L.tax < 0 || res.etr < 10))
+    f('Tax-boosted profit', 2, (L.tax < 0 ? 'Tax credit of ₹' + Math.abs(L.tax).toFixed(0) + ' cr' : 'Tax rate only ' + res.etr.toFixed(0) + '%') + ' — PAT overstates the run-rate; judge on PBT (' + (Y ? growth(L.pbt, Y.pbt)?.toFixed(0) + '% YoY' : '—') + ')');
+  if (res.oneoff !== null && res.oneoff >= 20)
+    f('One-offs', 2, 'Exceptional items are ' + res.oneoff.toFixed(0) + '% of PBT');
+  if (res.revYoY !== null && res.revYoY <= -10) f('Sales falling', 2, 'Revenue ' + res.revYoY.toFixed(0) + '% YoY');
+  if (res.mDelta !== null && res.mDelta >= 300) f('Margin expansion', 0, 'EBITDA margin up ' + Math.round(res.mDelta) + ' bps YoY');
+  if (res.revYoY !== null && res.patYoY !== null && res.revYoY >= 10 && res.patYoY >= res.revYoY && !res.flags.some(x => x.sev >= 2))
+    f('Quality growth', 0, 'PAT growing at least as fast as revenue');
+  const age = (TODAY - new Date(L.q)) / 86400000;
+  if (age > 150) f('Old data', 1, 'Latest quarter in the data is ' + qLabel(L.q) + ' — newer results may not be on Yahoo yet');
+  if (!Y) f('No year-ago quarter', 1, 'Not enough history for YoY comparisons');
+  const s3 = res.flags.filter(x => x.sev >= 3).length, s2 = res.flags.filter(x => x.sev === 2).length;
+  res.grade = s3 || s2 >= 2 ? 'weak' : s2 ? 'watch' : 'good';
+  return res;
+}
+function eqSpark(Q) {
+  const v = Q.map(q => q.pat).filter(x => x !== null && x !== undefined);
+  if (v.length < 2) return '<span class="dim">—</span>';
+  const W = 96, H = 26, n = Q.length, bw = W / n - 2;
+  const mx = Math.max(...v.map(Math.abs)) || 1;
+  const zero = Math.min(...v) < 0 ? H / 2 : H - 1;
+  const sc = Math.min(...v) < 0 ? (H / 2 - 1) / mx : (H - 2) / mx;
+  return '<svg class="spark" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' + Q.map((q, k) => {
+    if (q.pat === null || q.pat === undefined) return '';
+    const h = Math.max(1, Math.abs(q.pat) * sc), x = k * (W / n) + 1;
+    const y = q.pat >= 0 ? zero - h : zero;
+    const c = q.pat < 0 ? 'var(--red)' : k === n - 1 ? 'var(--green)' : 'rgba(168,176,191,0.45)';
+    return '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="1" fill="' + c + '"><title>' + qLabel(q.q) + ': ₹' + q.pat + ' cr</title></rect>';
+  }).join('') + '</svg>';
+}
+function crore(v) { return v === null || v === undefined ? '<span class="dim">—</span>' : Number(v).toLocaleString('en-IN', { maximumFractionDigits: v >= 100 || v <= -100 ? 0 : 1 }); }
+function bps(v) { return v === null || v === undefined ? '<span class="dim">—</span>' : '<span class="' + (v >= 0 ? 'pos' : 'neg') + '">' + (v >= 0 ? '+' : '−') + Math.round(Math.abs(v)) + ' bps</span>'; }
+function renderEarnings() {
+  const held = new Set(holdings.map(h => h.ticker));
+  const scopeEl = document.getElementById('eq-scope');
+  if (!scopeEl.dataset.init) { scopeEl.value = held.size ? 'holdings' : 'issues'; scopeEl.dataset.init = '1'; }
+  const secEl = document.getElementById('eq-sec');
+  if (secEl.options.length <= 1) getSectors().forEach(x => { const o = document.createElement('option'); o.value = x; o.textContent = x; secEl.appendChild(o); });
+  const all = stocks.map(st => ({ st, a: eqAnalyse(st.ticker) }));
+  const withData = all.filter(x => x.a.grade !== 'none');
+  const cnt = g => withData.filter(x => x.a.grade === g).length;
+  const heldFlag = all.filter(x => held.has(x.st.ticker) && (x.a.grade === 'weak' || x.a.grade === 'watch')).length;
+  document.getElementById('eq-sub').textContent = fundMissing
+    ? 'No fundamentals.json yet — run the "Update fundamentals" GitHub Action once'
+    : 'Latest quarter vs the same quarter last year · data ' + (fundUpdatedAt || 'loading…');
+  document.getElementById('eq-metrics').innerHTML = mc('With data', withData.length, '', 'of ' + stocks.length + ' covered') +
+    mc('Weak', cnt('weak'), 'r', 'red flag or 2+ amber') + mc('Watch', cnt('watch'), 'a', 'one amber flag') +
+    mc('Good', cnt('good'), 'g', 'no flags') + mc('Holdings flagged', heldFlag, heldFlag ? 'r' : 'g', held.size + ' holdings');
+  const scope = scopeEl.value, sec = secEl.value, q = document.getElementById('eq-q').value.trim().toUpperCase();
+  const order = { weak: 0, watch: 1, good: 2, none: 3 };
+  const rows = all.filter(x =>
+      (scope === 'all' || (scope === 'holdings' ? held.has(x.st.ticker) : (x.a.grade === 'weak' || x.a.grade === 'watch'))) &&
+      (!sec || x.st.sector === sec) &&
+      (!q || x.st.ticker.includes(q) || (x.st.name || '').toUpperCase().includes(q)))
+    .sort((a, b) => order[a.a.grade] - order[b.a.grade] || a.st.ticker.localeCompare(b.st.ticker));
+  const body = document.getElementById('eq-body');
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="12"><div class="empty">' + (fundMissing ? 'No results data yet. On GitHub go to Actions → Update fundamentals → Run workflow, then refresh.'
+      : scope === 'holdings' && !held.size ? 'Add holdings on the Portfolio tab, or switch to "All coverage".' : 'Nothing matches.') + '</div></td></tr>';
+    return;
+  }
+  body.innerHTML = rows.map(({ st, a }) => {
+    const t = esc(st.ticker);
+    if (a.grade === 'none') return '<tr><td><span class="tk" onclick="openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span></td><td colspan="10" class="dim">No quarterly data yet</td><td><span class="eq-grade eq-none">no data</span></td></tr>';
+    const L = a.L;
+    const main = '<tr class="eq-row" onclick="eqToggle(\'' + t + '\')">' +
+      '<td><span class="tk" onclick="event.stopPropagation();openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span>' + (held.has(st.ticker) ? ' <span class="b b-hold" style="font-size:9px">held</span>' : '') + '<div class="dim" style="font-size:10px;margin-top:2px">' + esc(st.name || '') + '</div></td>' +
+      '<td class="mono" style="white-space:nowrap">' + qLabel(L.q) + '</td>' +
+      '<td class="num mono">' + crore(L.rev) + '</td><td class="num">' + fPct(a.revYoY) + '</td>' +
+      '<td class="num mono">' + (a.m !== null ? a.m.toFixed(1) + '%' : '<span class="dim">—</span>') + '</td><td class="num">' + bps(a.mDelta) + '</td>' +
+      '<td class="num mono">' + crore(L.pat) + '</td><td class="num">' + fPct(a.patYoY) + '</td>' +
+      '<td class="num mono">' + (L.tax !== null && L.tax < 0 ? '<span class="neg">credit</span>' : a.etr !== null ? a.etr.toFixed(0) + '%' : '<span class="dim">—</span>') + '</td>' +
+      '<td>' + eqSpark(a.Q) + '</td>' +
+      '<td><div class="flags">' + a.flags.filter(x => x.sev !== 1).map(x => '<span class="b ' + (x.sev >= 3 ? 'b-high' : x.sev === 2 ? 'b-medium' : 'b-buy') + '" title="' + esc(x.why) + '">' + esc(x.txt) + '</span>').join('') + '</div></td>' +
+      '<td><span class="eq-grade eq-' + a.grade + '">' + a.grade + '</span></td></tr>';
+    if (!eqOpen.has(st.ticker)) return main;
+    const qs = a.Q.slice().reverse();
+    const det = '<tr class="eq-detail"><td colspan="12"><div class="scroll" style="overflow-x:auto"><table class="eq-qt"><thead><tr><th>₹ crore</th>' + qs.map(x => '<th>' + qLabel(x.q) + '</th>').join('') + '</tr></thead><tbody>' +
+      [['Revenue', x => crore(x.rev)], ['EBITDA', x => crore(x.ebitda)], ['EBITDA margin', x => { const m = eqMargin(x); return m === null ? '—' : m.toFixed(1) + '%'; }],
+       ['PBT', x => crore(x.pbt)], ['Tax', x => crore(x.tax)], ['Tax rate', x => x.tax !== null && x.tax < 0 ? 'credit' : x.pbt > 0 && x.tax !== null ? (x.tax / x.pbt * 100).toFixed(0) + '%' : '—'],
+       ['Exceptional items', x => crore(x.unusual)], ['PAT', x => crore(x.pat)], ['EPS ₹', x => x.eps ?? '—']]
+      .map(([lbl, fn]) => '<tr><td>' + lbl + '</td>' + qs.map(x => '<td class="mono">' + fn(x) + '</td>').join('') + '</tr>').join('') +
+      '</tbody></table></div>' + (a.flags.length ? '<div class="eq-why">' + a.flags.map(x => '<b>' + esc(x.txt) + ':</b> ' + esc(x.why)).join('<br>') + '</div>' : '') + '</td></tr>';
+    return main + det;
+  }).join('');
+}
+function eqToggle(t) { eqOpen.has(t) ? eqOpen.delete(t) : eqOpen.add(t); renderEarnings(); }
+
+// ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 loadLocal();
@@ -1582,7 +1796,7 @@ renderSummary();
 updatePills();
 
 // Always load research data and prices from the repo; token is only needed to sync edits back.
-pullFromGitHub().then(() => fetchPrices());
+pullFromGitHub().then(() => fetchPrices()).then(() => fetchFundamentals());
 </script>
 </body>
 </html>
