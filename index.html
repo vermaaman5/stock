@@ -564,7 +564,7 @@ async function fetchPrices() {
     const u = cfg.user || 'vermaaman5';
     const repo = cfg.repo || 'stock';
     const url = `https://raw.githubusercontent.com/${u}/${repo}/main/prices.json?t=${Date.now()}`;
-    const r = await fetch(url);
+    const r = await fetch(url, { cache: 'no-store' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     livePrices = data.prices || {};
@@ -581,35 +581,40 @@ async function fetchPrices() {
 // ═══════════════════════════════════════════════
 // SYNC
 // ═══════════════════════════════════════════════
+// Read research data from the public repo: no token needed.
+// The token is only used by "Sync to GitHub" (writes).
+function rawUrl(file) {
+  const u = cfg.user || 'vermaaman5';
+  const repo = cfg.repo || 'stock';
+  return `https://raw.githubusercontent.com/${u}/${repo}/main/${file}?t=${Date.now()}`;
+}
 async function pullFromGitHub() {
-  if (!cfg.token || !cfg.user) return;
   try {
-    const sf = await ghGet('/stocks.json');
-    const pulled = decodeGH(sf.content);
+    const r = await fetch(rawUrl('stocks.json'), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const pulled = await r.json();
     if (Array.isArray(pulled) && pulled.length > 0) {
       stocks = pulled;
-      // Update nextSid
-      const maxId = Math.max(...stocks.map(s => s.id || 0));
-      nextSid = maxId + 1;
+      nextSid = Math.max(0, ...stocks.map(s => s.id || 0)) + 1;
       saveLocal();
-      rerenderActive();
-      updatePills();
     }
-    setSb('sync','ok','Pulled');
+    setSb('sync','ok','Loaded ' + stocks.length);
   } catch(e) {
-    // stocks.json may not exist yet — that's fine
-    setSb('sync','warn','No remote data');
+    setSb('sync', stocks.length ? 'warn' : 'err', stocks.length ? 'Offline copy' : 'Load failed');
   }
   try {
-    const wf = await ghGet('/watchlist.json');
-    const wpulled = decodeGH(wf.content);
-    if (Array.isArray(wpulled)) {
-      watchlist = wpulled;
-      const maxWid = Math.max(0, ...watchlist.map(w => w.id || 0));
-      nextWid = maxWid + 1;
-      saveLocal();
+    const r = await fetch(rawUrl('watchlist.json'), { cache: 'no-store' });
+    if (r.ok) {
+      const wpulled = await r.json();
+      if (Array.isArray(wpulled)) {
+        watchlist = wpulled;
+        nextWid = Math.max(0, ...watchlist.map(w => w.id || 0)) + 1;
+        saveLocal();
+      }
     }
   } catch(e) {}
+  rerenderActive();
+  updatePills();
 }
 
 async function syncToGitHub() {
@@ -1198,14 +1203,8 @@ loadLocal();
 renderSummary();
 updatePills();
 
-if (cfg.token && cfg.user) {
-  // Pull latest research data first, then prices
-  pullFromGitHub().then(() => fetchPrices());
-} else {
-  setSb('price','warn','Not configured');
-  setSb('sync','warn','Not configured');
-  setTimeout(() => showBanner('warn','⚙ Open Settings (bottom left) to connect GitHub for live prices & cross-device sync.'), 500);
-}
+// Always load research data and prices from the repo; token is only needed to sync edits back.
+pullFromGitHub().then(() => fetchPrices());
 </script>
 </body>
 </html>
