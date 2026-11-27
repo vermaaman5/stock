@@ -222,6 +222,29 @@ tr.eq-detail > td { background:var(--surface2); padding:12px 16px 16px; }
 .idea .sc { font-family:var(--mono); font-size:11px; color:var(--green); }
 .q-held { font-size:9px; padding:1px 6px; border-radius:99px; background:var(--blue-dim); color:var(--blue); margin-left:4px; }
 
+/* Sector rotation + backtest */
+.rot td.hm { font-family:var(--mono); font-size:11px; text-align:right; white-space:nowrap; }
+.rot tr { cursor:pointer; }
+.quad { display:inline-flex; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:500; white-space:nowrap; border:1px solid transparent; }
+.q-lead { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.q-weak { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+.q-impr { background:var(--blue-dim); color:var(--blue); border-color:rgba(78,158,240,0.25); }
+.q-lag { background:var(--red-dim); color:var(--red); border-color:var(--red-border); }
+.bt-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+@media (max-width:900px) { .bt-grid { grid-template-columns:minmax(0,1fr); } }
+.bt-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--rl); padding:14px; }
+.bt-card.edge { border-color:var(--green-border); }
+.bt-card.none { border-color:var(--red-border); }
+.bt-head { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:10px; }
+.bt-name { font-weight:500; font-size:14px; }
+.bt-big { font-family:var(--mono); font-size:22px; }
+.bt-kv { display:grid; grid-template-columns:1fr auto; gap:3px 10px; font-size:11px; color:var(--text2); }
+.bt-kv span:nth-child(even) { font-family:var(--mono); text-align:right; color:var(--text); }
+.bt-reg { margin-top:10px; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+.bt-reg div { background:var(--surface2); border-radius:var(--r); padding:6px 8px; font-size:10px; color:var(--muted); }
+.bt-reg div.now { outline:1px solid var(--blue); }
+.bt-reg b { display:block; font-family:var(--mono); font-size:12px; font-weight:500; color:var(--text); }
+
 /* Portfolio */
 .pf-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:10px; margin-bottom:16px; }
 @media (max-width:900px) { .pf-grid { grid-template-columns:minmax(0,1fr); } }
@@ -445,6 +468,22 @@ td.num, th.num { text-align:right; white-space:nowrap; }
     </div>
     <div id="tc-regime"></div>
     <div class="metrics" id="tc-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="sec-hdr"><span class="sec-title">Sector rotation · vs Nifty</span><span class="dim" style="font-size:11px">Click a sector to filter the setups below</span></div>
+      <div class="tw">
+        <table class="rot">
+          <thead><tr><th>Sector</th><th>Phase</th><th class="num">1M</th><th class="num">3M</th><th class="num">6M</th><th class="num">In uptrend</th><th class="num">Above 50 DMA</th><th>Leaders (RS 3M)</th></tr></thead>
+          <tbody id="rot-body"></tbody>
+        </table>
+      </div>
+      <div class="pf-note">Each figure is the sector's median stock return minus the Nifty's. Leading: beating the Nifty over 3M and still gaining in the last month. Weakening: ahead over 3M but slipping lately. Improving: behind over 3M but gaining lately. Lagging: behind on both. Swing trades work best in Leading and Improving sectors.</div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="sec-hdr"><span class="sec-title">Setup track record · backtest</span><span class="dim" style="font-size:11px" id="bt-sub"></span></div>
+      <div id="bt-panel"></div>
+    </div>
     <div class="divider"></div>
     <div class="sec">
       <div class="sec-hdr">
@@ -769,6 +808,7 @@ let stocks = [];
 let watchlist = [];
 let livePrices = {};
 let priceUpdatedAt = null;
+let priceAsOf = null;
 let nextSid = 201;
 let nextWid = 1;
 let sortCol = null;
@@ -846,7 +886,14 @@ async function fetchPrices() {
     livePrices = data.prices || {};
     indexData = data.index || {};
     priceUpdatedAt = data.updated_at_readable || null;
-    setSb('price','ok', priceUpdatedAt || 'Updated');
+    // Count stocks whose last bar is older than most others (Yahoo lagging)
+    const dates = Object.values(livePrices).map(p => p.date).filter(Boolean);
+    const freq = {}; dates.forEach(d => freq[d] = (freq[d] || 0) + 1);
+    const latest = Object.keys(freq).sort((x, y) => freq[y] - freq[x])[0];
+    const stale = latest ? Object.entries(livePrices).filter(([, p]) => p.date && p.date < latest).map(([t]) => t) : [];
+    priceAsOf = latest || null;
+    setSb('price', stale.length ? 'warn' : 'ok', (latest ? 'Close of ' + new Date(latest + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : (priceUpdatedAt || 'Updated')) + (stale.length ? ' · ' + stale.length + ' stale' : ''));
+    if (stale.length) document.getElementById('sb-price').title = 'Older data for: ' + stale.join(', ');
     rerenderActive();
     hideBanner();
   } catch(e) {
@@ -917,6 +964,7 @@ async function refreshAll() {
   await pullFromGitHub();
   await fetchPrices();
   await fetchFundamentals();
+  await fetchBacktest();
 }
 
 // ═══════════════════════════════════════════════
@@ -1981,6 +2029,8 @@ function renderRegime() {
 }
 function renderTechnicals() {
   renderRegime();
+  renderRotation();
+  renderBacktest();
   const held = new Set(holdings.map(h => h.ticker));
   const secEl = document.getElementById('tc-sec');
   if (secEl.options.length <= 1) getSectors().forEach(x => { const o = document.createElement('option'); o.value = x; o.textContent = x; secEl.appendChild(o); });
@@ -2076,7 +2126,11 @@ function ideaScore(s) {
   if (eq.grade === 'good') { sc += 1; chips.push(['b-buy', 'good results']); }
   if (eq.grade === 'weak') { sc -= 2; chips.push(['b-high', 'weak results']); }
   if (k.trend === 'up') { sc += 2; chips.push(['b-bullish', 'uptrend']); }
-  if (k.setup === 'Breakout' || k.setup === 'Pullback') { sc += 2; chips.push([SETUP_B[k.setup], k.setup.toLowerCase()]); }
+  const hist = setupHistR(k.setup);
+  if (k.setup === 'Breakout' || k.setup === 'Pullback') {
+    if (hist !== null && hist <= 0) chips.push(['b-medium', k.setup.toLowerCase() + ' (no edge in backtest)']);
+    else { sc += 2; chips.push([SETUP_B[k.setup], k.setup.toLowerCase()]); }
+  }
   if (k.setup === 'Oversold') { sc += 1; chips.push([SETUP_B[k.setup], 'oversold']); }
   if (k.setup === 'Extended') { sc -= 1; chips.push(['b-medium', 'extended']); }
   const rs = k.x.rs_3m;
@@ -2102,6 +2156,97 @@ function renderTopIdeas() {
 }
 
 // ═══════════════════════════════════════════════
+// SECTOR ROTATION
+// ═══════════════════════════════════════════════
+function median(a) { const v = a.filter(x => x !== null && x !== undefined && !isNaN(x)).sort((x, y) => x - y); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; }
+function heat(v) {
+  if (v === null) return '<td class="hm"><span class="dim">—</span></td>';
+  const a = Math.min(Math.abs(v) / 15, 1) * 0.35 + 0.05;
+  const bg = v >= 0 ? 'rgba(34,197,94,' + a.toFixed(2) + ')' : 'rgba(240,78,78,' + a.toFixed(2) + ')';
+  return '<td class="hm" style="background:' + bg + '">' + (v >= 0 ? '+' : '') + v.toFixed(1) + '</td>';
+}
+function renderRotation() {
+  const n = indexData.NIFTY || {};
+  const by = {};
+  stocks.forEach(st => {
+    const p = livePrices[st.ticker];
+    if (!p || !p.tech) return;
+    (by[st.sector] = by[st.sector] || []).push({ st, p, k: techOf(st.ticker) });
+  });
+  const rows = Object.entries(by).map(([sec, L]) => {
+    const rs = key => { const m = median(L.map(x => x.p.tech[key])); return m === null || n[key] === undefined || n[key] === null ? null : m - n[key]; };
+    const r1 = rs('ret_1m'), r3 = rs('ret_3m'), r6 = rs('ret_6m');
+    const up = L.filter(x => x.k && x.k.trend === 'up').length / L.length * 100;
+    const a50 = L.filter(x => x.p.tech.dma50 && x.p.cmp > x.p.tech.dma50).length / L.length * 100;
+    const phase = r3 === null || r1 === null ? null : r3 >= 0 ? (r1 >= 0 ? ['Leading', 'q-lead'] : ['Weakening', 'q-weak']) : (r1 >= 0 ? ['Improving', 'q-impr'] : ['Lagging', 'q-lag']);
+    const leaders = L.filter(x => x.p.tech.rs_3m !== null && x.p.tech.rs_3m !== undefined).sort((a, b) => b.p.tech.rs_3m - a.p.tech.rs_3m).slice(0, 3);
+    return { sec, r1, r3, r6, up, a50, phase, leaders, n: L.length };
+  }).sort((a, b) => (b.r3 ?? -999) - (a.r3 ?? -999));
+  const body = document.getElementById('rot-body');
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="8"><div class="empty">Sector data arrives with the next price update.</div></td></tr>'; return; }
+  const cur = document.getElementById('tc-sec').value;
+  body.innerHTML = rows.map(r => '<tr onclick="rotPick(\'' + esc(r.sec).replace(/'/g, '&#39;') + '\')"' + (cur === r.sec ? ' style="outline:1px solid var(--blue)"' : '') + '>' +
+    '<td>' + esc(r.sec) + ' <span class="dim" style="font-size:10px">' + r.n + '</span></td>' +
+    '<td>' + (r.phase ? '<span class="quad ' + r.phase[1] + '">' + r.phase[0] + '</span>' : '—') + '</td>' +
+    heat(r.r1) + heat(r.r3) + heat(r.r6) +
+    '<td class="num mono">' + r.up.toFixed(0) + '%</td><td class="num mono">' + r.a50.toFixed(0) + '%</td>' +
+    '<td><div class="flags">' + r.leaders.map(x => '<span class="b b-low">' + esc(x.st.ticker) + ' ' + (x.p.tech.rs_3m >= 0 ? '+' : '') + x.p.tech.rs_3m.toFixed(0) + '</span>').join('') + '</div></td></tr>').join('');
+}
+function rotPick(sec) {
+  const el = document.getElementById('tc-sec');
+  el.value = el.value === sec ? '' : sec;
+  document.getElementById('tc-setup').value = el.value ? 'all' : 'long';
+  renderTechnicals();
+  document.getElementById('tc-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══════════════════════════════════════════════
+// BACKTEST
+// ═══════════════════════════════════════════════
+let backtest = null;
+async function fetchBacktest() {
+  try {
+    const r = await fetch(rawUrl('backtest.json'), { cache: 'no-store' });
+    backtest = r.ok ? await r.json() : null;
+  } catch(e) { backtest = null; }
+  rerenderActive();
+}
+function currentRegime() {
+  const n = indexData.NIFTY;
+  if (!n || !n.dma50 || !n.dma200) return null;
+  return n.cmp > n.dma50 && n.cmp > n.dma200 ? 'risk_on' : n.cmp < n.dma50 && n.cmp < n.dma200 ? 'risk_off' : 'mixed';
+}
+function setupHistR(setup) {
+  if (!backtest || !backtest.setups || !backtest.setups[setup]) return null;
+  const S = backtest.setups[setup], g = currentRegime();
+  const r = g && S.by_regime[g] && S.by_regime[g].trades >= 30 ? S.by_regime[g] : S.all;
+  return r && r.trades ? r.avg_r : null;
+}
+function renderBacktest() {
+  const el = document.getElementById('bt-panel');
+  if (!backtest) {
+    document.getElementById('bt-sub').textContent = '';
+    el.innerHTML = '<div class="empty">No backtest yet. On GitHub: Actions → Backtest setups → Run workflow (about 5 minutes). It then reruns every Saturday.</div>';
+    return;
+  }
+  document.getElementById('bt-sub').textContent = (backtest.period || '') + ' · run ' + (backtest.updated_at_readable || '');
+  const base = backtest.baseline || {}, g = currentRegime();
+  const RL = { risk_on: 'Risk-on', mixed: 'Mixed', risk_off: 'Risk-off' };
+  const rf = v => v === null || v === undefined ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R';
+  el.innerHTML = '<div class="bt-grid">' + ['Breakout', 'Pullback', 'Oversold'].map(name => {
+    const S = backtest.setups[name]; if (!S || !S.all.trades) return '<div class="bt-card"><div class="bt-name">' + name + '</div><div class="dim">No trades</div></div>';
+    const a = S.all, edge = a.avg_r - (base.avg_r || 0);
+    const verdict = a.avg_r > 0.1 && edge > 0.05 ? ['edge', 'Has an edge', 'pos'] : a.avg_r <= 0 ? ['none', 'No edge — skip', 'neg'] : ['', 'Marginal', 'dim'];
+    return '<div class="bt-card ' + verdict[0] + '"><div class="bt-head"><span class="bt-name">' + name + '</span><span class="' + verdict[2] + '" style="font-size:11px">' + verdict[1] + '</span></div>' +
+      '<div class="bt-head"><span class="bt-big ' + (a.avg_r >= 0 ? 'pos' : 'neg') + '">' + rf(a.avg_r) + '</span><span class="dim" style="font-size:11px">per trade · random entry ' + rf(base.avg_r) + '</span></div>' +
+      '<div class="bt-kv"><span>Trades</span><span>' + a.trades.toLocaleString('en-IN') + '</span><span>Win rate</span><span>' + a.win_rate + '%</span>' +
+      '<span>Hit target / stop / timed out</span><span>' + a.target_pct + ' / ' + a.stop_pct + ' / ' + (100 - a.target_pct - a.stop_pct).toFixed(1) + '%</span>' +
+      '<span>Profit factor</span><span>' + (a.profit_factor ?? '—') + '</span><span>Avg days held</span><span>' + a.avg_days + '</span></div>' +
+      '<div class="bt-reg">' + ['risk_on', 'mixed', 'risk_off'].map(k => { const r = S.by_regime[k] || {}; return '<div class="' + (k === g ? 'now' : '') + '">' + RL[k] + (k === g ? ' · now' : '') + '<b class="' + ((r.avg_r || 0) >= 0 ? 'pos' : 'neg') + '">' + (r.trades ? rf(r.avg_r) : '—') + '</b>' + (r.trades ? r.trades + ' trades' : '') + '</div>'; }).join('') + '</div></div>';
+  }).join('') + '</div><div class="pf-note">Each trade: signal on the close, buy next day’s open, stop 2×ATR below, target 2R, exit after 20 days if neither is hit, 0.25% costs. R = multiples of the amount risked: +0.20R per trade at ₹10,000 risk is ₹2,000 average profit per trade. “Random entry” applies the same exits to entries on any day, so a setup is only useful if it beats that. Past results don’t guarantee future ones.</div>';
+}
+
+// ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 loadLocal();
@@ -2111,7 +2256,7 @@ updatePills();
 
 // Always load research data and prices from the repo; token is only needed to sync edits back.
 loadSwing();
-pullFromGitHub().then(() => fetchPrices()).then(() => fetchFundamentals()).then(() => migrateTickers());
+pullFromGitHub().then(() => fetchPrices()).then(() => fetchFundamentals()).then(() => fetchBacktest()).then(() => migrateTickers());
 </script>
 </body>
 </html>
