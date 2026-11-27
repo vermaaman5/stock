@@ -721,8 +721,8 @@
   },
   {
     "id": 46,
-    "ticker": "LTIM",
-    "name": "LTIMindtree",
+    "ticker": "LTM",
+    "name": "LTM (LTIMindtree)",
     "sector": "Technology",
     "view": "neutral",
     "action": "hold",
@@ -785,7 +785,7 @@
   },
   {
     "id": 50,
-    "ticker": "KPIT",
+    "ticker": "KPITTECH",
     "name": "KPIT Technologies",
     "sector": "Technology",
     "view": "neutral",
@@ -961,7 +961,7 @@
   },
   {
     "id": 61,
-    "ticker": "KECINTER",
+    "ticker": "KEC",
     "name": "KEC International",
     "sector": "Capital Goods & Infra",
     "view": "neutral",
@@ -1137,7 +1137,7 @@
   },
   {
     "id": 72,
-    "ticker": "KALPATPOWR",
+    "ticker": "KPIL",
     "name": "Kalpataru Projects",
     "sector": "Capital Goods & Infra",
     "view": "neutral",
@@ -1937,8 +1937,8 @@
   },
   {
     "id": 122,
-    "ticker": "TATAMOTORS",
-    "name": "Tata Motors",
+    "ticker": "TMPV",
+    "name": "Tata Motors Passenger Vehicles",
     "sector": "Auto & Ancillaries",
     "view": "neutral",
     "action": "hold",
@@ -2017,7 +2017,7 @@
   },
   {
     "id": 127,
-    "ticker": "TVSMOTORS",
+    "ticker": "TVSMOTOR",
     "name": "TVS Motor",
     "sector": "Auto & Ancillaries",
     "view": "neutral",
@@ -2129,7 +2129,7 @@
   },
   {
     "id": 134,
-    "ticker": "AMARAJABAT",
+    "ticker": "ARE&M",
     "name": "Amara Raja Energy",
     "sector": "Auto & Ancillaries",
     "view": "neutral",
@@ -2353,7 +2353,7 @@
   },
   {
     "id": 148,
-    "ticker": "NALCO",
+    "ticker": "NATIONALUM",
     "name": "NALCO",
     "sector": "Metals & Materials",
     "view": "neutral",
@@ -2545,7 +2545,7 @@
   },
   {
     "id": 160,
-    "ticker": "DALMIACEM",
+    "ticker": "DALBHARAT",
     "name": "Dalmia Bharat",
     "sector": "Metals & Materials",
     "view": "neutral",
@@ -2673,7 +2673,7 @@
   },
   {
     "id": 168,
-    "ticker": "DATAPATT",
+    "ticker": "DATAPATTNS",
     "name": "Data Patterns",
     "sector": "Defence & Aerospace",
     "view": "neutral",
@@ -2721,7 +2721,7 @@
   },
   {
     "id": 171,
-    "ticker": "MTAR",
+    "ticker": "MTARTECH",
     "name": "MTAR Technologies",
     "sector": "Defence & Aerospace",
     "view": "neutral",
@@ -2785,7 +2785,7 @@
   },
   {
     "id": 175,
-    "ticker": "APOLLOMICRO",
+    "ticker": "APOLLO",
     "name": "Apollo Micro Systems",
     "sector": "Defence & Aerospace",
     "view": "neutral",
@@ -2801,7 +2801,7 @@
   },
   {
     "id": 176,
-    "ticker": "DCX",
+    "ticker": "DCXINDIA",
     "name": "DCX Systems",
     "sector": "Defence & Aerospace",
     "view": "neutral",
@@ -3121,7 +3121,7 @@
   },
   {
     "id": 196,
-    "ticker": "VINATI",
+    "ticker": "VINATIORGA",
     "name": "Vinati Organics",
     "sector": "Chemicals & Specialty",
     "view": "neutral",
@@ -3185,8 +3185,8 @@
   },
   {
     "id": 200,
-    "ticker": "GUJGASLTD",
-    "name": "Gujarat Gas",
+    "ticker": "GUJENERGY",
+    "name": "Gujarat Energy (ex-Gujarat Gas)",
     "sector": "Chemicals & Specialty",
     "view": "neutral",
     "action": "hold",
