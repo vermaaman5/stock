@@ -105,15 +105,34 @@ def fetch_index():
         df = yf.download("^NSEI", period="1y", interval="1d", progress=False, auto_adjust=False)
         if hasattr(df.columns, "levels"):
             df.columns = df.columns.get_level_values(0)
-        df = df.dropna()
+        df = completed_bars(df.dropna(subset=["Close"]))
         t = technicals(df)
         t.pop("spark", None)
         t["cmp"] = _r(df["Close"].iloc[-1])
         t["change_pct"] = _r((df["Close"].iloc[-1] / df["Close"].iloc[-2] - 1) * 100)
+        t["date"] = str(df.index[-1].date())
         return {"NIFTY": t}
     except Exception as e:  # noqa: BLE001
         print(f"  Nifty fetch failed: {e}")
         return {}
+
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+def completed_bars(df):
+    """Drop today's bar if NSE hasn't closed yet (before 3:40 PM IST).
+    Yahoo creates a partial 'today' row for some stocks before and during the
+    session; mixing those with finished bars gave stale/odd prices."""
+    if df.empty:
+        return df
+    now = datetime.now(IST)
+    last = df.index[-1]
+    last_date = last.date() if hasattr(last, "date") else last
+    market_closed = now.hour > 15 or (now.hour == 15 and now.minute >= 40)
+    if last_date == now.date() and not market_closed:
+        return df.iloc[:-1]
+    return df
 
 
 def fetch_prices(tickers, index=None):
@@ -123,7 +142,7 @@ def fetch_prices(tickers, index=None):
     prices, failed = {}, []
     for t in tickers:
         try:
-            df = raw[t + ".NS"].dropna()
+            df = completed_bars(raw[t + ".NS"].dropna(subset=["Close"]))
             if df.empty:
                 raise ValueError("no data")
             last = float(df["Close"].iloc[-1])
@@ -136,6 +155,7 @@ def fetch_prices(tickers, index=None):
                 "week_52_high": round(float(df["High"].tail(250).max()), 2),
                 "week_52_low": round(float(df["Low"].tail(250).min()), 2),
                 "change_pct": round((last - prev) / prev * 100, 2),
+                "date": str(df.index[-1].date()),
             }
             try:
                 tech = technicals(df)
