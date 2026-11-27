@@ -2,24 +2,33 @@ name: Update stock prices
 
 on:
   schedule:
-    # 9:00 AM IST = 3:30 UTC
-    - cron: "30 3 * * 1-5"   # Monday–Friday only
-    # Backup run at 4:00 PM IST = 10:30 UTC (after market close)
-    - cron: "30 10 * * 1-5"
-
-  # Allow manual trigger from GitHub UI
+    # After NSE close: 4:15 PM IST = 10:45 UTC, Monday–Friday
+    - cron: "45 10 * * 1-5"
+    # Backup at 7:00 PM IST = 13:30 UTC, in case Yahoo was late with the close
+    - cron: "30 13 * * 1-5"
   workflow_dispatch:
+    inputs:
+      force_alert:
+        description: "Send the Telegram alert even if there's no new close"
+        type: boolean
+        default: false
+
+concurrency:
+  group: prices
+  cancel-in-progress: false
 
 jobs:
   update-prices:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
     permissions:
       contents: write
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: pip install -U yfinance
 
+      - name: Keep a copy of the previous prices (for alerts)
+        run: cp prices.json prices_prev.json || true
+
       - name: Run price update
         run: python update_prices.py
 
@@ -36,9 +48,21 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git stash
-          git pull --rebase origin main
-          git stash pop
           git add prices.json
-          git diff --cached --quiet || git commit -m "chore: update prices $(date +'%Y-%m-%d %H:%M IST' -d '+5 hours 30 minutes')"
-          git push
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "chore: update prices $(TZ=Asia/Kolkata date +'%Y-%m-%d %H:%M IST')"
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 10
+          done
+          exit 1
+
+      - name: Telegram alert
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_HOLDINGS: ${{ secrets.TELEGRAM_HOLDINGS }}
+          ALERT_FORCE: ${{ github.event.inputs.force_alert == 'true' && '1' || '' }}
+        run: python alerts.py prices
