@@ -609,7 +609,7 @@ td.num, th.num { text-align:right; white-space:nowrap; }
           <tbody id="pf-body"></tbody>
         </table>
       </div>
-      <div class="pf-note">Holdings are saved only in this browser, never on GitHub (your repo is public). Use Backup / restore to move them to another device.</div>
+      <div class="pf-note" id="pf-privacy"></div>
     </div>
   </div>
 </main>
@@ -767,7 +767,11 @@ td.num, th.num { text-align:right; white-space:nowrap; }
         <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx" style="font-family:monospace">
       </div>
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:8px;">Token stored only in your browser. Never shared anywhere.</div>
+    <div class="frow full" style="margin-top:12px"><label>Portfolio passphrase (encrypts your holdings when you Sync)</label>
+      <input type="password" id="cfg-pfpass" placeholder="at least 12 characters, e.g. four random words" autocomplete="new-password">
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.6">Token and passphrase are stored only in this browser. Your holdings are encrypted here before upload, so GitHub only ever sees unreadable text. Use the same passphrase on every device and in the PORTFOLIO_PASSPHRASE secret. If you lose it, your synced holdings can't be recovered (your local copy and Backup still work).</div>
+    <div class="pf-note" id="cfg-msg" style="color:var(--red)"></div>
     <div class="modal-foot">
       <button class="btn" onclick="closeSettings()">Cancel</button>
       <button class="btn btn-accent" onclick="saveSettings()">Save & connect</button>
@@ -895,7 +899,7 @@ async function fetchPrices() {
     setSb('price', stale.length ? 'warn' : 'ok', (latest ? 'Close of ' + new Date(latest + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : (priceUpdatedAt || 'Updated')) + (stale.length ? ' · ' + stale.length + ' stale' : ''));
     if (stale.length) document.getElementById('sb-price').title = 'Older data for: ' + stale.join(', ');
     rerenderActive();
-    hideBanner();
+    if (!pfDecryptErr) hideBanner();
   } catch(e) {
     setSb('price','err','Fetch failed');
     showBanner('err','✗ Could not fetch prices.');
@@ -937,6 +941,7 @@ async function pullFromGitHub() {
       }
     }
   } catch(e) {}
+  await pullPortfolio();
   rerenderActive();
   updatePills();
 }
@@ -951,9 +956,21 @@ async function syncToGitHub() {
     await ghPut('/stocks.json', stocks, sSha);
     try { const f = await ghGet('/watchlist.json'); wSha = f.sha; } catch(e) {}
     await ghPut('/watchlist.json', watchlist, wSha);
+    let pfMsg = holdings.length ? ' Holdings not synced — add a portfolio passphrase in Settings.' : '';
+    if (cfg.pfPass) {
+      let pSha = null, remoteTs = 0;
+      try { const f = await ghGet('/' + PF_ENC_FILE); pSha = f.sha; remoteTs = JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g, ''))))).updated_at || 0; } catch(e) {}
+      if (remoteTs > pfUpdatedAt) {
+        pfMsg = ' Holdings NOT uploaded: GitHub has a newer portfolio from another device — refresh this page first.';
+      } else {
+        await ghPut('/' + PF_ENC_FILE, await encryptPf(), pSha);
+        pfRemoteTs = pfUpdatedAt;
+        pfMsg = ' Holdings synced (encrypted).';
+      }
+    }
     setSb('sync','ok', new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}));
-    showBanner('ok','✓ Synced to GitHub. Data available on all devices.');
-    setTimeout(hideBanner, 3000);
+    showBanner(pfMsg.includes('NOT') ? 'warn' : 'ok','✓ Synced to GitHub.' + pfMsg);
+    if (!pfMsg.includes('NOT') && !pfMsg.includes('passphrase')) setTimeout(hideBanner, 3000);
   } catch(e) {
     setSb('sync','err','Failed');
     showBanner('err','✗ Sync failed. Check your token and repo name in Settings.');
@@ -1475,6 +1492,8 @@ function openSettings() {
   document.getElementById('cfg-user').value = cfg.user || '';
   document.getElementById('cfg-repo').value = cfg.repo || 'stock';
   document.getElementById('cfg-token').value = cfg.token || '';
+  document.getElementById('cfg-pfpass').value = cfg.pfPass || '';
+  document.getElementById('cfg-msg').textContent = '';
   document.getElementById('settings-overlay').classList.add('open');
 }
 function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
@@ -1482,6 +1501,9 @@ function saveSettings() {
   cfg.user  = document.getElementById('cfg-user').value.trim();
   cfg.repo  = document.getElementById('cfg-repo').value.trim() || 'stock';
   cfg.token = document.getElementById('cfg-token').value.trim();
+  const pp = document.getElementById('cfg-pfpass').value;
+  if (pp && pp.length < 12) { document.getElementById('cfg-msg').textContent = 'Passphrase must be at least 12 characters — your repo is public, so a short one could be guessed.'; return; }
+  if (pp !== (cfg.pfPass || '')) { cfg.pfPass = pp; if (pp) touchPf(); }
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
   closeSettings();
   showBanner('info','Connecting…');
@@ -1547,6 +1569,11 @@ function closeChart() {
 // PORTFOLIO  (holdings live in this browser only)
 // ═══════════════════════════════════════════════
 const PF_KEY = 'mkts_pf_v1';
+const PF_TS_KEY = 'mkts_pf_ts';
+const PF_ENC_FILE = 'portfolio.enc.json';
+let pfUpdatedAt = 0;
+let pfRemoteTs = 0;
+let pfDecryptErr = false;
 let holdings = [];
 let pfEditing = null;
 const PF_KNOWN = {
@@ -1567,8 +1594,13 @@ function inrShort(v) {
   return sg + '₹' + Math.round(a).toLocaleString('en-IN');
 }
 function signed(v, txt) { return '<span class="' + (v >= 0 ? 'pos' : 'neg') + '">' + (v >= 0 ? '+' : '−') + txt + '</span>'; }
-function loadPf() { try { holdings = JSON.parse(localStorage.getItem(PF_KEY) || '[]') || []; } catch(e) { holdings = []; } }
-function savePf() { try { localStorage.setItem(PF_KEY, JSON.stringify(holdings)); } catch(e) {} }
+function loadPf() {
+  try { holdings = JSON.parse(localStorage.getItem(PF_KEY) || '[]') || []; } catch(e) { holdings = []; }
+  try { pfUpdatedAt = parseInt(localStorage.getItem(PF_TS_KEY) || '0', 10) || 0; } catch(e) { pfUpdatedAt = 0; }
+}
+function savePfLocal() { try { localStorage.setItem(PF_KEY, JSON.stringify(holdings)); localStorage.setItem(PF_TS_KEY, String(pfUpdatedAt)); } catch(e) {} }
+function touchPf() { pfUpdatedAt = Date.now(); savePfLocal(); }
+function savePf() { touchPf(); }
 function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
 
 // Make sure a held ticker is in Coverage so the price script fetches it.
@@ -1630,6 +1662,9 @@ function renderPortfolio() {
   const day = priced.reduce((a, r) => a + (r.day || 0), 0);
   const big = rows.slice().sort((a, b) => b.w - a.w)[0];
   const att = rows.filter(r => r.sev >= 2);
+  document.getElementById('pf-privacy').textContent = cfg.pfPass
+    ? 'Holdings sync to GitHub encrypted with your passphrase when you click Sync, and load on any device that has the same passphrase in Settings.'
+    : 'Holdings are saved only in this browser. Add a portfolio passphrase in Settings to sync them (encrypted) across devices and to Telegram alerts.';
   document.getElementById('pf-sub').textContent = rows.length
     ? rows.length + ' holdings · prices ' + (priceUpdatedAt || 'not loaded')
     : 'Your holdings, P&L and what needs attention';
@@ -1957,8 +1992,9 @@ function migrateTickers() {
     x.ticker = m[0];
     if (m[1] && 'name' in x) x.name = m[1];
   });
+  const before = JSON.stringify(holdings);
   fix(stocks, true); fix(watchlist, true); fix(holdings, false);
-  savePf();
+  if (JSON.stringify(holdings) !== before) savePf();
   if (done.length) {
     saveLocal(); rerenderActive(); updatePills();
     showBanner('warn', 'Updated ' + done.length + ' renamed NSE tickers (' + done.join(', ') + '). Click "Sync to GitHub" to save — their prices and results start on the next run.');
@@ -2244,6 +2280,49 @@ function renderBacktest() {
       '<span>Profit factor</span><span>' + (a.profit_factor ?? '—') + '</span><span>Avg days held</span><span>' + a.avg_days + '</span></div>' +
       '<div class="bt-reg">' + ['risk_on', 'mixed', 'risk_off'].map(k => { const r = S.by_regime[k] || {}; return '<div class="' + (k === g ? 'now' : '') + '">' + RL[k] + (k === g ? ' · now' : '') + '<b class="' + ((r.avg_r || 0) >= 0 ? 'pos' : 'neg') + '">' + (r.trades ? rf(r.avg_r) : '—') + '</b>' + (r.trades ? r.trades + ' trades' : '') + '</div>'; }).join('') + '</div></div>';
   }).join('') + '</div><div class="pf-note">Each trade: signal on the close, buy next day’s open, stop 2×ATR below, target 2R, exit after 20 days if neither is hit, 0.25% costs. R = multiples of the amount risked: +0.20R per trade at ₹10,000 risk is ₹2,000 average profit per trade. “Random entry” applies the same exits to entries on any day, so a setup is only useful if it beats that. Past results don’t guarantee future ones.</div>';
+}
+
+// ═══════════════════════════════════════════════
+// ENCRYPTED PORTFOLIO SYNC  (PBKDF2-SHA256 → AES-256-GCM)
+// ═══════════════════════════════════════════════
+const PF_ITER = 310000;
+const b64e = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const b64d = str => Uint8Array.from(atob(str), c => c.charCodeAt(0));
+async function pfKey(pass, salt) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: PF_ITER, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function encryptPf() {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await pfKey(cfg.pfPass, salt);
+  const plain = new TextEncoder().encode(JSON.stringify({ holdings, updated_at: pfUpdatedAt }));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plain);
+  return { v: 1, kdf: 'PBKDF2-SHA256', iter: PF_ITER, cipher: 'AES-256-GCM', salt: b64e(salt), iv: b64e(iv), ct: b64e(ct), updated_at: pfUpdatedAt };
+}
+async function decryptPf(f, pass) {
+  const key = await pfKey(pass, b64d(f.salt));
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(f.iv) }, key, b64d(f.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+async function pullPortfolio() {
+  if (!cfg.pfPass || !window.crypto || !crypto.subtle) return;
+  try {
+    const r = await fetch(rawUrl(PF_ENC_FILE), { cache: 'no-store' });
+    if (!r.ok) return;
+    const f = await r.json();
+    pfRemoteTs = f.updated_at || 0;
+    if (pfRemoteTs <= pfUpdatedAt) return;
+    const d = await decryptPf(f, cfg.pfPass);
+    if (Array.isArray(d.holdings)) {
+      holdings = d.holdings;
+      pfUpdatedAt = d.updated_at || pfRemoteTs;
+      savePfLocal();
+      holdings.forEach(h => ensureCoverage(h.ticker));
+    }
+  } catch(e) {
+    pfDecryptErr = true;
+    showBanner('err', '✗ Couldn’t unlock your synced portfolio — the passphrase in Settings doesn’t match the one used to sync it.');
+  }
 }
 
 // ═══════════════════════════════════════════════
