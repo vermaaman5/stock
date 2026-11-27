@@ -1,0 +1,49 @@
+name: Backtest setups
+
+on:
+  schedule:
+    # Saturdays 10:00 AM IST = 04:30 UTC
+    - cron: "30 4 * * 6"
+  workflow_dispatch:
+
+concurrency:
+  group: backtest
+  cancel-in-progress: true
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -U yfinance pandas numpy
+
+      - name: Run backtest
+        run: python backtest.py
+
+      - name: Commit backtest.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backtest.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "chore: update backtest $(TZ=Asia/Kolkata date +'%Y-%m-%d')"
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 10
+          done
+          exit 1
