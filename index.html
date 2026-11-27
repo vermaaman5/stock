@@ -204,6 +204,24 @@ tr.eq-detail > td { background:var(--surface2); padding:12px 16px 16px; }
 .eq-why { margin-top:10px; font-size:11px; color:var(--text2); line-height:1.6; }
 .spark { display:block; }
 
+/* Technicals & summary panels */
+.regime { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; padding:12px 14px; border-radius:var(--rl); border:1px solid var(--border); background:var(--surface); margin-bottom:14px; font-size:12px; }
+.regime.on { border-color:var(--green-border); background:rgba(34,197,94,0.05); }
+.regime.off { border-color:var(--red-border); background:rgba(240,78,78,0.05); }
+.regime .rg-title { font-weight:500; font-size:13px; }
+.regime .rg-k { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.06em; }
+.regime .rg-v { font-family:var(--mono); font-size:12px; }
+.tset { display:flex; gap:8px; align-items:center; font-size:11px; color:var(--text2); }
+.tset input { width:110px; }
+.tset input.sm { width:64px; }
+.plan { font-family:var(--mono); font-size:10px; line-height:1.5; white-space:nowrap; color:var(--text2); }
+.plan b { color:var(--text); font-weight:500; }
+.dmas { font-family:var(--mono); font-size:10px; white-space:nowrap; line-height:1.5; }
+.idea { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 10px; padding:8px 10px; border-radius:var(--r); margin-bottom:4px; background:var(--surface2); border:1px solid var(--border2); font-size:12px; }
+.idea .chips { display:flex; gap:4px; flex-wrap:wrap; grid-column:1 / -1; }
+.idea .sc { font-family:var(--mono); font-size:11px; color:var(--green); }
+.q-held { font-size:9px; padding:1px 6px; border-radius:99px; background:var(--blue-dim); color:var(--blue); margin-left:4px; }
+
 /* Portfolio */
 .pf-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:10px; margin-bottom:16px; }
 @media (max-width:900px) { .pf-grid { grid-template-columns:minmax(0,1fr); } }
@@ -259,6 +277,11 @@ td.num, th.num { text-align:right; white-space:nowrap; }
       Watchlist
       <span class="nav-pill hot" id="np-alert" style="display:none">0</span>
     </div>
+    <div class="nav-item" id="nav-technicals" onclick="showPage('technicals',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 17l5-6 4 4 8-9M14 6h6v6"/></svg>
+      Technicals
+      <span class="nav-pill" id="np-tech" style="display:none">0</span>
+    </div>
     <div class="nav-item" id="nav-portfolio" onclick="showPage('portfolio',this)">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M3 12h18"/></svg>
       Portfolio
@@ -293,6 +316,17 @@ td.num, th.num { text-align:right; white-space:nowrap; }
     <div class="metrics" id="sum-metrics"></div>
     <div class="divider"></div>
     <div class="sec">
+      <div class="pf-grid">
+        <div class="pf-card">
+          <div class="alert-panel-title" id="rq-title">Review queue</div>
+          <div id="review-queue"></div>
+        </div>
+        <div class="pf-card">
+          <div class="alert-panel-title">Top ideas</div>
+          <div id="top-ideas"></div>
+          <div class="pf-note">Score adds up your view, action and conviction, the latest results grade, trend, setup, strength vs Nifty and reward-to-risk to target. It ranks candidates to look at, not trades to take.</div>
+        </div>
+      </div>
       <div id="alerts-panel"></div>
       <div class="sec-hdr"><span class="sec-title">Sector overview</span></div>
       <div class="sc-grid" id="sum-sectors"></div>
@@ -398,6 +432,59 @@ td.num, th.num { text-align:right; white-space:nowrap; }
     </div>
   </div>
 
+  <!-- TECHNICALS -->
+  <div class="page" id="page-technicals">
+    <div class="ph">
+      <div class="ph-left"><h1>Technicals</h1><p id="tc-sub">Trend, momentum and swing setups from daily closes</p></div>
+      <div class="ph-right">
+        <div class="tset">
+          <label for="sw-cap">Capital ₹</label><input type="number" id="sw-cap" min="0" step="10000" onchange="saveSwing()">
+          <label for="sw-risk">Risk/trade %</label><input class="sm" type="number" id="sw-risk" min="0.1" max="5" step="0.1" onchange="saveSwing()">
+        </div>
+      </div>
+    </div>
+    <div id="tc-regime"></div>
+    <div class="metrics" id="tc-metrics"></div>
+    <div class="divider"></div>
+    <div class="sec">
+      <div class="sec-hdr">
+        <span class="sec-title">Setups</span>
+        <div class="toolbar">
+          <div class="sw">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input class="si" type="text" id="tc-q" placeholder="Search…" oninput="renderTechnicals()">
+          </div>
+          <select id="tc-setup" onchange="renderTechnicals()">
+            <option value="long">Long setups</option>
+            <option value="all">All stocks</option>
+            <option value="Breakout">Breakouts</option>
+            <option value="Pullback">Pullbacks</option>
+            <option value="Oversold">Oversold in uptrend</option>
+            <option value="Breakdown">Breakdowns</option>
+            <option value="Extended">Extended</option>
+            <option value="down">Downtrends</option>
+          </select>
+          <select id="tc-scope" onchange="renderTechnicals()">
+            <option value="all">All coverage</option>
+            <option value="holdings">My holdings</option>
+          </select>
+          <select id="tc-sec" onchange="renderTechnicals()"><option value="">All sectors</option></select>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>Ticker</th><th class="num">CMP ₹</th><th class="num">Today</th><th>60 days</th><th>Trend</th>
+            <th class="num">vs 20 / 50 / 200 DMA</th><th class="num">RSI</th><th class="num">RS 3M</th><th class="num">Vol ×</th><th class="num">ATR</th>
+            <th>Setup</th><th>Plan: stop · target · qty</th>
+          </tr></thead>
+          <tbody id="tc-body"></tbody>
+        </table>
+      </div>
+      <div class="pf-note">Breakout: close above the prior 20-day high on 1.5× average volume, above the 50 DMA. Pullback: uptrend (price &gt; 50 DMA &gt; 200 DMA), within 2.5% of the 20 or 50 DMA, RSI 38–55. Oversold: above the 200 DMA with RSI under 35. Plan: stop 2×ATR below the close, target at 2R, quantity sized so a stop-out loses your risk per trade (capped at 25% of capital). RS 3M = stock's 3-month return minus Nifty's. End-of-day data; check the live chart before acting.</div>
+    </div>
+  </div>
+
   <!-- EARNINGS -->
   <div class="page" id="page-earnings">
     <div class="ph">
@@ -426,7 +513,7 @@ td.num, th.num { text-align:right; white-space:nowrap; }
           <thead><tr>
             <th>Ticker</th><th>Quarter</th><th class="num">Revenue</th><th class="num">Rev YoY</th>
             <th class="num">EBITDA mgn</th><th class="num">Mgn Δ YoY</th><th class="num">PAT</th><th class="num">PAT YoY</th>
-            <th class="num">Tax rate</th><th>PAT, 8 qtrs</th><th>Flags</th><th>Grade</th>
+            <th class="num">P/E</th><th class="num">Tax rate</th><th>PAT, 8 qtrs</th><th>Flags</th><th>Grade</th>
           </tr></thead>
           <tbody id="eq-body"></tbody>
         </table>
@@ -757,6 +844,7 @@ async function fetchPrices() {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     livePrices = data.prices || {};
+    indexData = data.index || {};
     priceUpdatedAt = data.updated_at_readable || null;
     setSb('price','ok', priceUpdatedAt || 'Updated');
     rerenderActive();
@@ -903,6 +991,7 @@ function showPage(id, el) {
   if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
   if (id === 'portfolio') renderPortfolio();
   if (id === 'earnings') renderEarnings();
+  if (id === 'technicals') renderTechnicals();
 }
 
 function rerenderActive() {
@@ -915,6 +1004,7 @@ function rerenderActive() {
   else if (id === 'watchlist') { renderWatchlist(); renderWatchMetrics(); }
   else if (id === 'portfolio') renderPortfolio();
   else if (id === 'earnings') renderEarnings();
+  else if (id === 'technicals') renderTechnicals();
 }
 
 function updatePills() {
@@ -934,6 +1024,10 @@ function updatePills() {
   const ee = document.getElementById('np-eq');
   ee.textContent = eqn;
   ee.style.display = eqn > 0 ? 'inline-block' : 'none';
+  const lg = stocks.filter(x => { const k = techOf(x.ticker); return k && k.kind === 'long'; }).length;
+  const te = document.getElementById('np-tech');
+  te.textContent = lg;
+  te.style.display = lg > 0 ? 'inline-block' : 'none';
 }
 
 // ═══════════════════════════════════════════════
@@ -988,6 +1082,8 @@ function renderSummary() {
     apHtml += '</div>';
   }
   document.getElementById('alerts-panel').innerHTML = apHtml;
+  renderReviewQueue();
+  renderTopIdeas();
 
   // Sector cards
   let html = '';
@@ -1466,6 +1562,9 @@ function pfRows() {
     const age = r.cs.thesisDate ? Math.round((TODAY - new Date(r.cs.thesisDate)) / 86400000) : 999;
     if (!r.cs.notes || age > 90) f('b-low', 'Review thesis', 1, !r.cs.notes ? 'No thesis written for a stock you own' : 'Thesis is ' + age + ' days old');
     if (!r.cs.sl && r.cmp !== null) f('b-low', 'No SL', 1, 'No stop loss set in Coverage');
+    const tk = techOf(r.h.ticker);
+    if (tk && tk.setup === 'Breakdown') f('b-high', 'Breakdown', 3, 'Closed below its 20-day low on ' + tk.x.vol_ratio + '× volume');
+    else if (tk && tk.d200 !== null && tk.d200 < 0) f('b-medium', 'Below 200 DMA', 2, 'Trading ' + Math.abs(tk.d200).toFixed(1) + '% below the 200-day average');
     const eq = eqAnalyse(r.h.ticker);
     if (eq.grade === 'weak') f('b-high', 'Weak results', 2, 'Latest results: ' + eq.flags.filter(x => x.sev >= 2).map(x => x.txt.toLowerCase()).join(', '));
     else if (eq.grade === 'watch') f('b-medium', 'Results: watch', 2, 'Latest results: ' + eq.flags.filter(x => x.sev >= 2).map(x => x.txt.toLowerCase()).join(', '));
@@ -1701,6 +1800,9 @@ function eqAnalyse(t) {
   }
   if (L.pbt > 0 && L.tax !== null && L.tax !== undefined && (L.tax < 0 || res.etr < 10))
     f('Tax-boosted profit', 2, (L.tax < 0 ? 'Tax credit of ₹' + Math.abs(L.tax).toFixed(0) + ' cr' : 'Tax rate only ' + res.etr.toFixed(0) + '%') + ' — PAT overstates the run-rate; judge on PBT (' + (Y ? growth(L.pbt, Y.pbt)?.toFixed(0) + '% YoY' : '—') + ')');
+  const sector = (stocks.find(x => x.ticker === t) || {}).sector;
+  if (sector !== 'BFSI' && L.other_inc > 0 && L.pbt > 0 && L.other_inc / L.pbt >= 0.25)
+    f('Other-income heavy', 2, 'Other income ₹' + Math.round(L.other_inc).toLocaleString('en-IN') + ' cr is ' + Math.round(L.other_inc / L.pbt * 100) + '% of PBT — core operating profit is smaller than headline PAT suggests');
   if (res.oneoff !== null && res.oneoff >= 20)
     f('One-offs', 2, 'Exceptional items are ' + res.oneoff.toFixed(0) + '% of PBT');
   if (res.revYoY !== null && res.revYoY <= -10) f('Sales falling', 2, 'Revenue ' + res.revYoY.toFixed(0) + '% YoY');
@@ -1756,13 +1858,13 @@ function renderEarnings() {
     .sort((a, b) => order[a.a.grade] - order[b.a.grade] || a.st.ticker.localeCompare(b.st.ticker));
   const body = document.getElementById('eq-body');
   if (!rows.length) {
-    body.innerHTML = '<tr><td colspan="12"><div class="empty">' + (fundMissing ? 'No results data yet. On GitHub go to Actions → Update fundamentals → Run workflow, then refresh.'
+    body.innerHTML = '<tr><td colspan="13"><div class="empty">' + (fundMissing ? 'No results data yet. On GitHub go to Actions → Update fundamentals → Run workflow, then refresh.'
       : scope === 'holdings' && !held.size ? 'Add holdings on the Portfolio tab, or switch to "All coverage".' : 'Nothing matches.') + '</div></td></tr>';
     return;
   }
   body.innerHTML = rows.map(({ st, a }) => {
     const t = esc(st.ticker);
-    if (a.grade === 'none') return '<tr><td><span class="tk" onclick="openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span></td><td colspan="10" class="dim">No quarterly data yet</td><td><span class="eq-grade eq-none">no data</span></td></tr>';
+    if (a.grade === 'none') return '<tr><td><span class="tk" onclick="openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span></td><td colspan="11" class="dim">No quarterly data yet</td><td><span class="eq-grade eq-none">no data</span></td></tr>';
     const L = a.L;
     const main = '<tr class="eq-row" onclick="eqToggle(\'' + t + '\')">' +
       '<td><span class="tk" onclick="event.stopPropagation();openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span>' + (held.has(st.ticker) ? ' <span class="b b-hold" style="font-size:9px">held</span>' : '') + '<div class="dim" style="font-size:10px;margin-top:2px">' + esc(st.name || '') + '</div></td>' +
@@ -1770,13 +1872,14 @@ function renderEarnings() {
       '<td class="num mono">' + crore(L.rev) + '</td><td class="num">' + fPct(a.revYoY) + '</td>' +
       '<td class="num mono">' + (a.m !== null ? a.m.toFixed(1) + '%' : '<span class="dim">—</span>') + '</td><td class="num">' + bps(a.mDelta) + '</td>' +
       '<td class="num mono">' + crore(L.pat) + '</td><td class="num">' + fPct(a.patYoY) + '</td>' +
+      '<td class="num mono">' + fmtPE(st.ticker) + '</td>' +
       '<td class="num mono">' + (L.tax !== null && L.tax < 0 ? '<span class="neg">credit</span>' : a.etr !== null ? a.etr.toFixed(0) + '%' : '<span class="dim">—</span>') + '</td>' +
       '<td>' + eqSpark(a.Q) + '</td>' +
       '<td><div class="flags">' + a.flags.filter(x => x.sev !== 1).map(x => '<span class="b ' + (x.sev >= 3 ? 'b-high' : x.sev === 2 ? 'b-medium' : 'b-buy') + '" title="' + esc(x.why) + '">' + esc(x.txt) + '</span>').join('') + '</div></td>' +
       '<td><span class="eq-grade eq-' + a.grade + '">' + a.grade + '</span></td></tr>';
     if (!eqOpen.has(st.ticker)) return main;
     const qs = a.Q.slice().reverse();
-    const det = '<tr class="eq-detail"><td colspan="12"><div class="scroll" style="overflow-x:auto"><table class="eq-qt"><thead><tr><th>₹ crore</th>' + qs.map(x => '<th>' + qLabel(x.q) + '</th>').join('') + '</tr></thead><tbody>' +
+    const det = '<tr class="eq-detail"><td colspan="13"><div class="scroll" style="overflow-x:auto"><table class="eq-qt"><thead><tr><th>₹ crore</th>' + qs.map(x => '<th>' + qLabel(x.q) + '</th>').join('') + '</tr></thead><tbody>' +
       [['Revenue', x => crore(x.rev)], ['EBITDA', x => crore(x.ebitda)], ['EBITDA margin', x => { const m = eqMargin(x); return m === null ? '—' : m.toFixed(1) + '%'; }],
        ['PBT', x => crore(x.pbt)], ['Tax', x => crore(x.tax)], ['Tax rate', x => x.tax !== null && x.tax < 0 ? 'credit' : x.pbt > 0 && x.tax !== null ? (x.tax / x.pbt * 100).toFixed(0) + '%' : '—'],
        ['Exceptional items', x => crore(x.unusual)], ['PAT', x => crore(x.pat)], ['EPS ₹', x => x.eps ?? '—']]
@@ -1788,6 +1891,217 @@ function renderEarnings() {
 function eqToggle(t) { eqOpen.has(t) ? eqOpen.delete(t) : eqOpen.add(t); renderEarnings(); }
 
 // ═══════════════════════════════════════════════
+// RENAMED NSE SYMBOLS (old → new)
+// ═══════════════════════════════════════════════
+const TICKER_RENAMES = {
+  TATAMOTORS: ['TMPV', 'Tata Motors Passenger Vehicles'], LTIM: ['LTM', 'LTM (LTIMindtree)'],
+  GUJGASLTD: ['GUJENERGY', 'Gujarat Energy (ex-Gujarat Gas)'], KALPATPOWR: ['KPIL'], KECINTER: ['KEC'],
+  KPIT: ['KPITTECH'], TVSMOTORS: ['TVSMOTOR'], AMARAJABAT: ['ARE&M'], NALCO: ['NATIONALUM'],
+  DALMIACEM: ['DALBHARAT'], DATAPATT: ['DATAPATTNS'], MTAR: ['MTARTECH'], APOLLOMICRO: ['APOLLO'],
+  DCX: ['DCXINDIA'], VINATI: ['VINATIORGA']
+};
+function migrateTickers() {
+  const done = [];
+  const fix = (list, rec) => list.forEach(x => {
+    const m = TICKER_RENAMES[x.ticker];
+    if (!m || list.some(y => y.ticker === m[0])) return;
+    if (rec) done.push(x.ticker + '→' + m[0]);
+    x.ticker = m[0];
+    if (m[1] && 'name' in x) x.name = m[1];
+  });
+  fix(stocks, true); fix(watchlist, true); fix(holdings, false);
+  savePf();
+  if (done.length) {
+    saveLocal(); rerenderActive(); updatePills();
+    showBanner('warn', 'Updated ' + done.length + ' renamed NSE tickers (' + done.join(', ') + '). Click "Sync to GitHub" to save — their prices and results start on the next run.');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// TECHNICALS (swing trading)
+// ═══════════════════════════════════════════════
+let indexData = {};
+let swing = { capital: 1000000, risk: 1 };
+function loadSwing() {
+  try { swing = Object.assign(swing, JSON.parse(localStorage.getItem('mkts_swing') || '{}')); } catch(e) {}
+  document.getElementById('sw-cap').value = swing.capital;
+  document.getElementById('sw-risk').value = swing.risk;
+}
+function saveSwing() {
+  const c = parseFloat(document.getElementById('sw-cap').value), r = parseFloat(document.getElementById('sw-risk').value);
+  if (c > 0) swing.capital = c;
+  if (r > 0 && r <= 5) swing.risk = r;
+  try { localStorage.setItem('mkts_swing', JSON.stringify(swing)); } catch(e) {}
+  renderTechnicals();
+}
+const pd_ = (a, b) => a && b ? (a / b - 1) * 100 : null;
+function techOf(t) {
+  const p = livePrices[t];
+  if (!p || !p.tech) return null;
+  const x = p.tech, c = p.cmp;
+  const k = { x, c, d20: pd_(c, x.dma20), d50: pd_(c, x.dma50), d200: pd_(c, x.dma200), setup: null, kind: null, plan: null, why: '' };
+  k.trend = x.dma50 && x.dma200 ? (c > x.dma50 && x.dma50 > x.dma200 ? 'up' : c < x.dma50 && x.dma50 < x.dma200 ? 'down' : 'side') : x.dma50 ? (c > x.dma50 ? 'side' : 'down') : null;
+  const v = x.vol_ratio || 0, rsi = x.rsi14;
+  if (x.lo20 && c < x.lo20 && v >= 1.5) { k.setup = 'Breakdown'; k.kind = 'avoid'; k.why = 'Closed below the 20-day low (₹' + x.lo20 + ') on ' + v + '× volume'; }
+  else if (x.hi20 && c > x.hi20 && v >= 1.5 && (!x.dma50 || c > x.dma50)) { k.setup = 'Breakout'; k.kind = 'long'; k.why = 'Closed above the ' + (x.hi55 && c > x.hi55 ? '55' : '20') + '-day high on ' + v + '× volume'; k.strong = !!(x.hi55 && c > x.hi55); }
+  else if (k.trend === 'up' && rsi !== null && rsi >= 38 && rsi <= 55 && ((k.d20 !== null && Math.abs(k.d20) <= 2.5) || (k.d50 !== null && Math.abs(k.d50) <= 2.5))) { k.setup = 'Pullback'; k.kind = 'long'; k.why = 'Uptrend, resting near the ' + (Math.abs(k.d20) <= 2.5 ? '20' : '50') + ' DMA, RSI ' + rsi; }
+  else if (x.dma200 && c > x.dma200 && rsi !== null && rsi < 35) { k.setup = 'Oversold'; k.kind = 'long'; k.why = 'Above the 200 DMA with RSI ' + rsi; }
+  else if ((rsi !== null && rsi > 75) || (k.d20 !== null && k.d20 > 12)) { k.setup = 'Extended'; k.kind = 'avoid'; k.why = 'RSI ' + rsi + ', ' + (k.d20 || 0).toFixed(1) + '% above the 20 DMA — don’t chase'; }
+  if (k.kind === 'long' && x.atr14) {
+    const stop = c - 2 * x.atr14, risk = c - stop;
+    const byRisk = Math.floor(swing.capital * swing.risk / 100 / risk);
+    const byCap = Math.floor(swing.capital * 0.25 / c);
+    k.plan = { stop, target: c + 2 * risk, qty: Math.max(0, Math.min(byRisk, byCap)), capped: byCap < byRisk };
+  }
+  return k;
+}
+function techSpark(arr, trend) {
+  const v = (arr || []).filter(n => n !== null);
+  if (v.length < 5) return '<span class="dim">—</span>';
+  const W = 84, H = 24, mn = Math.min(...v), mx = Math.max(...v), rg = mx - mn || 1;
+  const pts = v.map((n, i) => (i / (v.length - 1) * (W - 2) + 1).toFixed(1) + ',' + (H - 2 - (n - mn) / rg * (H - 4)).toFixed(1)).join(' ');
+  const col = trend === 'up' ? 'var(--green)' : trend === 'down' ? 'var(--red)' : 'var(--text2)';
+  return '<svg class="spark" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '"><polyline fill="none" stroke="' + col + '" stroke-width="1.3" points="' + pts + '"/></svg>';
+}
+const TREND_B = { up: '<span class="b b-bullish">Uptrend</span>', down: '<span class="b b-bearish">Downtrend</span>', side: '<span class="b b-neutral">Sideways</span>' };
+const SETUP_B = { Breakout: 'b-buy', Pullback: 'b-buy', Oversold: 'b-accumulate', Breakdown: 'b-high', Extended: 'b-medium' };
+function setupBadge(k) { return k && k.setup ? '<span class="b ' + SETUP_B[k.setup] + '" title="' + esc(k.why) + '">' + k.setup + (k.strong ? ' 55d' : '') + '</span>' : '<span class="dim">—</span>'; }
+function dmaTxt(v) { return v === null ? '<span class="dim">—</span>' : '<span class="' + (v >= 0 ? 'pos' : 'neg') + '">' + (v >= 0 ? '+' : '') + v.toFixed(1) + '%</span>'; }
+function renderRegime() {
+  const n = indexData.NIFTY;
+  const el = document.getElementById('tc-regime');
+  if (!n) { el.innerHTML = '<div class="regime"><span class="dim">Nifty data arrives with the next price update.</span></div>'; return; }
+  const a50 = n.cmp > n.dma50, a200 = n.cmp > n.dma200;
+  const cls = a50 && a200 ? 'on' : !a50 && !a200 ? 'off' : '';
+  const label = a50 && a200 ? 'Risk-on: Nifty above its 50 and 200 DMA' : !a50 && !a200 ? 'Risk-off: Nifty below its 50 and 200 DMA — size down, favour cash' : 'Mixed: Nifty between its 50 and 200 DMA — be selective';
+  const kv = (k, v) => '<div><div class="rg-k">' + k + '</div><div class="rg-v">' + v + '</div></div>';
+  el.innerHTML = '<div class="regime ' + cls + '"><div class="rg-title" style="flex:1 1 260px">' + label + '</div>' +
+    kv('Nifty', Number(n.cmp).toLocaleString('en-IN') + ' ' + fChg(n.change_pct)) + kv('vs 50 DMA', dmaTxt(pd_(n.cmp, n.dma50))) +
+    kv('vs 200 DMA', dmaTxt(pd_(n.cmp, n.dma200))) + kv('RSI', n.rsi14 ?? '—') + kv('3M', fPct(n.ret_3m)) + '</div>';
+}
+function renderTechnicals() {
+  renderRegime();
+  const held = new Set(holdings.map(h => h.ticker));
+  const secEl = document.getElementById('tc-sec');
+  if (secEl.options.length <= 1) getSectors().forEach(x => { const o = document.createElement('option'); o.value = x; o.textContent = x; secEl.appendChild(o); });
+  const all = stocks.map(st => ({ st, k: techOf(st.ticker) })).filter(x => x.k);
+  const cnt = f => all.filter(f).length;
+  document.getElementById('tc-sub').textContent = all.length ? all.length + ' stocks with daily data · ' + (priceUpdatedAt || '') : 'Indicators arrive with the next price update (replace update_prices.py first)';
+  document.getElementById('tc-metrics').innerHTML =
+    mc('Uptrend', cnt(x => x.k.trend === 'up'), 'g', 'price > 50 > 200 DMA') + mc('Downtrend', cnt(x => x.k.trend === 'down'), 'r', 'price < 50 < 200 DMA') +
+    mc('Breakouts', cnt(x => x.k.setup === 'Breakout'), 'g', 'on volume') + mc('Pullbacks', cnt(x => x.k.setup === 'Pullback'), 'g', 'in uptrend') +
+    mc('Breakdowns', cnt(x => x.k.setup === 'Breakdown'), 'r', 'on volume') + mc('Extended', cnt(x => x.k.setup === 'Extended'), 'a', 'don’t chase');
+  const f = document.getElementById('tc-setup').value, scope = document.getElementById('tc-scope').value;
+  const sec = secEl.value, q = document.getElementById('tc-q').value.trim().toUpperCase();
+  const pri = { Breakout: 0, Pullback: 1, Oversold: 2, Breakdown: 3, Extended: 4 };
+  const rows = all.filter(({ st, k }) =>
+      (f === 'all' || (f === 'long' ? k.kind === 'long' : f === 'down' ? k.trend === 'down' : k.setup === f)) &&
+      (scope === 'all' || held.has(st.ticker)) && (!sec || st.sector === sec) &&
+      (!q || st.ticker.includes(q) || (st.name || '').toUpperCase().includes(q)))
+    .sort((a, b) => (pri[a.k.setup] ?? 9) - (pri[b.k.setup] ?? 9) || (b.k.x.rs_3m ?? -999) - (a.k.x.rs_3m ?? -999));
+  const body = document.getElementById('tc-body');
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="12"><div class="empty">' + (!all.length ? 'No indicator data yet. Replace update_prices.py on GitHub, then run "Update stock prices" in Actions.' : 'No stocks match. Try "All stocks".') + '</div></td></tr>';
+    return;
+  }
+  body.innerHTML = rows.map(({ st, k }) => {
+    const x = k.x, t = esc(st.ticker), pl = k.plan;
+    return '<tr><td><span class="tk" onclick="openChart(\'' + t + '\',\'' + esc(st.name) + '\')">' + t + '</span>' + (held.has(st.ticker) ? '<span class="q-held">held</span>' : '') + '<div class="dim" style="font-size:10px;margin-top:2px">' + esc(st.name || '') + '</div></td>' +
+      '<td class="num mono">' + inr(k.c, 2) + '</td><td class="num">' + fChg(livePrices[st.ticker].change_pct) + '</td>' +
+      '<td>' + techSpark(x.spark, k.trend) + '</td><td>' + (TREND_B[k.trend] || '<span class="dim">—</span>') + '</td>' +
+      '<td class="num dmas">' + dmaTxt(k.d20) + ' / ' + dmaTxt(k.d50) + ' / ' + dmaTxt(k.d200) + '</td>' +
+      '<td class="num mono' + (x.rsi14 > 70 ? ' neg' : x.rsi14 < 30 ? ' pos' : '') + '">' + (x.rsi14 ?? '—') + '</td>' +
+      '<td class="num">' + fPct(x.rs_3m) + '</td>' +
+      '<td class="num mono' + (x.vol_ratio >= 1.5 ? ' pos' : '') + '">' + (x.vol_ratio ?? '—') + '</td>' +
+      '<td class="num mono">' + (x.atr14 ? (x.atr14 / k.c * 100).toFixed(1) + '%' : '—') + '</td>' +
+      '<td>' + setupBadge(k) + '</td>' +
+      '<td>' + (pl ? '<div class="plan"><b>' + inr(pl.stop) + '</b> · <b>' + inr(pl.target) + '</b> · <b>' + pl.qty.toLocaleString('en-IN') + '</b>' + (pl.capped ? ' <span class="dim">(25% cap)</span>' : '') + '<br>risk ' + inr(pl.qty * (k.c - pl.stop)) + ' · value ' + inrShort(pl.qty * k.c) + '</div>' : '<span class="dim">' + (k.kind === 'avoid' ? esc(k.why) : '—') + '</span>') + '</td></tr>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// P/E FROM TRAILING 4 QUARTERS
+// ═══════════════════════════════════════════════
+function ttmEps(t) {
+  const Q = (fundamentals[t] || []).slice(-4);
+  if (Q.length < 4 || Q.some(q => q.eps === null || q.eps === undefined)) return null;
+  const span = (new Date(Q[3].q) - new Date(Q[0].q)) / 86400000;
+  if (span < 250 || span > 300) return null;
+  return Q.reduce((a, q) => a + q.eps, 0);
+}
+function peOf(t) { const e = ttmEps(t), c = getCmp(t); return e === null || !c ? null : e <= 0 ? -1 : c / e; }
+function fmtPE(t) { const pe = peOf(t); return pe === null ? '<span class="dim">—</span>' : pe < 0 ? '<span class="neg">loss</span>' : pe.toFixed(1) + '×'; }
+
+// ═══════════════════════════════════════════════
+// SUMMARY: REVIEW QUEUE + TOP IDEAS
+// ═══════════════════════════════════════════════
+function renderReviewQueue() {
+  const items = [];
+  const held = new Set(holdings.map(h => h.ticker));
+  const add = (sev, tk, txt, isHeld) => items.push({ sev, tk, txt, isHeld });
+  pfRows().filter(r => r.sev >= 2).forEach(r => add(r.sev + 1, r.h.ticker, r.flags.filter(f => f.cls !== 'b-low').map(f => f.txt).join(' · '), true));
+  stocks.forEach(s => {
+    if (held.has(s.ticker)) return;
+    const active = ['buy', 'accumulate', 'sell'].includes(s.action) || s.view !== 'neutral';
+    if (!active) return;
+    const eq = eqAnalyse(s.ticker), k = techOf(s.ticker);
+    const bull = s.view === 'bullish' || ['buy', 'accumulate'].includes(s.action);
+    const why = [];
+    let sev = 0;
+    if (bull && eq.grade === 'weak') { why.push('weak results vs your bullish call'); sev = Math.max(sev, 3); }
+    if (bull && k && k.trend === 'down') { why.push('in a downtrend'); sev = Math.max(sev, 2); }
+    if (bull && k && k.setup === 'Breakdown') { why.push('broke down on volume'); sev = Math.max(sev, 3); }
+    if (!bull && k && k.trend === 'up' && eq.grade === 'good') { why.push('bearish call but uptrend + good results'); sev = Math.max(sev, 2); }
+    const age = s.thesisDate ? Math.round((TODAY - new Date(s.thesisDate)) / 86400000) : 999;
+    const r3 = k && k.x.ret_3m;
+    if (age > 90 && r3 !== null && r3 !== undefined && Math.abs(r3) >= 15) { why.push('moved ' + (r3 > 0 ? '+' : '') + r3 + '% in 3M, thesis ' + age + ' days old'); sev = Math.max(sev, 2); }
+    if (eq.L && s.thesisDate && new Date(eq.L.q) > new Date(s.thesisDate) && sev) why.push('new results since thesis');
+    if (sev) add(sev, s.ticker, why.join(' · '), false);
+  });
+  items.sort((a, b) => b.sev - a.sev || (b.isHeld - a.isHeld));
+  document.getElementById('rq-title').textContent = 'Review queue' + (items.length ? ' · ' + items.length : '');
+  document.getElementById('review-queue').innerHTML = !items.length
+    ? '<div class="empty" style="padding:18px">Nothing to review. Your holdings and active calls look consistent with price and results.</div>'
+    : items.slice(0, 12).map(i => '<div class="att ' + (i.sev >= 3 ? 'r' : 'a') + '"><div style="min-width:0"><span class="tk" onclick="openChart(\'' + esc(i.tk) + '\',\'' + esc(i.tk) + '\')">' + esc(i.tk) + '</span>' + (i.isHeld ? '<span class="q-held">held</span>' : '') + '<div class="why">' + esc(i.txt) + '</div></div></div>').join('') +
+      (items.length > 12 ? '<div class="pf-note">+' + (items.length - 12) + ' more — see Portfolio, Earnings and Technicals.</div>' : '');
+}
+function ideaScore(s) {
+  const k = techOf(s.ticker), eq = eqAnalyse(s.ticker), c = getCmp(s.ticker);
+  if (!k || !c) return null;
+  if (k.trend === 'down' || k.setup === 'Breakdown' || s.action === 'sell' || s.view === 'bearish') return null;
+  let sc = 0; const chips = [];
+  if (s.view === 'bullish') { sc += 2; chips.push(['b-bullish', 'bullish view']); }
+  if (['buy', 'accumulate'].includes(s.action)) { sc += 1; chips.push(['b-' + s.action, s.action]); }
+  sc += ((s.conviction || 3) - 3);
+  if (eq.grade === 'good') { sc += 1; chips.push(['b-buy', 'good results']); }
+  if (eq.grade === 'weak') { sc -= 2; chips.push(['b-high', 'weak results']); }
+  if (k.trend === 'up') { sc += 2; chips.push(['b-bullish', 'uptrend']); }
+  if (k.setup === 'Breakout' || k.setup === 'Pullback') { sc += 2; chips.push([SETUP_B[k.setup], k.setup.toLowerCase()]); }
+  if (k.setup === 'Oversold') { sc += 1; chips.push([SETUP_B[k.setup], 'oversold']); }
+  if (k.setup === 'Extended') { sc -= 1; chips.push(['b-medium', 'extended']); }
+  const rs = k.x.rs_3m;
+  if (rs !== null && rs !== undefined) { if (rs >= 10) { sc += 2; chips.push(['b-buy', 'RS +' + rs]); } else if (rs > 0) sc += 1; else if (rs <= -10) sc -= 1; }
+  if (s.target && s.sl && c > s.sl && s.target > c) {
+    const rr = (s.target - c) / (c - s.sl);
+    if (rr >= 3) sc += 2; else if (rr >= 2) sc += 1;
+    chips.push(['b-low', 'R:R ' + rr.toFixed(1)]);
+  }
+  const pe = peOf(s.ticker);
+  if (pe !== null && pe > 0) chips.push(['b-low', 'P/E ' + pe.toFixed(0)]);
+  return { s, sc, chips };
+}
+function renderTopIdeas() {
+  const ideas = stocks.map(ideaScore).filter(x => x && x.sc >= 3).sort((a, b) => b.sc - a.sc).slice(0, 10);
+  const n = indexData.NIFTY;
+  const warn = n && n.dma50 && n.dma200 && n.cmp < n.dma50 && n.cmp < n.dma200
+    ? '<div class="att r" style="margin-bottom:8px"><div class="why" style="margin:0">Nifty is below its 50 and 200 DMA (risk-off). Most breakouts fail in this regime — use smaller size or wait.</div></div>' : '';
+  document.getElementById('top-ideas').innerHTML = warn + (!ideas.length
+    ? '<div class="empty" style="padding:18px">' + (Object.values(livePrices).some(p => p.tech) ? 'No stock scores 3+ right now. That itself says: be patient.' : 'Ideas appear once the price job starts saving indicators (replace update_prices.py).') + '</div>'
+    : ideas.map(i => '<div class="idea"><div><span class="tk" onclick="openChart(\'' + esc(i.s.ticker) + '\',\'' + esc(i.s.name) + '\')">' + esc(i.s.ticker) + '</span> <span class="dim">' + esc(i.s.name) + '</span></div><span class="sc">' + i.sc + '</span>' +
+        '<div class="chips">' + i.chips.map(c => '<span class="b ' + c[0] + '">' + esc(c[1]) + '</span>').join('') + '</div></div>').join(''));
+}
+
+// ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
 loadLocal();
@@ -1796,7 +2110,8 @@ renderSummary();
 updatePills();
 
 // Always load research data and prices from the repo; token is only needed to sync edits back.
-pullFromGitHub().then(() => fetchPrices()).then(() => fetchFundamentals());
+loadSwing();
+pullFromGitHub().then(() => fetchPrices()).then(() => fetchFundamentals()).then(() => migrateTickers());
 </script>
 </body>
 </html>
