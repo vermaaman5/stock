@@ -36,7 +36,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -U yfinance
+        run: pip install -U yfinance cryptography
 
       - name: Keep a copy of the previous prices (for alerts)
         run: cp prices.json prices_prev.json || true
@@ -64,5 +64,6 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_HOLDINGS: ${{ secrets.TELEGRAM_HOLDINGS }}
+          PORTFOLIO_PASSPHRASE: ${{ secrets.PORTFOLIO_PASSPHRASE }}
           ALERT_FORCE: ${{ github.event.inputs.force_alert == 'true' && '1' || '' }}
         run: python alerts.py prices
