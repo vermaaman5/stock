@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: pip install -U yfinance
 
+      - name: Keep a copy of the previous results (for alerts)
+        run: cp fundamentals.json fundamentals_prev.json || true
+
       - name: Fetch quarterly results
         run: python update_fundamentals.py
 
@@ -55,3 +58,11 @@ jobs:
             sleep 10
           done
           exit 1
+
+      - name: Telegram alert
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_HOLDINGS: ${{ secrets.TELEGRAM_HOLDINGS }}
+        run: python alerts.py results
