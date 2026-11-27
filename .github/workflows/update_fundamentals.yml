@@ -29,7 +29,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -U yfinance
+        run: pip install -U yfinance cryptography
 
       - name: Keep a copy of the previous results (for alerts)
         run: cp fundamentals.json fundamentals_prev.json || true
@@ -65,4 +65,5 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_HOLDINGS: ${{ secrets.TELEGRAM_HOLDINGS }}
+          PORTFOLIO_PASSPHRASE: ${{ secrets.PORTFOLIO_PASSPHRASE }}
         run: python alerts.py results
