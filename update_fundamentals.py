@@ -91,7 +91,12 @@ def main():
     for i, t in enumerate(tickers, 1):
         for attempt in (1, 2):
             try:
-                data[t] = fetch_one(t)
+                new = fetch_one(t)
+                # Yahoo only returns ~5 quarters; keep older ones from previous
+                # runs so history builds up to 8 quarters over time.
+                merged = {q["q"]: q for q in old.get(t, [])}
+                merged.update({q["q"]: q for q in new})
+                data[t] = [merged[k] for k in sorted(merged)][-8:]
                 break
             except Exception as e:  # noqa: BLE001
                 if attempt == 2:
